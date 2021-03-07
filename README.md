@@ -6,3 +6,4 @@ Blazor Oqtane Syncfusion Help Desk
 
 ### Also See
 * [SyncfusionHelpDesk - Sever Side Blazor version](https://github.com/ADefWebserver/SyncfusionHelpDesk)
+* [SyncfusionHelpDesk - Blazor WebAssembly version](https://github.com/ADefWebserver/SyncfusionHelpDeskClient)
