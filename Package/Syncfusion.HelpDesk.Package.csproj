@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Client\Syncfusion.HelpDesk.Client.csproj" />
+    <ProjectReference Include="..\Server\Syncfusion.HelpDesk.Server.csproj" />
+    <ProjectReference Include="..\Shared\Syncfusion.HelpDesk.Shared.csproj" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="IF $(ConfigurationName) == Debug (debug.cmd)" />
+    <Exec Command="IF $(ConfigurationName) == Release (release.cmd)" />
+  </Target>
+
+</Project>

@@ -1,0 +1,100 @@
+@using Oqtane.Modules.Controls
+@using Syncfusion.HelpDesk.Services
+@using Syncfusion.HelpDesk.Models
+
+@namespace Syncfusion.HelpDesk
+@inherits ModuleBase
+@inject IHelpDeskService HelpDeskService
+@inject NavigationManager NavigationManager
+
+<table class="table table-borderless">
+    <tr>
+        <td>
+            <Label For="name" HelpText="Enter a name">Name: </Label>
+        </td>
+        <td>
+            <input id="name" class="form-control" @bind="@_name" />
+        </td>
+    </tr>
+</table>
+<button type="button" class="btn btn-success" @onclick="Save">Save</button>
+<NavLink class="btn btn-secondary" href="@NavigateUrl()">Cancel</NavLink>
+<br />
+<br />
+@if (PageState.Action == "Edit")
+{
+    <AuditInfo CreatedBy="@_createdby" CreatedOn="@_createdon" ModifiedBy="@_modifiedby" ModifiedOn="@_modifiedon"></AuditInfo>
+}
+
+@code {
+    public override SecurityAccessLevel SecurityAccessLevel => SecurityAccessLevel.Edit;
+
+    public override string Actions => "Add,Edit";
+
+    public override string Title => "Manage HelpDesk";
+
+    public override List<Resource> Resources => new List<Resource>()
+    {
+        new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" }
+    };
+
+    int _id;
+    string _name;
+    string _createdby;
+    DateTime _createdon;
+    string _modifiedby;
+    DateTime _modifiedon;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            if (PageState.Action == "Edit")
+            {
+                _id = Int32.Parse(PageState.QueryString["id"]);
+                HelpDesk HelpDesk = await HelpDeskService.GetHelpDeskAsync(_id, ModuleState.ModuleId);
+                if (HelpDesk != null)
+                {
+                    _name = HelpDesk.Name;
+                    _createdby = HelpDesk.CreatedBy;
+                    _createdon = HelpDesk.CreatedOn;
+                    _modifiedby = HelpDesk.ModifiedBy;
+                    _modifiedon = HelpDesk.ModifiedOn;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            await logger.LogError(ex, "Error Loading HelpDesk {HelpDeskId} {Error}", _id, ex.Message);
+            AddModuleMessage("Error Loading HelpDesk", MessageType.Error);
+        }
+    }
+
+    private async Task Save()
+    {
+        try
+        {
+            if (PageState.Action == "Add")
+            {
+                HelpDesk HelpDesk = new HelpDesk();
+                HelpDesk.ModuleId = ModuleState.ModuleId;
+                HelpDesk.Name = _name;
+                HelpDesk = await HelpDeskService.AddHelpDeskAsync(HelpDesk);
+                await logger.LogInformation("HelpDesk Added {HelpDesk}", HelpDesk);
+            }
+            else
+            {
+                HelpDesk HelpDesk = await HelpDeskService.GetHelpDeskAsync(_id, ModuleState.ModuleId);
+                HelpDesk.Name = _name;
+                await HelpDeskService.UpdateHelpDeskAsync(HelpDesk);
+                await logger.LogInformation("HelpDesk Updated {HelpDesk}", HelpDesk);
+            }
+            NavigationManager.NavigateTo(NavigateUrl());
+        }
+        catch (Exception ex)
+        {
+            await logger.LogError(ex, "Error Saving HelpDesk {Error}", ex.Message);
+            AddModuleMessage("Error Saving HelpDesk", MessageType.Error);
+        }
+    }
+}

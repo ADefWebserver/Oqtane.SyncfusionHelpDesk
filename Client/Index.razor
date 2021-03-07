@@ -1,0 +1,72 @@
+@using Syncfusion.HelpDesk.Services
+@using Syncfusion.HelpDesk.Models
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Grids
+
+@namespace Syncfusion.HelpDesk
+@inherits ModuleBase
+@inject IHelpDeskService HelpDeskService
+@inject NavigationManager NavigationManager
+
+@if (_HelpDesks == null)
+{
+    <p><em>Loading...</em></p> }
+else
+{
+    <br />
+    <ActionLink Action="Add"
+                Security="SecurityAccessLevel.Edit"
+                Text="Add TestExternal" />
+    <br />
+    <br />
+    @if (_HelpDesks.Count != 0)
+    {
+        <SfGrid DataSource="@_HelpDesks"
+                AllowPaging="true">
+            <GridPageSettings PageSize="5"></GridPageSettings>
+        </SfGrid>
+    }
+    else
+    {
+        <p>No Tests To Display</p>
+    }
+}
+
+@code {
+    public override List<Resource> Resources => new List<Resource>()
+{
+        new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" },
+        new Resource { ResourceType = ResourceType.Script, Url = ModulePath() + "Module.js" }
+    };
+
+    List<HelpDesk> _HelpDesks;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _HelpDesks = await HelpDeskService.GetHelpDesksAsync(ModuleState.ModuleId);
+        }
+        catch (Exception ex)
+        {
+            await logger.LogError(ex, "Error Loading HelpDesk {Error}", ex.Message);
+            AddModuleMessage("Error Loading HelpDesk", MessageType.Error);
+        }
+    }
+
+    private async Task Delete(HelpDesk HelpDesk)
+    {
+        try
+        {
+            await HelpDeskService.DeleteHelpDeskAsync(HelpDesk.HelpDeskId, ModuleState.ModuleId);
+            await logger.LogInformation("HelpDesk Deleted {HelpDesk}", HelpDesk);
+            _HelpDesks = await HelpDeskService.GetHelpDesksAsync(ModuleState.ModuleId);
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await logger.LogError(ex, "Error Deleting HelpDesk {HelpDesk} {Error}", HelpDesk, ex.Message);
+            AddModuleMessage("Error Deleting HelpDesk", MessageType.Error);
+        }
+    }
+}
