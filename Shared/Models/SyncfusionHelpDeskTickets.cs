@@ -4,7 +4,6 @@ using Oqtane.Models;
 
 namespace Syncfusion.HelpDesk.Models
 {
-    [Table("SyncfusionHelpDeskTickets")]
     public class SyncfusionHelpDeskTickets : IAuditable
     {
         public int Id { get; set; }
