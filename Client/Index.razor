@@ -39,13 +39,13 @@ else
         new Resource { ResourceType = ResourceType.Script, Url = ModulePath() + "Module.js" }
     };
 
-    List<HelpDesk> _HelpDesks;
+    List<SyncfusionHelpDeskTickets> _HelpDesks;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            _HelpDesks = await HelpDeskService.GetHelpDesksAsync(ModuleState.ModuleId);
+            _HelpDesks = await HelpDeskService.GetSyncfusionHelpDeskTicketsAsync(ModuleState.ModuleId);
         }
         catch (Exception ex)
         {
@@ -54,13 +54,13 @@ else
         }
     }
 
-    private async Task Delete(HelpDesk HelpDesk)
+    private async Task Delete(SyncfusionHelpDeskTickets HelpDesk)
     {
         try
         {
-            await HelpDeskService.DeleteHelpDeskAsync(HelpDesk.HelpDeskId, ModuleState.ModuleId);
+            await HelpDeskService.DeleteSyncfusionHelpDeskTicketsAsync(HelpDesk.Id, ModuleState.ModuleId);
             await logger.LogInformation("HelpDesk Deleted {HelpDesk}", HelpDesk);
-            _HelpDesks = await HelpDeskService.GetHelpDesksAsync(ModuleState.ModuleId);
+            _HelpDesks = await HelpDeskService.GetSyncfusionHelpDeskTicketsAsync(ModuleState.ModuleId);
             StateHasChanged();
         }
         catch (Exception ex)

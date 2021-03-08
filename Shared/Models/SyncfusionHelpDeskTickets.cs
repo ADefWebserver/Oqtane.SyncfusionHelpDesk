@@ -4,13 +4,14 @@ using Oqtane.Models;
 
 namespace Syncfusion.HelpDesk.Models
 {
-    [Table("SyncfusionHelpDesk")]
-    public class HelpDesk : IAuditable
+    [Table("SyncfusionHelpDeskTickets")]
+    public class SyncfusionHelpDeskTickets : IAuditable
     {
-        public int HelpDeskId { get; set; }
+        public int Id { get; set; }
         public int ModuleId { get; set; }
-        public string Name { get; set; }
-
+        public string TicketStatus { get; set; }
+        public DateTime TicketDate { get; set; }
+        public string TicketDescription { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
         public string ModifiedBy { get; set; }

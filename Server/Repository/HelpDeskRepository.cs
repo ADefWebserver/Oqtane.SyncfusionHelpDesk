@@ -15,34 +15,34 @@ namespace Syncfusion.HelpDesk.Repository
             _db = context;
         }
 
-        public IEnumerable<Models.HelpDesk> GetHelpDesks(int ModuleId)
+        public IEnumerable<Models.SyncfusionHelpDeskTickets> GetSyncfusionHelpDeskTickets(int ModuleId)
         {
-            return _db.HelpDesk.Where(item => item.ModuleId == ModuleId);
+            return _db.SyncfusionHelpDeskTickets.Where(item => item.ModuleId == ModuleId);
         }
 
-        public Models.HelpDesk GetHelpDesk(int HelpDeskId)
+        public Models.SyncfusionHelpDeskTickets GetSyncfusionHelpDeskTicket(int Id)
         {
-            return _db.HelpDesk.Find(HelpDeskId);
+            return _db.SyncfusionHelpDeskTickets.Find(Id);
         }
 
-        public Models.HelpDesk AddHelpDesk(Models.HelpDesk HelpDesk)
+        public Models.SyncfusionHelpDeskTickets AddSyncfusionHelpDeskTickets(Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTicket)
         {
-            _db.HelpDesk.Add(HelpDesk);
+            _db.SyncfusionHelpDeskTickets.Add(SyncfusionHelpDeskTicket);
             _db.SaveChanges();
-            return HelpDesk;
+            return SyncfusionHelpDeskTicket;
         }
 
-        public Models.HelpDesk UpdateHelpDesk(Models.HelpDesk HelpDesk)
+        public Models.SyncfusionHelpDeskTickets UpdateSyncfusionHelpDeskTickets(Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTicket)
         {
-            _db.Entry(HelpDesk).State = EntityState.Modified;
+            _db.Entry(SyncfusionHelpDeskTicket).State = EntityState.Modified;
             _db.SaveChanges();
-            return HelpDesk;
+            return SyncfusionHelpDeskTicket;
         }
 
-        public void DeleteHelpDesk(int HelpDeskId)
+        public void DeleteSyncfusionHelpDeskTickets(int Id)
         {
-            Models.HelpDesk HelpDesk = _db.HelpDesk.Find(HelpDeskId);
-            _db.HelpDesk.Remove(HelpDesk);
+            Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTicket = _db.SyncfusionHelpDeskTickets.Find(Id);
+            _db.SyncfusionHelpDeskTickets.Remove(SyncfusionHelpDeskTicket);
             _db.SaveChanges();
         }
     }

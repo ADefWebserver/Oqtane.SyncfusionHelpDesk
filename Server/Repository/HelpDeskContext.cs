@@ -8,7 +8,7 @@ namespace Syncfusion.HelpDesk.Repository
 {
     public class HelpDeskContext : DBContextBase, IService
     {
-        public virtual DbSet<Models.HelpDesk> HelpDesk { get; set; }
+        public virtual DbSet<Models.SyncfusionHelpDeskTickets> SyncfusionHelpDeskTickets { get; set; }
 
         public HelpDeskContext(ITenantResolver tenantResolver, IHttpContextAccessor accessor) : base(tenantResolver, accessor)
         {

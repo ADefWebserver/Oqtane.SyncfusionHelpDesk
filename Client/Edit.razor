@@ -10,10 +10,26 @@
 <table class="table table-borderless">
     <tr>
         <td>
-            <Label For="name" HelpText="Enter a name">Name: </Label>
+            <Label For="name" HelpText="Enter a Ticket Status">Ticket Status: </Label>
         </td>
         <td>
-            <input id="name" class="form-control" @bind="@_name" />
+            <input id="TicketStatus" class="form-control" @bind="@_TicketStatus" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <Label For="TicketDate" HelpText="Enter a Ticket Date">Ticket Date: </Label>
+        </td>
+        <td>
+            <input id="TicketDate" class="form-control" @bind="@_TicketDate" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <Label For="TicketDescription" HelpText="Enter a Ticket Description">Ticket Description: </Label>
+        </td>
+        <td>
+            <input id="TicketDescription" class="form-control" @bind="@_TicketDescription" />
         </td>
     </tr>
 </table>
@@ -39,7 +55,9 @@
     };
 
     int _id;
-    string _name;
+    string _TicketStatus;
+    string _TicketDate;
+    string _TicketDescription;
     string _createdby;
     DateTime _createdon;
     string _modifiedby;
@@ -52,10 +70,12 @@
             if (PageState.Action == "Edit")
             {
                 _id = Int32.Parse(PageState.QueryString["id"]);
-                HelpDesk HelpDesk = await HelpDeskService.GetHelpDeskAsync(_id, ModuleState.ModuleId);
+                SyncfusionHelpDeskTickets HelpDesk = await HelpDeskService.GetSyncfusionHelpDeskTicketsAsync(_id, ModuleState.ModuleId);
                 if (HelpDesk != null)
                 {
-                    _name = HelpDesk.Name;
+                    _TicketStatus = HelpDesk.TicketStatus;
+                    _TicketDate = HelpDesk.TicketDate.ToShortDateString();
+                    _TicketDescription = HelpDesk.TicketDescription;
                     _createdby = HelpDesk.CreatedBy;
                     _createdon = HelpDesk.CreatedOn;
                     _modifiedby = HelpDesk.ModifiedBy;
@@ -76,17 +96,21 @@
         {
             if (PageState.Action == "Add")
             {
-                HelpDesk HelpDesk = new HelpDesk();
+                SyncfusionHelpDeskTickets HelpDesk = new SyncfusionHelpDeskTickets();
                 HelpDesk.ModuleId = ModuleState.ModuleId;
-                HelpDesk.Name = _name;
-                HelpDesk = await HelpDeskService.AddHelpDeskAsync(HelpDesk);
+                HelpDesk.TicketStatus = _TicketStatus;
+                HelpDesk.TicketDate = Convert.ToDateTime(_TicketDate);
+                HelpDesk.TicketDescription = _TicketDescription;
+                HelpDesk = await HelpDeskService.AddSyncfusionHelpDeskTicketsAsync(HelpDesk);
                 await logger.LogInformation("HelpDesk Added {HelpDesk}", HelpDesk);
             }
             else
             {
-                HelpDesk HelpDesk = await HelpDeskService.GetHelpDeskAsync(_id, ModuleState.ModuleId);
-                HelpDesk.Name = _name;
-                await HelpDeskService.UpdateHelpDeskAsync(HelpDesk);
+                SyncfusionHelpDeskTickets HelpDesk = await HelpDeskService.GetSyncfusionHelpDeskTicketsAsync(_id, ModuleState.ModuleId);
+                HelpDesk.TicketStatus = _TicketStatus;
+                HelpDesk.TicketDate = Convert.ToDateTime(_TicketDate);
+                HelpDesk.TicketDescription = _TicketDescription;
+                await HelpDeskService.UpdateSyncfusionHelpDeskTicketsAsync(HelpDesk);
                 await logger.LogInformation("HelpDesk Updated {HelpDesk}", HelpDesk);
             }
             NavigationManager.NavigateTo(NavigateUrl());

@@ -5,10 +5,10 @@ namespace Syncfusion.HelpDesk.Repository
 {
     public interface IHelpDeskRepository
     {
-        IEnumerable<Models.HelpDesk> GetHelpDesks(int ModuleId);
-        Models.HelpDesk GetHelpDesk(int HelpDeskId);
-        Models.HelpDesk AddHelpDesk(Models.HelpDesk HelpDesk);
-        Models.HelpDesk UpdateHelpDesk(Models.HelpDesk HelpDesk);
-        void DeleteHelpDesk(int HelpDeskId);
+        IEnumerable<Models.SyncfusionHelpDeskTickets> GetSyncfusionHelpDeskTickets(int ModuleId);
+        Models.SyncfusionHelpDeskTickets GetSyncfusionHelpDeskTicket(int Id);
+        Models.SyncfusionHelpDeskTickets AddSyncfusionHelpDeskTickets(Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTicket);
+        Models.SyncfusionHelpDeskTickets UpdateSyncfusionHelpDeskTickets(Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTicket);
+        void DeleteSyncfusionHelpDeskTickets(int Id);
     }
 }

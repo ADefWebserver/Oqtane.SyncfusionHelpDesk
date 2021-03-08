@@ -1,6 +1,8 @@
 /*  
-Remove SyncfusionHelpDesk table
+Remove SyncfusionHelpDesk tables
 */
 
-DROP TABLE [dbo].[SyncfusionHelpDesk]
+DROP TABLE [dbo].[SyncfusionHelpDeskTicketDetails]
+GO
+DROP TABLE [dbo].[SyncfusionHelpDeskTickets]
 GO

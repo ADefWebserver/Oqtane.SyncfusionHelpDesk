@@ -34,7 +34,9 @@ namespace Syncfusion.HelpDesk.Manager
         public string ExportModule(Module module)
         {
             string content = "";
-            List<Models.HelpDesk> HelpDesks = _HelpDeskRepository.GetHelpDesks(module.ModuleId).ToList();
+            List<Models.SyncfusionHelpDeskTickets> HelpDesks = 
+                _HelpDeskRepository.GetSyncfusionHelpDeskTickets(module.ModuleId).ToList();
+
             if (HelpDesks != null)
             {
                 content = JsonSerializer.Serialize(HelpDesks);
@@ -44,16 +46,23 @@ namespace Syncfusion.HelpDesk.Manager
 
         public void ImportModule(Module module, string content, string version)
         {
-            List<Models.HelpDesk> HelpDesks = null;
+            List<Models.SyncfusionHelpDeskTickets> HelpDesks = null;
             if (!string.IsNullOrEmpty(content))
             {
-                HelpDesks = JsonSerializer.Deserialize<List<Models.HelpDesk>>(content);
+                HelpDesks = JsonSerializer.Deserialize<List<Models.SyncfusionHelpDeskTickets>>(content);
             }
             if (HelpDesks != null)
             {
                 foreach(var HelpDesk in HelpDesks)
                 {
-                    _HelpDeskRepository.AddHelpDesk(new Models.HelpDesk { ModuleId = module.ModuleId, Name = HelpDesk.Name });
+                    _HelpDeskRepository.AddSyncfusionHelpDeskTickets(
+                        new Models.SyncfusionHelpDeskTickets {
+                            Id = HelpDesk.Id,
+                            ModuleId = module.ModuleId,
+                            TicketDate = HelpDesk.TicketDate,
+                            TicketStatus = HelpDesk.TicketStatus,
+                            TicketDescription = HelpDesk.TicketDescription   
+                        });
                 }
             }
         }

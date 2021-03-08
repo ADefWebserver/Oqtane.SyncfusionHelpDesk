@@ -4,16 +4,16 @@ using Syncfusion.HelpDesk.Models;
 
 namespace Syncfusion.HelpDesk.Services
 {
-    public interface IHelpDeskService 
+    public interface IHelpDeskService
     {
-        Task<List<Models.HelpDesk>> GetHelpDesksAsync(int ModuleId);
+        Task<List<Models.SyncfusionHelpDeskTickets>> GetSyncfusionHelpDeskTicketsAsync(int ModuleId);
 
-        Task<Models.HelpDesk> GetHelpDeskAsync(int HelpDeskId, int ModuleId);
+        Task<Models.SyncfusionHelpDeskTickets> GetSyncfusionHelpDeskTicketsAsync(int Id, int ModuleId);
 
-        Task<Models.HelpDesk> AddHelpDeskAsync(Models.HelpDesk HelpDesk);
+        Task<Models.SyncfusionHelpDeskTickets> AddSyncfusionHelpDeskTicketsAsync(Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTickets);
 
-        Task<Models.HelpDesk> UpdateHelpDeskAsync(Models.HelpDesk HelpDesk);
+        Task<Models.SyncfusionHelpDeskTickets> UpdateSyncfusionHelpDeskTicketsAsync(Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTickets);
 
-        Task DeleteHelpDeskAsync(int HelpDeskId, int ModuleId);
+        Task DeleteSyncfusionHelpDeskTicketsAsync(int Id, int ModuleId);
     }
 }

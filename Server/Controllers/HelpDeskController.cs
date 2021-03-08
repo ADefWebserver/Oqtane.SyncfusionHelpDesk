@@ -31,17 +31,17 @@ namespace Syncfusion.HelpDesk.Controllers
         // GET: api/<controller>?moduleid=x
         [HttpGet]
         [Authorize(Policy = PolicyNames.ViewModule)]
-        public IEnumerable<Models.HelpDesk> Get(string moduleid)
+        public IEnumerable<Models.SyncfusionHelpDeskTickets> Get(string moduleid)
         {
-            return _HelpDeskRepository.GetHelpDesks(int.Parse(moduleid));
+            return _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid));
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
         [Authorize(Policy = PolicyNames.ViewModule)]
-        public Models.HelpDesk Get(int id)
+        public Models.SyncfusionHelpDeskTickets Get(int id)
         {
-            Models.HelpDesk HelpDesk = _HelpDeskRepository.GetHelpDesk(id);
+            Models.SyncfusionHelpDeskTickets HelpDesk = _HelpDeskRepository.GetSyncfusionHelpDeskTicket(id);
             if (HelpDesk != null && HelpDesk.ModuleId != _entityId)
             {
                 HelpDesk = null;
@@ -52,11 +52,11 @@ namespace Syncfusion.HelpDesk.Controllers
         // POST api/<controller>
         [HttpPost]
         [Authorize(Policy = PolicyNames.EditModule)]
-        public Models.HelpDesk Post([FromBody] Models.HelpDesk HelpDesk)
+        public Models.SyncfusionHelpDeskTickets Post([FromBody] Models.SyncfusionHelpDeskTickets HelpDesk)
         {
             if (ModelState.IsValid && HelpDesk.ModuleId == _entityId)
             {
-                HelpDesk = _HelpDeskRepository.AddHelpDesk(HelpDesk);
+                HelpDesk = _HelpDeskRepository.AddSyncfusionHelpDeskTickets(HelpDesk);
                 _logger.Log(LogLevel.Information, this, LogFunction.Create, "HelpDesk Added {HelpDesk}", HelpDesk);
             }
             return HelpDesk;
@@ -65,11 +65,11 @@ namespace Syncfusion.HelpDesk.Controllers
         // PUT api/<controller>/5
         [HttpPut("{id}")]
         [Authorize(Policy = PolicyNames.EditModule)]
-        public Models.HelpDesk Put(int id, [FromBody] Models.HelpDesk HelpDesk)
+        public Models.SyncfusionHelpDeskTickets Put(int id, [FromBody] Models.SyncfusionHelpDeskTickets HelpDesk)
         {
             if (ModelState.IsValid && HelpDesk.ModuleId == _entityId)
             {
-                HelpDesk = _HelpDeskRepository.UpdateHelpDesk(HelpDesk);
+                HelpDesk = _HelpDeskRepository.UpdateSyncfusionHelpDeskTickets(HelpDesk);
                 _logger.Log(LogLevel.Information, this, LogFunction.Update, "HelpDesk Updated {HelpDesk}", HelpDesk);
             }
             return HelpDesk;
@@ -80,10 +80,10 @@ namespace Syncfusion.HelpDesk.Controllers
         [Authorize(Policy = PolicyNames.EditModule)]
         public void Delete(int id)
         {
-            Models.HelpDesk HelpDesk = _HelpDeskRepository.GetHelpDesk(id);
+            Models.SyncfusionHelpDeskTickets HelpDesk = _HelpDeskRepository.GetSyncfusionHelpDeskTicket(id);
             if (HelpDesk != null && HelpDesk.ModuleId == _entityId)
             {
-                _HelpDeskRepository.DeleteHelpDesk(id);
+                _HelpDeskRepository.DeleteSyncfusionHelpDeskTickets(id);
                 _logger.Log(LogLevel.Information, this, LogFunction.Delete, "HelpDesk Deleted {HelpDeskId}", id);
             }
         }

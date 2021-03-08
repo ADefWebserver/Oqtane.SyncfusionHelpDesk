@@ -7,8 +7,8 @@ namespace Syncfusion.HelpDesk
     {
         public ModuleDefinition ModuleDefinition => new ModuleDefinition
         {
-            Name = "HelpDesk",
-            Description = "HelpDesk",
+            Name = "Syncfusion HelpDesk",
+            Description = "Syncfusion HelpDesk",
             Version = "1.0.0",
             ServerManagerType = "Syncfusion.HelpDesk.Manager.HelpDeskManager, Syncfusion.HelpDesk.Server.Oqtane",
             ReleaseVersions = "1.0.0",

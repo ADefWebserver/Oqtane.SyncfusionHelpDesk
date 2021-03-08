@@ -20,28 +20,28 @@ namespace Syncfusion.HelpDesk.Services
 
          private string Apiurl => CreateApiUrl(_siteState.Alias, "HelpDesk");
 
-        public async Task<List<Models.HelpDesk>> GetHelpDesksAsync(int ModuleId)
+        public async Task<List<Models.SyncfusionHelpDeskTickets>> GetSyncfusionHelpDeskTicketsAsync(int ModuleId)
         {
-            List<Models.HelpDesk> HelpDesks = await GetJsonAsync<List<Models.HelpDesk>>(CreateAuthorizationPolicyUrl($"{Apiurl}?moduleid={ModuleId}", ModuleId));
-            return HelpDesks.OrderBy(item => item.Name).ToList();
+            List<Models.SyncfusionHelpDeskTickets> HelpDesks = await GetJsonAsync<List<Models.SyncfusionHelpDeskTickets>>(CreateAuthorizationPolicyUrl($"{Apiurl}?moduleid={ModuleId}", ModuleId));
+            return HelpDesks.OrderBy(item => item.Id).ToList();
         }
 
-        public async Task<Models.HelpDesk> GetHelpDeskAsync(int HelpDeskId, int ModuleId)
+        public async Task<Models.SyncfusionHelpDeskTickets> GetSyncfusionHelpDeskTicketsAsync(int HelpDeskId, int ModuleId)
         {
-            return await GetJsonAsync<Models.HelpDesk>(CreateAuthorizationPolicyUrl($"{Apiurl}/{HelpDeskId}", ModuleId));
+            return await GetJsonAsync<Models.SyncfusionHelpDeskTickets>(CreateAuthorizationPolicyUrl($"{Apiurl}/{HelpDeskId}", ModuleId));
         }
 
-        public async Task<Models.HelpDesk> AddHelpDeskAsync(Models.HelpDesk HelpDesk)
+        public async Task<Models.SyncfusionHelpDeskTickets> AddSyncfusionHelpDeskTicketsAsync(Models.SyncfusionHelpDeskTickets HelpDesk)
         {
-            return await PostJsonAsync<Models.HelpDesk>(CreateAuthorizationPolicyUrl($"{Apiurl}", HelpDesk.ModuleId), HelpDesk);
+            return await PostJsonAsync<Models.SyncfusionHelpDeskTickets>(CreateAuthorizationPolicyUrl($"{Apiurl}", HelpDesk.ModuleId), HelpDesk);
         }
 
-        public async Task<Models.HelpDesk> UpdateHelpDeskAsync(Models.HelpDesk HelpDesk)
+        public async Task<Models.SyncfusionHelpDeskTickets> UpdateSyncfusionHelpDeskTicketsAsync(Models.SyncfusionHelpDeskTickets HelpDesk)
         {
-            return await PutJsonAsync<Models.HelpDesk>(CreateAuthorizationPolicyUrl($"{Apiurl}/{HelpDesk.HelpDeskId}", HelpDesk.ModuleId), HelpDesk);
+            return await PutJsonAsync<Models.SyncfusionHelpDeskTickets>(CreateAuthorizationPolicyUrl($"{Apiurl}/{HelpDesk.Id}", HelpDesk.ModuleId), HelpDesk);
         }
 
-        public async Task DeleteHelpDeskAsync(int HelpDeskId, int ModuleId)
+        public async Task DeleteSyncfusionHelpDeskTicketsAsync(int HelpDeskId, int ModuleId)
         {
             await DeleteAsync(CreateAuthorizationPolicyUrl($"{Apiurl}/{HelpDeskId}", ModuleId));
         }
