@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Oqtane.Infrastructure;
 using Syncfusion.Blazor;
@@ -15,7 +16,19 @@ namespace Syncfusion.HelpDesk.Server.Startup
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             //Register Syncfusion license
-            //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("YOUR LICENSE KEY");
+            // Get a free license here: https://www.syncfusion.com/products/communitylicense
+
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            
+            var Configuration = builder.Build();
+
+            var SyncfusionLicense = Configuration.GetSection("SyncfusionLicense");
+            if (SyncfusionLicense != null)
+            {
+                Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(SyncfusionLicense.Value);
+            }
         }
         public void ConfigureMvc(IMvcBuilder mvcBuilder)
         {
