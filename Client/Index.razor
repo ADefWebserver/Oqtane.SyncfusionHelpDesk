@@ -2,50 +2,78 @@
 @using Syncfusion.HelpDesk.Models
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Grids
-
+ 
 @namespace Syncfusion.HelpDesk
 @inherits ModuleBase
 @inject IHelpDeskService HelpDeskService
 @inject NavigationManager NavigationManager
 
-@if (_HelpDesks == null)
-{
-    <p><em>Loading...</em></p> }
-else
-{
-    <br />
-    <ActionLink Action="Add"
-                Security="SecurityAccessLevel.Edit"
-                Text="Add TestExternal" />
-    <br />
-    <br />
-    @if (_HelpDesks.Count != 0)
-    {
-        <SfGrid DataSource="@_HelpDesks"
-                AllowPaging="true">
-            <GridPageSettings PageSize="5"></GridPageSettings>
-        </SfGrid>
-    }
-    else
-    {
-        <p>No Tests To Display</p>
-    }
-}
+<SfToast ID="toast_default" Height="50"
+         @ref="ToastObj"
+         Title="Help Desk Ticket"
+         Content="@ToastContent">
+    <ToastPosition X="Right"></ToastPosition>
+</SfToast>
+<h3>New Help Desk Ticket</h3>
+<br />
+<EditForm ID="new-doctor-form" Model="@objHelpDeskTicket"
+          OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <div>
+        <SfDropDownList TItem="SyncfusionHelpDeskStatus" TValue="string"
+                        PopupHeight="230px" Index=0
+                        Placeholder="Ticket Status"
+                        DataSource="@SyncfusionHelpDeskStatus.Statuses"
+                        FloatLabelType="@FloatLabelType.Always"
+                        @bind-Value="@objHelpDeskTicket.TicketStatus">
+            <DropDownListFieldSettings Text="Text"
+                                       Value="ID">
+            </DropDownListFieldSettings>
+        </SfDropDownList>
+    </div>
+    <div>
+        <SfDatePicker ID="TicketDate" Placeholder="Ticket Date"
+                      FloatLabelType="@FloatLabelType.Always"
+                      @bind-Value="@objHelpDeskTicket.TicketDate"
+                      Max="DateTime.Now"
+                      ShowClearButton="false"></SfDatePicker>
+        <ValidationMessage For="@(() => objHelpDeskTicket.TicketDate)" />
+    </div>
+    <div>
+        <SfTextBox Placeholder="Ticket Description"
+                   FloatLabelType="@FloatLabelType.Always"
+                   @bind-Value="@objHelpDeskTicket.TicketDescription">
+
+        </SfTextBox>
+        <ValidationMessage For="@(() => objHelpDeskTicket.TicketDescription)" />
+    </div>
+    <br /><br />
+    <div class="e-footer-content">
+        <div class="button-container">
+            <button type="submit" class="e-btn e-normal e-primary">Save</button>
+        </div>
+    </div>
+</EditForm>
+
 
 @code {
     public override List<Resource> Resources => new List<Resource>()
-{
+    {
         new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" },
         new Resource { ResourceType = ResourceType.Script, Url = ModulePath() + "Module.js" }
     };
 
-    List<SyncfusionHelpDeskTickets> _HelpDesks;
+    // Global property for the Help Desk Ticket
+    SyncfusionHelpDeskTickets objHelpDeskTicket = new SyncfusionHelpDeskTickets();
+
+    SfToast ToastObj;
+    private string ToastContent { get; set; } = "";
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            _HelpDesks = await HelpDeskService.GetSyncfusionHelpDeskTicketsAsync(ModuleState.ModuleId);
+            //_HelpDesks = await HelpDeskService.GetSyncfusionHelpDeskTicketsAsync(ModuleState.ModuleId);
         }
         catch (Exception ex)
         {
@@ -54,19 +82,29 @@ else
         }
     }
 
-    private async Task Delete(SyncfusionHelpDeskTickets HelpDesk)
+    public async Task HandleValidSubmit(EditContext context)
     {
         try
         {
-            await HelpDeskService.DeleteSyncfusionHelpDeskTicketsAsync(HelpDesk.Id, ModuleState.ModuleId);
-            await logger.LogInformation("HelpDesk Deleted {HelpDesk}", HelpDesk);
-            _HelpDesks = await HelpDeskService.GetSyncfusionHelpDeskTicketsAsync(ModuleState.ModuleId);
+            // Save the new Help Desk Ticket
+
+            //await NoAuthenticationClient.PostAsJsonAsync(
+            //    "SyncfusionHelpDesk", objHelpDeskTicket);           
+
+            // Clear the form
+            objHelpDeskTicket = new SyncfusionHelpDeskTickets();
+
+            // Show the Toast
+            ToastContent = "Saved!";
             StateHasChanged();
+            await this.ToastObj.Show();
+
         }
         catch (Exception ex)
         {
-            await logger.LogError(ex, "Error Deleting HelpDesk {HelpDesk} {Error}", HelpDesk, ex.Message);
-            AddModuleMessage("Error Deleting HelpDesk", MessageType.Error);
+            ToastContent = ex.Message;
+            StateHasChanged();
+            await this.ToastObj.Show();
         }
     }
 }
