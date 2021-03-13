@@ -2,7 +2,7 @@
 @using Syncfusion.HelpDesk.Models
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Grids
- 
+
 @namespace Syncfusion.HelpDesk
 @inherits ModuleBase
 @inject IHelpDeskService HelpDeskService
@@ -48,23 +48,24 @@
         <ValidationMessage For="@(() => objHelpDeskTicket.TicketDescription)" />
     </div>
     <br /><br />
-    <div class="e-footer-content">
-        <div class="button-container">
-            <button type="submit" class="e-btn e-normal e-primary">Save</button>
-        </div>
-    </div>
+    <SfButton Content="@Content" HtmlAttributes="@submit"></SfButton>
 </EditForm>
 
 
 @code {
     public override List<Resource> Resources => new List<Resource>()
-    {
+{
         new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" },
         new Resource { ResourceType = ResourceType.Script, Url = ModulePath() + "Module.js" }
     };
 
+    public string Content = "Submit";
+    private Dictionary<string, object> submit = new Dictionary<string, object>() {
+        { "type", "submit"}
+    };
+
     // Global property for the Help Desk Ticket
-    SyncfusionHelpDeskTickets objHelpDeskTicket = new SyncfusionHelpDeskTickets();
+    SyncfusionHelpDeskTickets objHelpDeskTicket;
 
     SfToast ToastObj;
     private string ToastContent { get; set; } = "";
@@ -74,6 +75,7 @@
         try
         {
             //_HelpDesks = await HelpDeskService.GetSyncfusionHelpDeskTicketsAsync(ModuleState.ModuleId);
+            ResetForm();
         }
         catch (Exception ex)
         {
@@ -89,10 +91,10 @@
             // Save the new Help Desk Ticket
 
             //await NoAuthenticationClient.PostAsJsonAsync(
-            //    "SyncfusionHelpDesk", objHelpDeskTicket);           
+            //    "SyncfusionHelpDesk", objHelpDeskTicket);
 
             // Clear the form
-            objHelpDeskTicket = new SyncfusionHelpDeskTickets();
+            ResetForm();
 
             // Show the Toast
             ToastContent = "Saved!";
@@ -106,5 +108,16 @@
             StateHasChanged();
             await this.ToastObj.Show();
         }
+    }
+
+    public void ResetForm()
+    {
+        objHelpDeskTicket = new SyncfusionHelpDeskTickets()
+        {
+            TicketDate = new DateTime(
+                DateTime.Now.Year,
+                DateTime.Now.Month,
+                DateTime.Now.Day)
+        };
     }
 }
