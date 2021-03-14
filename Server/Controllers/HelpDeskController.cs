@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Primitives;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Oqtane.Shared;
@@ -8,8 +7,6 @@ using Oqtane.Enums;
 using Oqtane.Infrastructure;
 using Syncfusion.HelpDesk.Models;
 using Syncfusion.HelpDesk.Repository;
-using System.Linq.Expressions;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Oqtane.Repository;
@@ -40,61 +37,18 @@ namespace Syncfusion.HelpDesk.Controllers
         // GET: api/<controller>?moduleid=x
         [HttpGet]
         [Authorize(Policy = PolicyNames.EditModule)]
-        public object Get(string moduleid)
+        public IEnumerable<SyncfusionHelpDeskTickets> Get(string moduleid)
         {
-            StringValues Skip;
-            StringValues Take;
-            StringValues OrderBy;
-
-            // Filter the data
-            var TotalRecordCount = _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid)).Count();
-
-            int skip = (Request.Query.TryGetValue("$skip", out Skip))
-                ? Convert.ToInt32(Skip[0]) : 0;
-
-            int top = (Request.Query.TryGetValue("$top", out Take))
-                ? Convert.ToInt32(Take[0]) : TotalRecordCount;
-
-            string orderby =
-                (Request.Query.TryGetValue("$orderby", out OrderBy))
-                ? OrderBy.ToString() : "TicketDate";
-
-            // Handle OrderBy direction
-            if (orderby.EndsWith(" desc"))
-            {
-                orderby = orderby.Replace(" desc", "");
-
-                return new
-                {
-                    Items = _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid))
-                    .OrderBy(orderby)
-                    .Skip(skip)
-                    .Take(top),
-                    Count = TotalRecordCount
-                };
-            }
-            else
-            {
-                System.Reflection.PropertyInfo prop =
-                    typeof(SyncfusionHelpDeskTickets).GetProperty(orderby);
-
-                return new
-                {
-                    Items = _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid))
-                    .OrderBy(orderby)
-                    .Skip(skip)
-                    .Take(top),
-                    Count = TotalRecordCount
-                };
-            }
+            return _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid))
+                .OrderBy(x => x.Id)
+                .ToList();
         }
-
 
         // A non-Administrator can only query their Tickets
         // GET: api/<controller>?moduleid=x&username=y
         [HttpGet]
         [Authorize(Policy = PolicyNames.ViewModule)]
-        public object Get(string moduleid, string username)
+        public IEnumerable<SyncfusionHelpDeskTickets> Get(string moduleid, string username)
         {
             // Get User
             var User = _users.GetUser(this.User.Identity.Name);
@@ -102,55 +56,12 @@ namespace Syncfusion.HelpDesk.Controllers
             if (User == null)
             {
                 return null;
-            }
+            } 
 
-            StringValues Skip;
-            StringValues Take;
-            StringValues OrderBy;
-
-            // Filter the data
-            var TotalRecordCount = _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid)).Count();
-
-            int skip = (Request.Query.TryGetValue("$skip", out Skip))
-                ? Convert.ToInt32(Skip[0]) : 0;
-
-            int top = (Request.Query.TryGetValue("$top", out Take))
-                ? Convert.ToInt32(Take[0]) : TotalRecordCount;
-
-            string orderby =
-                (Request.Query.TryGetValue("$orderby", out OrderBy))
-                ? OrderBy.ToString() : "TicketDate";
-
-            // Handle OrderBy direction
-            if (orderby.EndsWith(" desc"))
-            {
-                orderby = orderby.Replace(" desc", "");
-
-                return new
-                {
-                    Items = _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid))
-                    .Where(x => x.CreatedBy == User.Username)
-                    .OrderBy(orderby)
-                    .Skip(skip)
-                    .Take(top),
-                    Count = TotalRecordCount
-                };
-            }
-            else
-            {
-                System.Reflection.PropertyInfo prop =
-                    typeof(SyncfusionHelpDeskTickets).GetProperty(orderby);
-
-                return new
-                {
-                    Items = _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid))
-                    .Where(x => x.CreatedBy == User.Username)
-                    .OrderBy(orderby)
-                    .Skip(skip)
-                    .Take(top),
-                    Count = TotalRecordCount
-                };
-            }
+            return _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid))
+                .Where(x => x.CreatedBy == User.Username)
+                .OrderBy(x => x.Id)
+                .ToList();
         }
 
         // All users can Post
@@ -227,32 +138,6 @@ namespace Syncfusion.HelpDesk.Controllers
                 _HelpDeskRepository.DeleteSyncfusionHelpDeskTickets(id);
                 _logger.Log(LogLevel.Information, this, LogFunction.Delete, "HelpDesk Deleted {HelpDeskId}", id);
             }
-        }
-    }
-
-    // From: https://bit.ly/30ypMCp
-    public static class IQueryableExtensions
-    {
-        public static IOrderedQueryable<T> OrderBy<T>(
-            this IQueryable<T> source, string propertyName)
-        {
-            return source.OrderBy(ToLambda<T>(propertyName));
-        }
-
-        public static IOrderedQueryable<T> OrderByDescending<T>(
-            this IQueryable<T> source, string propertyName)
-        {
-            return source.OrderByDescending(ToLambda<T>(propertyName));
-        }
-
-        private static Expression<Func<T, object>> ToLambda<T>(
-            string propertyName)
-        {
-            var parameter = Expression.Parameter(typeof(T));
-            var property = Expression.Property(parameter, propertyName);
-            var propAsObject = Expression.Convert(property, typeof(object));
-
-            return Expression.Lambda<Func<T, object>>(propAsObject, parameter);
         }
     }
 }
