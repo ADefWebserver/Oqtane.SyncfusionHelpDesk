@@ -36,7 +36,7 @@ namespace Syncfusion.HelpDesk.Controllers
             }
         }
         
-        // Only an Administrator can query
+        // Only an Administrator can query all Tickets
         // GET: api/<controller>?moduleid=x
         [HttpGet]
         [Authorize(Policy = PolicyNames.EditModule)]
@@ -81,6 +81,70 @@ namespace Syncfusion.HelpDesk.Controllers
                 return new
                 {
                     Items = _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid))
+                    .OrderBy(orderby)
+                    .Skip(skip)
+                    .Take(top),
+                    Count = TotalRecordCount
+                };
+            }
+        }
+
+
+        // A non-Administrator can only query their Tickets
+        // GET: api/<controller>?moduleid=x&username=y
+        [HttpGet]
+        [Authorize(Policy = PolicyNames.ViewModule)]
+        public object Get(string moduleid, string username)
+        {
+            // Get User
+            var User = _users.GetUser(this.User.Identity.Name);
+
+            if (User == null)
+            {
+                return null;
+            }
+
+            StringValues Skip;
+            StringValues Take;
+            StringValues OrderBy;
+
+            // Filter the data
+            var TotalRecordCount = _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid)).Count();
+
+            int skip = (Request.Query.TryGetValue("$skip", out Skip))
+                ? Convert.ToInt32(Skip[0]) : 0;
+
+            int top = (Request.Query.TryGetValue("$top", out Take))
+                ? Convert.ToInt32(Take[0]) : TotalRecordCount;
+
+            string orderby =
+                (Request.Query.TryGetValue("$orderby", out OrderBy))
+                ? OrderBy.ToString() : "TicketDate";
+
+            // Handle OrderBy direction
+            if (orderby.EndsWith(" desc"))
+            {
+                orderby = orderby.Replace(" desc", "");
+
+                return new
+                {
+                    Items = _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid))
+                    .Where(x => x.CreatedBy == User.Username)
+                    .OrderBy(orderby)
+                    .Skip(skip)
+                    .Take(top),
+                    Count = TotalRecordCount
+                };
+            }
+            else
+            {
+                System.Reflection.PropertyInfo prop =
+                    typeof(SyncfusionHelpDeskTickets).GetProperty(orderby);
+
+                return new
+                {
+                    Items = _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid))
+                    .Where(x => x.CreatedBy == User.Username)
                     .OrderBy(orderby)
                     .Skip(skip)
                     .Take(top),
