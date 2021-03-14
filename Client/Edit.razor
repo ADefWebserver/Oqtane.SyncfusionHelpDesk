@@ -50,7 +50,7 @@
     public override string Title => "Manage HelpDesk";
 
     public override List<Resource> Resources => new List<Resource>()
-    {
+{
         new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" }
     };
 
@@ -69,7 +69,7 @@
         {
             if (PageState.Action == "Edit")
             {
-                _id = Int32.Parse(PageState.QueryString["id"]);
+                //_id = Int32.Parse(PageState.QueryString["id"]);
                 //SyncfusionHelpDeskTickets HelpDesk = await HelpDeskService.GetSyncfusionHelpDeskTicketsAsync(_id, ModuleState.ModuleId);
                 //if (HelpDesk != null)
                 //{
@@ -94,25 +94,15 @@
     {
         try
         {
-            if (PageState.Action == "Add")
-            {
-                SyncfusionHelpDeskTickets HelpDesk = new SyncfusionHelpDeskTickets();
-                HelpDesk.ModuleId = ModuleState.ModuleId;
-                HelpDesk.TicketStatus = _TicketStatus;
-                HelpDesk.TicketDate = Convert.ToDateTime(_TicketDate);
-                HelpDesk.TicketDescription = _TicketDescription;
-                HelpDesk = await HelpDeskService.AddSyncfusionHelpDeskTicketsAsync(HelpDesk);
-                await logger.LogInformation("HelpDesk Added {HelpDesk}", HelpDesk);
-            }
-            else
-            {
-                //SyncfusionHelpDeskTickets HelpDesk = await HelpDeskService.GetSyncfusionHelpDeskTicketsAsync(_id, ModuleState.ModuleId);
-                //HelpDesk.TicketStatus = _TicketStatus;
-                //HelpDesk.TicketDate = Convert.ToDateTime(_TicketDate);
-                //HelpDesk.TicketDescription = _TicketDescription;
-                //await HelpDeskService.UpdateSyncfusionHelpDeskTicketsAsync(HelpDesk);
-                //await logger.LogInformation("HelpDesk Updated {HelpDesk}", HelpDesk);
-            }
+
+            SyncfusionHelpDeskTickets HelpDesk = new SyncfusionHelpDeskTickets();
+            HelpDesk.ModuleId = ModuleState.ModuleId;
+            HelpDesk.TicketStatus = _TicketStatus;
+            HelpDesk.TicketDate = Convert.ToDateTime(_TicketDate);
+            HelpDesk.TicketDescription = _TicketDescription;
+            HelpDesk = await HelpDeskService.AddSyncfusionHelpDeskTicketsAsync(HelpDesk);
+            await logger.LogInformation("HelpDesk Added {HelpDesk}", HelpDesk);
+
             NavigationManager.NavigateTo(NavigateUrl());
         }
         catch (Exception ex)

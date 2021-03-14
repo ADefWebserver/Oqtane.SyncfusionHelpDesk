@@ -1,21 +1,18 @@
 @using Syncfusion.HelpDesk.Services
 @using Syncfusion.HelpDesk.Models
 @using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.Grids
+@using Microsoft.AspNetCore.Components.Authorization
 
 @namespace Syncfusion.HelpDesk
 @inherits ModuleBase
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IHelpDeskService HelpDeskService
 @inject NavigationManager NavigationManager
 
-<SfToast ID="toast_default" Height="50"
-         @ref="ToastObj"
-         Title="Help Desk Ticket"
-         Content="@ToastContent">
-    <ToastPosition X="Right"></ToastPosition>
-</SfToast>
 <h3>New Help Desk Ticket</h3>
-<br />
+<ActionLink Action="Edit" Security="SecurityAccessLevel.Edit"
+            Text="Existing Tickets" />
+<br /><br />
 <EditForm ID="new-doctor-form" Model="@objHelpDeskTicket"
           OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator></DataAnnotationsValidator>
@@ -48,7 +45,16 @@
         <ValidationMessage For="@(() => objHelpDeskTicket.TicketDescription)" />
     </div>
     <br /><br />
-    <SfButton Content="@Content" HtmlAttributes="@submit"></SfButton>
+    @if (isAuthenticated)
+    {
+        <SfButton Content="@Content" HtmlAttributes="@submit"></SfButton>
+    }
+    else
+    {
+        <b>You must be logged in to submit a Ticket</b>
+    }
+    <br /><br />
+    <b>@Status</b>
 </EditForm>
 
 
@@ -67,13 +73,21 @@
     // Global property for the Help Desk Ticket
     SyncfusionHelpDeskTickets objHelpDeskTicket;
 
-    SfToast ToastObj;
-    private string ToastContent { get; set; } = "";
+    AuthenticationState authState;
+    bool isAuthenticated = false;
+    string Status = "";
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
+            // get user
+            authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
+            {
+                isAuthenticated = true;
+            }
+
             ResetForm();
         }
         catch (Exception ex)
@@ -87,25 +101,32 @@
     {
         try
         {
+            Status = "";
+
             // Save the new Help Desk Ticket
 
-            //await NoAuthenticationClient.PostAsJsonAsync(
-            //    "SyncfusionHelpDesk", objHelpDeskTicket);
+            SyncfusionHelpDeskTickets HelpDesk = new SyncfusionHelpDeskTickets();
+            HelpDesk.Id = -1;
+            HelpDesk.ModuleId = ModuleState.ModuleId;
+            HelpDesk.TicketStatus = objHelpDeskTicket.TicketStatus;
+            HelpDesk.TicketDate = Convert.ToDateTime(objHelpDeskTicket.TicketDate);
+            HelpDesk.TicketDescription = objHelpDeskTicket.TicketDescription;
+            HelpDesk.CreatedBy = authState.User.Identity.Name;
+            HelpDesk.CreatedOn = DateTime.Now;
+            HelpDesk.ModifiedBy = authState.User.Identity.Name;
+            HelpDesk.ModifiedOn = DateTime.Now;
+            HelpDesk.SyncfusionHelpDeskTicketDetails = new List<SyncfusionHelpDeskTicketDetails>();
+            HelpDesk = await HelpDeskService.AddSyncfusionHelpDeskTicketsAsync(HelpDesk);
+            await logger.LogInformation("HelpDesk Added {HelpDesk}", HelpDesk);
+
+            Status = "Saved!";
 
             // Clear the form
             ResetForm();
-
-            // Show the Toast
-            ToastContent = "Saved!";
-            StateHasChanged();
-            await this.ToastObj.Show();
-
         }
         catch (Exception ex)
         {
-            ToastContent = ex.Message;
-            StateHasChanged();
-            await this.ToastObj.Show();
+            Status = ex.Message;
         }
     }
 

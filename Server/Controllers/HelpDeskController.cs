@@ -68,11 +68,17 @@ namespace Syncfusion.HelpDesk.Controllers
         // POST api/<controller>
         [HttpPost]
         [Authorize(Policy = PolicyNames.ViewModule)]
-        public Task Post(SyncfusionHelpDeskTickets newSyncfusionHelpDeskTickets)
+        public Task Post(Models.SyncfusionHelpDeskTickets newSyncfusionHelpDeskTickets)
         {
             if (ModelState.IsValid && newSyncfusionHelpDeskTickets.ModuleId == _entityId)
             {
                 // Add a new Help Desk Ticket
+
+                // Get User
+                var User = _users.GetUser(this.User.Identity.Name);
+
+                newSyncfusionHelpDeskTickets.CreatedBy = User.Username;
+
                 newSyncfusionHelpDeskTickets = _HelpDeskRepository.AddSyncfusionHelpDeskTickets(newSyncfusionHelpDeskTickets);
 
                 _logger.Log(LogLevel.Information, this, LogFunction.Create, 
