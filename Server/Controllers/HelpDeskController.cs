@@ -53,13 +53,13 @@ namespace Syncfusion.HelpDesk.Controllers
             // Get User
             var User = _users.GetUser(this.User.Identity.Name);
 
-            if (User == null)
+            if (User.Username.ToLower() != username.ToLower())
             {
                 return null;
             } 
 
             return _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid))
-                .Where(x => x.CreatedBy == User.Username)
+                .Where(x => x.CreatedBy == username)
                 .OrderBy(x => x.Id)
                 .ToList();
         }
@@ -68,8 +68,7 @@ namespace Syncfusion.HelpDesk.Controllers
         // POST api/<controller>
         [HttpPost]
         [Authorize(Policy = PolicyNames.ViewModule)]
-        public Task
-            Post(SyncfusionHelpDeskTickets newSyncfusionHelpDeskTickets)
+        public Task Post(SyncfusionHelpDeskTickets newSyncfusionHelpDeskTickets)
         {
             if (ModelState.IsValid && newSyncfusionHelpDeskTickets.ModuleId == _entityId)
             {

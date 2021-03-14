@@ -20,20 +20,24 @@ namespace Syncfusion.HelpDesk.Services
 
          private string Apiurl => CreateApiUrl(_siteState.Alias, "HelpDesk");
 
-        public async Task<List<Models.SyncfusionHelpDeskTickets>> GetSyncfusionHelpDeskTicketsAsync(int ModuleId)
+        public async Task<List<Models.SyncfusionHelpDeskTickets>> GetSyncfusionHelpDeskTicketsAdminAsync(int ModuleId)
         {
-            List<Models.SyncfusionHelpDeskTickets> HelpDesks = await GetJsonAsync<List<Models.SyncfusionHelpDeskTickets>>(CreateAuthorizationPolicyUrl($"{Apiurl}?moduleid={ModuleId}", ModuleId));
-            return HelpDesks.OrderBy(item => item.Id).ToList();
+            return await GetJsonAsync<List<Models.SyncfusionHelpDeskTickets>>(CreateAuthorizationPolicyUrl($"{Apiurl}?moduleid={ModuleId}", ModuleId));
         }
-
-        public async Task<Models.SyncfusionHelpDeskTickets> GetSyncfusionHelpDeskTicketsAsync(int HelpDeskId, int ModuleId)
+        public async Task<List<Models.SyncfusionHelpDeskTickets>> GetSyncfusionHelpDeskTicketsByUserAsync(int ModuleId, string username)
         {
-            return await GetJsonAsync<Models.SyncfusionHelpDeskTickets>(CreateAuthorizationPolicyUrl($"{Apiurl}/{HelpDeskId}", ModuleId));
+            return await GetJsonAsync<List<Models.SyncfusionHelpDeskTickets>>(CreateAuthorizationPolicyUrl($"{Apiurl}?moduleid={ModuleId}&username={username}", ModuleId));
         }
 
         public async Task<Models.SyncfusionHelpDeskTickets> AddSyncfusionHelpDeskTicketsAsync(Models.SyncfusionHelpDeskTickets HelpDesk)
         {
             return await PostJsonAsync<Models.SyncfusionHelpDeskTickets>(CreateAuthorizationPolicyUrl($"{Apiurl}", HelpDesk.ModuleId), HelpDesk);
+        }
+
+        public async Task AddSyncfusionHelpDeskTicketDetailsAsync(int ModuleId, Models.SyncfusionHelpDeskTicketDetails HelpDeskTicketDetail)
+        {
+            var result = await PostJsonAsync(CreateAuthorizationPolicyUrl($"{Apiurl}", ModuleId), HelpDeskTicketDetail);
+            // ** TO DO - Return the updated SyncfusionHelpDeskTicketDetails
         }
 
         public async Task<Models.SyncfusionHelpDeskTickets> UpdateSyncfusionHelpDeskTicketsAsync(Models.SyncfusionHelpDeskTickets HelpDesk)

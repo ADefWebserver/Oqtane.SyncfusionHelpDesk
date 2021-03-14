@@ -70,17 +70,17 @@
             if (PageState.Action == "Edit")
             {
                 _id = Int32.Parse(PageState.QueryString["id"]);
-                SyncfusionHelpDeskTickets HelpDesk = await HelpDeskService.GetSyncfusionHelpDeskTicketsAsync(_id, ModuleState.ModuleId);
-                if (HelpDesk != null)
-                {
-                    _TicketStatus = HelpDesk.TicketStatus;
-                    _TicketDate = HelpDesk.TicketDate.ToShortDateString();
-                    _TicketDescription = HelpDesk.TicketDescription;
-                    _createdby = HelpDesk.CreatedBy;
-                    _createdon = HelpDesk.CreatedOn;
-                    _modifiedby = HelpDesk.ModifiedBy;
-                    _modifiedon = HelpDesk.ModifiedOn;
-                }
+                //SyncfusionHelpDeskTickets HelpDesk = await HelpDeskService.GetSyncfusionHelpDeskTicketsAsync(_id, ModuleState.ModuleId);
+                //if (HelpDesk != null)
+                //{
+                //    _TicketStatus = HelpDesk.TicketStatus;
+                //    _TicketDate = HelpDesk.TicketDate.ToShortDateString();
+                //    _TicketDescription = HelpDesk.TicketDescription;
+                //    _createdby = HelpDesk.CreatedBy;
+                //    _createdon = HelpDesk.CreatedOn;
+                //    _modifiedby = HelpDesk.ModifiedBy;
+                //    _modifiedon = HelpDesk.ModifiedOn;
+                //}
             }
         }
         catch (Exception ex)
@@ -106,12 +106,12 @@
             }
             else
             {
-                SyncfusionHelpDeskTickets HelpDesk = await HelpDeskService.GetSyncfusionHelpDeskTicketsAsync(_id, ModuleState.ModuleId);
-                HelpDesk.TicketStatus = _TicketStatus;
-                HelpDesk.TicketDate = Convert.ToDateTime(_TicketDate);
-                HelpDesk.TicketDescription = _TicketDescription;
-                await HelpDeskService.UpdateSyncfusionHelpDeskTicketsAsync(HelpDesk);
-                await logger.LogInformation("HelpDesk Updated {HelpDesk}", HelpDesk);
+                //SyncfusionHelpDeskTickets HelpDesk = await HelpDeskService.GetSyncfusionHelpDeskTicketsAsync(_id, ModuleState.ModuleId);
+                //HelpDesk.TicketStatus = _TicketStatus;
+                //HelpDesk.TicketDate = Convert.ToDateTime(_TicketDate);
+                //HelpDesk.TicketDescription = _TicketDescription;
+                //await HelpDeskService.UpdateSyncfusionHelpDeskTicketsAsync(HelpDesk);
+                //await logger.LogInformation("HelpDesk Updated {HelpDesk}", HelpDesk);
             }
             NavigationManager.NavigateTo(NavigateUrl());
         }

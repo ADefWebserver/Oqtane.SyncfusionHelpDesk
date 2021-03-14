@@ -6,11 +6,13 @@ namespace Syncfusion.HelpDesk.Services
 {
     public interface IHelpDeskService
     {
-        Task<List<Models.SyncfusionHelpDeskTickets>> GetSyncfusionHelpDeskTicketsAsync(int ModuleId);
+        Task<List<Models.SyncfusionHelpDeskTickets>> GetSyncfusionHelpDeskTicketsAdminAsync(int ModuleId);
 
-        Task<Models.SyncfusionHelpDeskTickets> GetSyncfusionHelpDeskTicketsAsync(int Id, int ModuleId);
+        Task<List<Models.SyncfusionHelpDeskTickets>> GetSyncfusionHelpDeskTicketsByUserAsync(int ModuleId, string username);
 
         Task<Models.SyncfusionHelpDeskTickets> AddSyncfusionHelpDeskTicketsAsync(Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTickets);
+        
+        Task AddSyncfusionHelpDeskTicketDetailsAsync(int ModuleId, Models.SyncfusionHelpDeskTicketDetails HelpDeskTicketDetail);
 
         Task<Models.SyncfusionHelpDeskTickets> UpdateSyncfusionHelpDeskTicketsAsync(Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTickets);
 
