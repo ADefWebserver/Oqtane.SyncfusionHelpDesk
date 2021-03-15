@@ -10,9 +10,9 @@
 @inject NavigationManager NavigationManager
 
 <h3>New Help Desk Ticket</h3>
-<ActionLink Action="Edit" Security="SecurityAccessLevel.Edit"
-            Text="Existing Tickets" />
-<br /><br />
+<ActionLink Action="Edit" Security="SecurityAccessLevel.Edit" Text="Existing Tickets" />
+<br />
+<br />
 <EditForm ID="new-doctor-form" Model="@objHelpDeskTicket"
           OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator></DataAnnotationsValidator>
@@ -48,15 +48,13 @@
     @if (isAuthenticated)
     {
         <SfButton Content="@Content" HtmlAttributes="@submit"></SfButton>
+        <br /><br /> <b>@Status</b>
     }
     else
     {
         <b>You must be logged in to submit a Ticket</b>
     }
-    <br /><br />
-    <b>@Status</b>
 </EditForm>
-
 
 @code {
     public override List<Resource> Resources => new List<Resource>()
@@ -71,7 +69,13 @@
     };
 
     // Global property for the Help Desk Ticket
-    SyncfusionHelpDeskTickets objHelpDeskTicket;
+    SyncfusionHelpDeskTickets objHelpDeskTicket = new SyncfusionHelpDeskTickets()
+    {
+        TicketDate = new DateTime(
+                DateTime.Now.Year,
+                DateTime.Now.Month,
+                DateTime.Now.Day)
+    };
 
     AuthenticationState authState;
     bool isAuthenticated = false;
@@ -83,12 +87,11 @@
         {
             // get user
             authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
             if (authState.User.Identity.IsAuthenticated)
             {
                 isAuthenticated = true;
             }
-
-            ResetForm();
         }
         catch (Exception ex)
         {
@@ -106,7 +109,7 @@
             // Save the new Help Desk Ticket
 
             SyncfusionHelpDeskTickets HelpDesk = new SyncfusionHelpDeskTickets();
-            HelpDesk.Id = -1;
+
             HelpDesk.ModuleId = ModuleState.ModuleId;
             HelpDesk.TicketStatus = objHelpDeskTicket.TicketStatus;
             HelpDesk.TicketDate = Convert.ToDateTime(objHelpDeskTicket.TicketDate);
@@ -116,6 +119,7 @@
             HelpDesk.ModifiedBy = authState.User.Identity.Name;
             HelpDesk.ModifiedOn = DateTime.Now;
             HelpDesk.SyncfusionHelpDeskTicketDetails = new List<SyncfusionHelpDeskTicketDetails>();
+
             HelpDesk = await HelpDeskService.AddSyncfusionHelpDeskTicketsAsync(HelpDesk);
             await logger.LogInformation("HelpDesk Added {HelpDesk}", HelpDesk);
 

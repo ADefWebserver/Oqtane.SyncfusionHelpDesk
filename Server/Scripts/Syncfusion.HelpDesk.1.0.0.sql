@@ -7,7 +7,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[SyncfusionHelpDeskTicketDetails](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[HelpDeskTicketDetailId] [int] IDENTITY(1,1) NOT NULL,
 	[HelpDeskTicketId] [int] NOT NULL,
 	[TicketDetailDate] [datetime] NOT NULL,
 	[TicketDescription] [nvarchar](max) NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE [dbo].[SyncfusionHelpDeskTicketDetails](
 	[ModifiedOn] [datetime] NOT NULL,
  CONSTRAINT [PK_SyncfusionHelpDeskTicketDetails] PRIMARY KEY CLUSTERED 
 (
-	[Id] ASC
+	[HelpDeskTicketDetailId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
@@ -27,7 +27,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[SyncfusionHelpDeskTickets](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[HelpDeskTicketId] [int] IDENTITY(1,1) NOT NULL,
 	[ModuleId] [int] NOT NULL,
 	[TicketStatus] [nvarchar](50) NOT NULL,
 	[TicketDate] [datetime] NOT NULL,
@@ -38,12 +38,12 @@ CREATE TABLE [dbo].[SyncfusionHelpDeskTickets](
 	[ModifiedOn] [datetime] NOT NULL,
  CONSTRAINT [PK_HelpDeskTickets] PRIMARY KEY CLUSTERED 
 (
-	[Id] ASC
+	[HelpDeskTicketId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[SyncfusionHelpDeskTicketDetails]  WITH CHECK ADD  CONSTRAINT [FK_SyncfusionHelpDeskTicketDetails_SyncfusionHelpDeskTickets] FOREIGN KEY([HelpDeskTicketId])
-REFERENCES [dbo].[SyncfusionHelpDeskTickets] ([Id])
+REFERENCES [dbo].[SyncfusionHelpDeskTickets] ([HelpDeskTicketId])
 ON DELETE CASCADE
 GO
 ALTER TABLE [dbo].[SyncfusionHelpDeskTicketDetails] CHECK CONSTRAINT [FK_SyncfusionHelpDeskTicketDetails_SyncfusionHelpDeskTickets]

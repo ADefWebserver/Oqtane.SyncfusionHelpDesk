@@ -95,13 +95,13 @@
         try
         {
 
-            SyncfusionHelpDeskTickets HelpDesk = new SyncfusionHelpDeskTickets();
-            HelpDesk.ModuleId = ModuleState.ModuleId;
-            HelpDesk.TicketStatus = _TicketStatus;
-            HelpDesk.TicketDate = Convert.ToDateTime(_TicketDate);
-            HelpDesk.TicketDescription = _TicketDescription;
-            HelpDesk = await HelpDeskService.AddSyncfusionHelpDeskTicketsAsync(HelpDesk);
-            await logger.LogInformation("HelpDesk Added {HelpDesk}", HelpDesk);
+            //SyncfusionHelpDeskTickets HelpDesk = new SyncfusionHelpDeskTickets();
+            //HelpDesk.ModuleId = ModuleState.ModuleId;
+            //HelpDesk.TicketStatus = _TicketStatus;
+            //HelpDesk.TicketDate = Convert.ToDateTime(_TicketDate);
+            //HelpDesk.TicketDescription = _TicketDescription;
+            //HelpDesk = await HelpDeskService.AddSyncfusionHelpDeskTicketsAsync(HelpDesk);
+            //await logger.LogInformation("HelpDesk Added {HelpDesk}", HelpDesk);
 
             NavigationManager.NavigateTo(NavigateUrl());
         }

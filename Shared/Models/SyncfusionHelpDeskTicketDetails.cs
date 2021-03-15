@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Oqtane.Models;
 
 namespace Syncfusion.HelpDesk.Models
 {
-    public partial class SyncfusionHelpDeskTicketDetails : IAuditable
+    public class SyncfusionHelpDeskTicketDetails : IAuditable
     {
-        public int Id { get; set; }
+        [Key]
+        public int HelpDeskTicketDetailId { get; set; }
         public int HelpDeskTicketId { get; set; }
         public DateTime TicketDetailDate { get; set; }
         public string TicketDescription { get; set; }

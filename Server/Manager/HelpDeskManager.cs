@@ -57,7 +57,7 @@ namespace Syncfusion.HelpDesk.Manager
                 {
                     _HelpDeskRepository.AddSyncfusionHelpDeskTickets(
                         new Models.SyncfusionHelpDeskTickets {
-                            Id = HelpDesk.Id,
+                            HelpDeskTicketId = HelpDesk.HelpDeskTicketId,
                             ModuleId = module.ModuleId,
                             TicketDate = HelpDesk.TicketDate,
                             TicketStatus = HelpDesk.TicketStatus,

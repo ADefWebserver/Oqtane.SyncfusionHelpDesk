@@ -40,7 +40,7 @@ namespace Syncfusion.HelpDesk.Controllers
         public IEnumerable<SyncfusionHelpDeskTickets> Get(string moduleid)
         {
             return _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid))
-                .OrderBy(x => x.Id)
+                .OrderBy(x => x.HelpDeskTicketId)
                 .ToList();
         }
 
@@ -60,7 +60,7 @@ namespace Syncfusion.HelpDesk.Controllers
 
             return _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid))
                 .Where(x => x.CreatedBy == username)
-                .OrderBy(x => x.Id)
+                .OrderBy(x => x.HelpDeskTicketId)
                 .ToList();
         }
 
@@ -68,24 +68,18 @@ namespace Syncfusion.HelpDesk.Controllers
         // POST api/<controller>
         [HttpPost]
         [Authorize(Policy = PolicyNames.ViewModule)]
-        public Task Post(Models.SyncfusionHelpDeskTickets newSyncfusionHelpDeskTickets)
+        public Task Post([FromBody] Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTickets)
         {
-            if (ModelState.IsValid && newSyncfusionHelpDeskTickets.ModuleId == _entityId)
+            if (ModelState.IsValid && SyncfusionHelpDeskTickets.ModuleId == _entityId)
             {
                 // Add a new Help Desk Ticket
-
-                // Get User
-                var User = _users.GetUser(this.User.Identity.Name);
-
-                newSyncfusionHelpDeskTickets.CreatedBy = User.Username;
-
-                newSyncfusionHelpDeskTickets = _HelpDeskRepository.AddSyncfusionHelpDeskTickets(newSyncfusionHelpDeskTickets);
+                SyncfusionHelpDeskTickets = _HelpDeskRepository.AddSyncfusionHelpDeskTickets(SyncfusionHelpDeskTickets);
 
                 _logger.Log(LogLevel.Information, this, LogFunction.Create, 
-                    "HelpDesk Added {newSyncfusionHelpDeskTickets}", newSyncfusionHelpDeskTickets);
+                    "HelpDesk Added {newSyncfusionHelpDeskTickets}", SyncfusionHelpDeskTickets);
             }            
 
-            return Task.FromResult(newSyncfusionHelpDeskTickets);
+            return Task.FromResult(SyncfusionHelpDeskTickets);
         }
 
         // Only users who created Ticket

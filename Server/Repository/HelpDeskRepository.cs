@@ -28,9 +28,9 @@ namespace Syncfusion.HelpDesk.Repository
 
         public Models.SyncfusionHelpDeskTickets AddSyncfusionHelpDeskTickets(Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTicket)
         {
-            _db.SyncfusionHelpDeskTickets.Add(SyncfusionHelpDeskTicket);
-            _db.SaveChanges();
-            return SyncfusionHelpDeskTicket;
+                _db.SyncfusionHelpDeskTickets.Add(SyncfusionHelpDeskTicket);
+                _db.SaveChanges();
+                return SyncfusionHelpDeskTicket;
         }
 
         public Models.SyncfusionHelpDeskTickets UpdateSyncfusionHelpDeskTickets
@@ -39,8 +39,8 @@ namespace Syncfusion.HelpDesk.Repository
             // Get the existing record
             var ExistingTicket =
                 _db.SyncfusionHelpDeskTickets
-                .Where(x => x.Id ==
-                UpdatedSyncfusionHelpDeskTickets.Id)
+                .Where(x => x.HelpDeskTicketId ==
+                UpdatedSyncfusionHelpDeskTickets.HelpDeskTicketId)
                 .FirstOrDefault();
 
             if (ExistingTicket != null)
@@ -55,29 +55,29 @@ namespace Syncfusion.HelpDesk.Repository
                     UpdatedSyncfusionHelpDeskTickets.TicketStatus;
 
                 // Insert any new TicketDetails
-                if (UpdatedSyncfusionHelpDeskTickets.SyncfusionHelpDeskTicketDetails != null)
-                {
-                    foreach (var item in
-                        UpdatedSyncfusionHelpDeskTickets.SyncfusionHelpDeskTicketDetails)
-                    {
-                        if (item.Id == 0)
-                        {
-                            // Create New HelpDeskTicketDetails record
-                            SyncfusionHelpDeskTicketDetails newHelpDeskTicketDetails =
-                                new SyncfusionHelpDeskTicketDetails();
+                //if (UpdatedSyncfusionHelpDeskTickets.SyncfusionHelpDeskTicketDetails != null)
+                //{
+                //    foreach (var item in
+                //        UpdatedSyncfusionHelpDeskTickets.SyncfusionHelpDeskTicketDetails)
+                //    {
+                //        if (item.Id == 0)
+                //        {
+                //            // Create New HelpDeskTicketDetails record
+                //            SyncfusionHelpDeskTicketDetails newHelpDeskTicketDetails =
+                //                new SyncfusionHelpDeskTicketDetails();
 
-                            newHelpDeskTicketDetails.HelpDeskTicketId =
-                                UpdatedSyncfusionHelpDeskTickets.Id;
-                            newHelpDeskTicketDetails.TicketDetailDate =
-                                DateTime.Now;
-                            newHelpDeskTicketDetails.TicketDescription =
-                                item.TicketDescription;
+                //            newHelpDeskTicketDetails.HelpDeskTicketId =
+                //                UpdatedSyncfusionHelpDeskTickets.Id;
+                //            newHelpDeskTicketDetails.TicketDetailDate =
+                //                DateTime.Now;
+                //            newHelpDeskTicketDetails.TicketDescription =
+                //                item.TicketDescription;
 
-                            _db.SyncfusionHelpDeskTicketDetails
-                                .Add(newHelpDeskTicketDetails);
-                        }
-                    }
-                }
+                //            _db.SyncfusionHelpDeskTicketDetails
+                //                .Add(newHelpDeskTicketDetails);
+                //        }
+                //    }
+                //}
 
                 _db.Entry(ExistingTicket).State = EntityState.Modified;
                 _db.SaveChanges();
@@ -112,7 +112,7 @@ namespace Syncfusion.HelpDesk.Repository
             // Get the CompleteTicket
             var CompleteTicket =
                 _db.SyncfusionHelpDeskTickets
-                .Where(x => x.Id ==
+                .Where(x => x.HelpDeskTicketId ==
                 newSyncfusionHelpDeskTicketDetails.HelpDeskTicketId)
                 .FirstOrDefault();
 
