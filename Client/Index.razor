@@ -10,23 +10,20 @@
 @inject NavigationManager NavigationManager
 
 <h3>New Help Desk Ticket</h3>
-<ActionLink Action="Edit" Security="SecurityAccessLevel.Edit" Text="Existing Tickets" />
+<ActionLink Action="Edit" Security="SecurityAccessLevel.Edit" Text="Administration" />
 <br />
 <br />
 <EditForm ID="new-doctor-form" Model="@objHelpDeskTicket"
           OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator></DataAnnotationsValidator>
     <div>
-        <SfDropDownList TItem="SyncfusionHelpDeskStatus" TValue="string"
-                        PopupHeight="230px" Index=0
-                        Placeholder="Ticket Status"
-                        DataSource="@SyncfusionHelpDeskStatus.Statuses"
-                        FloatLabelType="@FloatLabelType.Always"
-                        @bind-Value="@objHelpDeskTicket.TicketStatus">
-            <DropDownListFieldSettings Text="Text"
-                                       Value="ID">
-            </DropDownListFieldSettings>
-        </SfDropDownList>
+        <SfComboBox TValue="string" TItem="SyncfusionHelpDeskStatus" 
+                    PopupHeight="230px" Placeholder="Ticket Status" 
+                    FloatLabelType="@FloatLabelType.Always"
+                    @bind-Value="@objHelpDeskTicket.TicketStatus" DataSource="@SyncfusionHelpDeskStatus.Statuses">
+            <ComboBoxEvents TValue="string" TItem="SyncfusionHelpDeskStatus"></ComboBoxEvents>
+            <ComboBoxFieldSettings Text="Text" Value="ID"></ComboBoxFieldSettings>
+        </SfComboBox>
     </div>
     <div>
         <SfDatePicker ID="TicketDate" Placeholder="Ticket Date"
@@ -74,7 +71,8 @@
         TicketDate = new DateTime(
                 DateTime.Now.Year,
                 DateTime.Now.Month,
-                DateTime.Now.Day)
+                DateTime.Now.Day),
+         TicketStatus = "New"
     };
 
     AuthenticationState authState;
@@ -141,7 +139,8 @@
             TicketDate = new DateTime(
                 DateTime.Now.Year,
                 DateTime.Now.Month,
-                DateTime.Now.Day)
+                DateTime.Now.Day), 
+            TicketStatus = "New"
         };
     }
 }

@@ -16,6 +16,8 @@ namespace Syncfusion.HelpDesk.Models
         [Key]
         public int HelpDeskTicketId { get; set; }
         public int ModuleId { get; set; }
+
+        [Required]
         public string TicketStatus { get; set; }
 
         [Required]
