@@ -9,46 +9,69 @@
 @inject IHelpDeskService HelpDeskService
 @inject NavigationManager NavigationManager
 
-<h3>New Help Desk Ticket</h3>
 <ActionLink Action="Edit" Security="SecurityAccessLevel.Edit" Text="Administration" />
-<br />
-<br />
+<br /><br />
 @if (isAuthenticated)
 {
-    <EditForm ID="new-doctor-form" Model="@objHelpDeskTicket"
-              OnValidSubmit="@HandleValidSubmit">
-        <DataAnnotationsValidator></DataAnnotationsValidator>
-        <div>
-            <SfComboBox TValue="string" TItem="SyncfusionHelpDeskStatus"
-                        PopupHeight="230px" Placeholder="Ticket Status"
-                        FloatLabelType="@FloatLabelType.Always"
-                        @bind-Value="@objHelpDeskTicket.TicketStatus" DataSource="@SyncfusionHelpDeskStatus.Statuses">
-                <ComboBoxEvents TValue="string" TItem="SyncfusionHelpDeskStatus"></ComboBoxEvents>
-                <ComboBoxFieldSettings Text="Text" Value="ID"></ComboBoxFieldSettings>
-            </SfComboBox>
-        </div>
-        <div>
-            <SfDatePicker ID="TicketDate" Placeholder="Ticket Date"
-                          FloatLabelType="@FloatLabelType.Always"
-                          @bind-Value="@objHelpDeskTicket.TicketDate"
-                          Max="DateTime.Now"
-                          ShowClearButton="false"></SfDatePicker>
-            <ValidationMessage For="@(() => objHelpDeskTicket.TicketDate)" />
-        </div>
-        <div>
-            <SfTextBox Placeholder="Ticket Description"
-                       FloatLabelType="@FloatLabelType.Always"
-                       @bind-Value="@objHelpDeskTicket.TicketDescription">
+    <div class="col-lg-12 control-section">
+        <div class="e-sample-resize-container">
+            <SfTab CssClass="default-tab">
+                <TabItems>
+                    <TabItem>
+                        <ChildContent>
+                            <TabHeader Text="New Help Desk Ticket" IconCss="e-twitter"></TabHeader>
+                        </ChildContent>
+                        <ContentTemplate>
+                            <br /><br />
+                            <EditForm ID="new-doctor-form" Model="@objHelpDeskTicket"
+                                      OnValidSubmit="@HandleValidSubmit">
+                                <DataAnnotationsValidator></DataAnnotationsValidator>
+                                <div>
+                                    <SfComboBox TValue="string" TItem="SyncfusionHelpDeskStatus"
+                                                PopupHeight="230px" Placeholder="Ticket Status"
+                                                FloatLabelType="@FloatLabelType.Always"
+                                                @bind-Value="@objHelpDeskTicket.TicketStatus" DataSource="@SyncfusionHelpDeskStatus.Statuses">
+                                        <ComboBoxEvents TValue="string" TItem="SyncfusionHelpDeskStatus"></ComboBoxEvents>
+                                        <ComboBoxFieldSettings Text="Text" Value="ID"></ComboBoxFieldSettings>
+                                    </SfComboBox>
+                                </div>
+                                <div>
+                                    <SfDatePicker ID="TicketDate" Placeholder="Ticket Date"
+                                                  FloatLabelType="@FloatLabelType.Always"
+                                                  @bind-Value="@objHelpDeskTicket.TicketDate"
+                                                  Max="DateTime.Now"
+                                                  ShowClearButton="false"></SfDatePicker>
+                                    <ValidationMessage For="@(() => objHelpDeskTicket.TicketDate)" />
+                                </div>
+                                <div>
+                                    <SfTextBox Placeholder="Ticket Description"
+                                               FloatLabelType="@FloatLabelType.Always"
+                                               @bind-Value="@objHelpDeskTicket.TicketDescription">
 
-            </SfTextBox>
-            <ValidationMessage For="@(() => objHelpDeskTicket.TicketDescription)" />
+                                    </SfTextBox>
+                                    <ValidationMessage For="@(() => objHelpDeskTicket.TicketDescription)" />
+                                </div>
+                                <br />
+
+                                <SfButton Content="@Content" HtmlAttributes="@submit"></SfButton>
+                                <br /><br /> <b>@Status</b>
+
+                            </EditForm>
+                        </ContentTemplate>
+                    </TabItem>
+                    <TabItem>
+                        <ChildContent>
+                            <TabHeader Text="Existing Tickets"></TabHeader>
+                        </ChildContent>
+                        <ContentTemplate>
+                            <br /><br />
+                            <h4>Existing Tickets</h4>
+                        </ContentTemplate>
+                    </TabItem>
+                </TabItems>
+            </SfTab>
         </div>
-        <br />
-
-        <SfButton Content="@Content" HtmlAttributes="@submit"></SfButton>
-        <br /><br /> <b>@Status</b>
-
-    </EditForm>
+    </div>
 }
 else
 {
@@ -70,9 +93,9 @@ else
     SyncfusionHelpDeskTickets objHelpDeskTicket = new SyncfusionHelpDeskTickets()
     {
         TicketDate = new DateTime(
-                DateTime.Now.Year,
-                DateTime.Now.Month,
-                DateTime.Now.Day),
+                    DateTime.Now.Year,
+                    DateTime.Now.Month,
+                    DateTime.Now.Day),
         TicketStatus = "New"
     };
 
