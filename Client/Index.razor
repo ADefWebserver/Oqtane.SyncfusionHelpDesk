@@ -15,7 +15,7 @@
 <br />
 @if (isAuthenticated)
 {
-    <div class="col-lg-12 control-section">
+    <div id="target" style="height: 500px;" class="col-lg-12 control-section">
         <div class="e-sample-resize-container">
             <SfTab CssClass="default-tab">
                 <TabItems>
@@ -68,7 +68,7 @@
                         <ContentTemplate>
                             <br /><br />
                             <div>
-                                <div id="target" style="height: 500px;">
+                                <div>
                                     <SfGrid ID="Grid"
                                             @ref="gridObj"
                                             DataSource="@colHelpDeskTickets"
@@ -81,15 +81,10 @@
                                                     TValue="SyncfusionHelpDeskTickets">
                                         </GridEvents>
                                         <GridColumns>
-                                            <GridColumn HeaderText="" TextAlign="TextAlign.Left" Width="150">
+                                            <GridColumn HeaderText="" TextAlign="TextAlign.Left" Width="50">
                                                 <GridCommandColumns>
                                                     <GridCommandColumn Type=CommandButtonType.Edit
-                                                                       ButtonOption="@(new CommandButtonOptions()
-                                                { Content = "Edit" })">
-                                                    </GridCommandColumn>
-                                                    <GridCommandColumn Type=CommandButtonType.Delete
-                                                                       ButtonOption="@(new CommandButtonOptions()
-                                                { Content = "Delete" })">
+                                                                       ButtonOption="@(new CommandButtonOptions() { Content = "Edit" })">
                                                     </GridCommandColumn>
                                                 </GridCommandColumns>
                                             </GridColumn>
@@ -103,6 +98,7 @@
                                             </GridColumn>
                                             <GridColumn Field=@nameof(SyncfusionHelpDeskTickets.TicketDate)
                                                         HeaderText="Date" TextAlign="@TextAlign.Left"
+                                                        Format="d" Type="ColumnType.Date" 
                                                         Width="80">
                                             </GridColumn>
                                             <GridColumn Field=@nameof(SyncfusionHelpDeskTickets.TicketDescription)
@@ -191,9 +187,7 @@ else
             {
                 isAuthenticated = true;
 
-                colHelpDeskTickets = 
-                    await HelpDeskService.GetSyncfusionHelpDeskTicketsByUserAsync(
-                        ModuleState.ModuleId, authState.User.Identity.Name);
+                await RefreshTickets();
             }
         }
         catch (Exception ex)
@@ -201,6 +195,15 @@ else
             await logger.LogError(ex, "Error Loading HelpDesk {Error}", ex.Message);
             AddModuleMessage("Error Loading HelpDesk", MessageType.Error);
         }
+    }
+
+    public async Task RefreshTickets()
+    {
+        var Tickets =
+            await HelpDeskService.GetSyncfusionHelpDeskTicketsByUserAsync(
+                ModuleState.ModuleId, authState.User.Identity.Name);
+
+        colHelpDeskTickets = Tickets.OrderByDescending(x => x.HelpDeskTicketId).ToList();
     }
 
     public async Task HandleValidSubmit(EditContext context)
@@ -230,6 +233,9 @@ else
 
             // Clear the form
             ResetForm();
+
+            // refresh Tickets
+            await RefreshTickets();
         }
         catch (Exception ex)
         {
@@ -253,16 +259,13 @@ else
 
     public bool EditDialogVisibility { get; set; } = false;
 
-    public async void OnCommandClicked(
+    public void OnCommandClicked(
       CommandClickEventArgs<SyncfusionHelpDeskTickets> args)
     {
         if (args.CommandColumn.ButtonOption.Content == "Edit")
         {
-            //// Get the selected Help Desk Ticket
-            //SelectedTicket =
-            //    await Http.GetFromJsonAsync<HelpDeskTicket>(
-            //        "Email?HelpDeskTicketGuid=" +
-            //        args.RowData.TicketGuid);
+            // Get the selected Help Desk Ticket
+            SelectedTicket = (SyncfusionHelpDeskTickets)args.RowData;
 
             // Open the Edit dialog
             this.EditDialogVisibility = true;
@@ -273,8 +276,7 @@ else
     public async Task SaveTicket()
     {
         // Update the selected Help Desk Ticket
-        //await Http.PutAsJsonAsync(
-        //"SyncfusionHelpDesk", SelectedTicket);
+        await HelpDeskService.UpdateSyncfusionHelpDeskTicketsAsync(SelectedTicket);
 
         // Close the Edit dialog
         this.EditDialogVisibility = false;

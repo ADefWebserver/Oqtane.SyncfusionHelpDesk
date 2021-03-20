@@ -23,7 +23,9 @@ namespace Syncfusion.HelpDesk.Repository
 
         public Models.SyncfusionHelpDeskTickets GetSyncfusionHelpDeskTicket(int Id)
         {
-            return _db.SyncfusionHelpDeskTickets.Find(Id);
+            return _db.SyncfusionHelpDeskTickets
+                .Where(item => item.HelpDeskTicketId == Id)
+                .Include(x => x.SyncfusionHelpDeskTicketDetails).FirstOrDefault();
         }
 
         public Models.SyncfusionHelpDeskTickets AddSyncfusionHelpDeskTickets(Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTicket)
@@ -34,7 +36,7 @@ namespace Syncfusion.HelpDesk.Repository
         }
 
         public Models.SyncfusionHelpDeskTickets UpdateSyncfusionHelpDeskTickets
-            (Models.SyncfusionHelpDeskTickets UpdatedSyncfusionHelpDeskTickets)
+            (string UpdateMode, Models.SyncfusionHelpDeskTickets UpdatedSyncfusionHelpDeskTickets)
         {
             // Get the existing record
             var ExistingTicket =
@@ -45,39 +47,46 @@ namespace Syncfusion.HelpDesk.Repository
 
             if (ExistingTicket != null)
             {
-                ExistingTicket.TicketDate =
-                    UpdatedSyncfusionHelpDeskTickets.TicketDate;
+                if (UpdateMode == "Admin")
+                {
+                    // Only Admin can update these fields
 
-                ExistingTicket.TicketDescription =
-                    UpdatedSyncfusionHelpDeskTickets.TicketDescription;
+                    ExistingTicket.TicketDate =
+                        UpdatedSyncfusionHelpDeskTickets.TicketDate;
+
+                    ExistingTicket.TicketDescription =
+                        UpdatedSyncfusionHelpDeskTickets.TicketDescription;
+                }
 
                 ExistingTicket.TicketStatus =
                     UpdatedSyncfusionHelpDeskTickets.TicketStatus;
 
                 // Insert any new TicketDetails
-                //if (UpdatedSyncfusionHelpDeskTickets.SyncfusionHelpDeskTicketDetails != null)
-                //{
-                //    foreach (var item in
-                //        UpdatedSyncfusionHelpDeskTickets.SyncfusionHelpDeskTicketDetails)
-                //    {
-                //        if (item.Id == 0)
-                //        {
-                //            // Create New HelpDeskTicketDetails record
-                //            SyncfusionHelpDeskTicketDetails newHelpDeskTicketDetails =
-                //                new SyncfusionHelpDeskTicketDetails();
+                if (UpdatedSyncfusionHelpDeskTickets.SyncfusionHelpDeskTicketDetails != null)
+                {
+                    foreach (var item in
+                        UpdatedSyncfusionHelpDeskTickets.SyncfusionHelpDeskTicketDetails)
+                    {
+                        if (item.HelpDeskTicketDetailId == 0)
+                        {
+                            // Create New HelpDeskTicketDetails record
+                            SyncfusionHelpDeskTicketDetails newHelpDeskTicketDetails =
+                                new SyncfusionHelpDeskTicketDetails();
 
-                //            newHelpDeskTicketDetails.HelpDeskTicketId =
-                //                UpdatedSyncfusionHelpDeskTickets.Id;
-                //            newHelpDeskTicketDetails.TicketDetailDate =
-                //                DateTime.Now;
-                //            newHelpDeskTicketDetails.TicketDescription =
-                //                item.TicketDescription;
+                            newHelpDeskTicketDetails.HelpDeskTicketId =
+                                UpdatedSyncfusionHelpDeskTickets.HelpDeskTicketId;
 
-                //            _db.SyncfusionHelpDeskTicketDetails
-                //                .Add(newHelpDeskTicketDetails);
-                //        }
-                //    }
-                //}
+                            newHelpDeskTicketDetails.TicketDetailDate =
+                                DateTime.Now;
+
+                            newHelpDeskTicketDetails.TicketDescription =
+                                item.TicketDescription;
+
+                            _db.SyncfusionHelpDeskTicketDetails
+                                .Add(newHelpDeskTicketDetails);
+                        }
+                    }
+                }
 
                 _db.Entry(ExistingTicket).State = EntityState.Modified;
                 _db.SaveChanges();
@@ -85,38 +94,6 @@ namespace Syncfusion.HelpDesk.Repository
 
             _db.SaveChanges();
             return ExistingTicket;
-        }
-
-        public Models.SyncfusionHelpDeskTickets AddHelpDeskTicketDetails
-            (Models.SyncfusionHelpDeskTicketDetails newSyncfusionHelpDeskTicketDetails)
-        {
-            // Insert new TicketDetail
-            // Create New HelpDeskTicketDetails record
-            SyncfusionHelpDeskTicketDetails newHelpDeskTicketDetails =
-                new SyncfusionHelpDeskTicketDetails();
-
-            newHelpDeskTicketDetails.HelpDeskTicketId =
-                newSyncfusionHelpDeskTicketDetails.HelpDeskTicketId;
-
-            newHelpDeskTicketDetails.TicketDetailDate =
-                DateTime.Now;
-
-            newHelpDeskTicketDetails.TicketDescription =
-                newSyncfusionHelpDeskTicketDetails.TicketDescription;
-
-            _db.SyncfusionHelpDeskTicketDetails
-                .Add(newHelpDeskTicketDetails);
-
-            _db.SaveChanges();
-
-            // Get the CompleteTicket
-            var CompleteTicket =
-                _db.SyncfusionHelpDeskTickets
-                .Where(x => x.HelpDeskTicketId ==
-                newSyncfusionHelpDeskTicketDetails.HelpDeskTicketId)
-                .FirstOrDefault();
-
-            return CompleteTicket;
         }
 
         public void DeleteSyncfusionHelpDeskTickets(int Id)

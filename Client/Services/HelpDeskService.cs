@@ -19,11 +19,8 @@ namespace Syncfusion.HelpDesk.Services
         }
 
          private string Apiurl => CreateApiUrl(_siteState.Alias, "HelpDesk");
+        private string AdminApiurl => CreateApiUrl(_siteState.Alias, "HelpDeskAdmin");
 
-        public async Task<List<Models.SyncfusionHelpDeskTickets>> GetSyncfusionHelpDeskTicketsAdminAsync(int ModuleId)
-        {
-            return await GetJsonAsync<List<Models.SyncfusionHelpDeskTickets>>(CreateAuthorizationPolicyUrl($"{Apiurl}?moduleid={ModuleId}", ModuleId));
-        }
         public async Task<List<Models.SyncfusionHelpDeskTickets>> GetSyncfusionHelpDeskTicketsByUserAsync(int ModuleId, string username)
         {
             return await GetJsonAsync<List<Models.SyncfusionHelpDeskTickets>>(CreateAuthorizationPolicyUrl($"{Apiurl}?username={username}", ModuleId));
@@ -34,20 +31,26 @@ namespace Syncfusion.HelpDesk.Services
             return await PostJsonAsync<Models.SyncfusionHelpDeskTickets>(CreateAuthorizationPolicyUrl($"{Apiurl}", SyncfusionHelpDeskTickets.ModuleId), SyncfusionHelpDeskTickets);
         }
 
-        public async Task AddSyncfusionHelpDeskTicketDetailsAsync(int ModuleId, Models.SyncfusionHelpDeskTicketDetails HelpDeskTicketDetail)
+        public async Task<Models.SyncfusionHelpDeskTickets> UpdateSyncfusionHelpDeskTicketsAsync(Models.SyncfusionHelpDeskTickets objSyncfusionHelpDeskTicket)
         {
-            var result = await PostJsonAsync(CreateAuthorizationPolicyUrl($"{Apiurl}", ModuleId), HelpDeskTicketDetail);
-            // ** TO DO - Return the updated SyncfusionHelpDeskTicketDetails
-        }
-
-        public async Task<Models.SyncfusionHelpDeskTickets> UpdateSyncfusionHelpDeskTicketsAsync(Models.SyncfusionHelpDeskTickets HelpDesk)
-        {
-            return await PutJsonAsync<Models.SyncfusionHelpDeskTickets>(CreateAuthorizationPolicyUrl($"{Apiurl}/{HelpDesk.HelpDeskTicketId}", HelpDesk.ModuleId), HelpDesk);
+            return await PostJsonAsync(CreateAuthorizationPolicyUrl($"{Apiurl}/{objSyncfusionHelpDeskTicket.HelpDeskTicketId}", objSyncfusionHelpDeskTicket.ModuleId), objSyncfusionHelpDeskTicket);
         }
 
         public async Task DeleteSyncfusionHelpDeskTicketsAsync(int HelpDeskId, int ModuleId)
         {
             await DeleteAsync(CreateAuthorizationPolicyUrl($"{Apiurl}/{HelpDeskId}", ModuleId));
+        }
+
+        // Admin Methods
+
+        public async Task<List<Models.SyncfusionHelpDeskTickets>> GetSyncfusionHelpDeskTicketsAdminAsync(int ModuleId)
+        {
+            return await GetJsonAsync<List<Models.SyncfusionHelpDeskTickets>>(CreateAuthorizationPolicyUrl($"{AdminApiurl}?moduleid={ModuleId}", ModuleId));
+        }
+
+        public async Task<Models.SyncfusionHelpDeskTickets> UpdateSyncfusionHelpDeskTicketsAdminAsync(Models.SyncfusionHelpDeskTickets objSyncfusionHelpDeskTicket)
+        {
+            return await PutJsonAsync<Models.SyncfusionHelpDeskTickets>(CreateAuthorizationPolicyUrl($"{AdminApiurl}/{objSyncfusionHelpDeskTicket.HelpDeskTicketId}", objSyncfusionHelpDeskTicket.ModuleId), objSyncfusionHelpDeskTicket);
         }
     }
 }

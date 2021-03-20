@@ -32,17 +32,6 @@ namespace Syncfusion.HelpDesk.Controllers
                 _entityId = int.Parse(accessor.HttpContext.Request.Query["entityid"]);
             }
         }
-        
-        // Only an Administrator can query all Tickets
-        // GET: api/<controller>?moduleid=x
-        //[HttpGet]
-        //[Authorize(Policy = PolicyNames.EditModule)]
-        //public IEnumerable<SyncfusionHelpDeskTickets> Get(string moduleid)
-        //{
-        //    return _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid))
-        //        .OrderBy(x => x.HelpDeskTicketId)
-        //        .ToList();
-        //}
 
         // A non-Administrator can only query their Tickets
         // GET: api/<controller>?username=x&entityid=y
@@ -58,10 +47,12 @@ namespace Syncfusion.HelpDesk.Controllers
                 return null;
             } 
 
-            return _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(entityid))
+            var HelpDeskTickets = _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(entityid))
                 .Where(x => x.CreatedBy == username)
                 .OrderBy(x => x.HelpDeskTicketId)
                 .ToList();
+
+            return HelpDeskTickets;
         }
 
         // All users can Post
@@ -83,14 +74,12 @@ namespace Syncfusion.HelpDesk.Controllers
         }
 
         // Only users who created Ticket
-        // can call this method to add Ticket Details
+        // can call this method to update Ticket
         // POST api/<controller>/1
         [HttpPost("{Id}")]
         [Authorize(Policy = PolicyNames.ViewModule)]
-        public Models.SyncfusionHelpDeskTickets Post(int Id, [FromBody] Models.SyncfusionHelpDeskTicketDetails newSyncfusionHelpDeskTicketDetails)
+        public void Post(int Id, [FromBody] Models.SyncfusionHelpDeskTickets UpdateSyncfusionHelpDeskTicket)
         {
-            SyncfusionHelpDeskTickets objSyncfusionHelpDeskTickets = new SyncfusionHelpDeskTickets();
-
             // Get User
             var User = _users.GetUser(this.User.Identity.Name);
 
@@ -102,28 +91,10 @@ namespace Syncfusion.HelpDesk.Controllers
                 // Ensure logged in user is the creator
                 if(ExistingTicket.CreatedBy.ToLower() == User.Username.ToLower())
                 {
-                    objSyncfusionHelpDeskTickets = _HelpDeskRepository.AddHelpDeskTicketDetails(newSyncfusionHelpDeskTicketDetails);
+                    // Update Ticket 
+                    _HelpDeskRepository.UpdateSyncfusionHelpDeskTickets("User", UpdateSyncfusionHelpDeskTicket);
                 }                
             }
-
-            return objSyncfusionHelpDeskTickets;
-        }
-
-        // Only an Administrator can update using this method
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        [Authorize(Policy = PolicyNames.EditModule)]
-        public Models.SyncfusionHelpDeskTickets Put(int id, [FromBody] Models.SyncfusionHelpDeskTickets updatedSyncfusionHelpDeskTickets)
-        {
-            if (ModelState.IsValid && updatedSyncfusionHelpDeskTickets.ModuleId == _entityId)
-            {
-                updatedSyncfusionHelpDeskTickets = _HelpDeskRepository.UpdateSyncfusionHelpDeskTickets(updatedSyncfusionHelpDeskTickets);
-                
-                _logger.Log(LogLevel.Information, this, LogFunction.Update, "HelpDesk Updated {updatedSyncfusionHelpDeskTickets}", 
-                    updatedSyncfusionHelpDeskTickets);
-            }
-
-            return updatedSyncfusionHelpDeskTickets;
         }
 
         // DELETE api/<controller>/5
