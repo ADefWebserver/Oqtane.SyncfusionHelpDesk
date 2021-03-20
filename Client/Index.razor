@@ -2,6 +2,7 @@
 @using Syncfusion.HelpDesk.Models
 @using Syncfusion.Blazor.Buttons
 @using Microsoft.AspNetCore.Components.Authorization
+@using Syncfusion.HelpDesk.Client
 
 @namespace Syncfusion.HelpDesk
 @inherits ModuleBase
@@ -10,7 +11,8 @@
 @inject NavigationManager NavigationManager
 
 <ActionLink Action="Edit" Security="SecurityAccessLevel.Edit" Text="Administration" />
-<br /><br />
+<br />
+<br />
 @if (isAuthenticated)
 {
     <div class="col-lg-12 control-section">
@@ -36,7 +38,7 @@
                                     </SfComboBox>
                                 </div>
                                 <div>
-                                    <SfDatePicker ID="TicketDate" Placeholder="Ticket Date"
+                                    <SfDatePicker ID="TicketDateInput" Placeholder="Ticket Date"
                                                   FloatLabelType="@FloatLabelType.Always"
                                                   @bind-Value="@objHelpDeskTicket.TicketDate"
                                                   Max="DateTime.Now"
@@ -65,13 +67,81 @@
                         </ChildContent>
                         <ContentTemplate>
                             <br /><br />
-                            <h4>Existing Tickets</h4>
+                            <div>
+                                <div id="target" style="height: 500px;">
+                                    <SfGrid ID="Grid"
+                                            @ref="gridObj"
+                                            DataSource="@colHelpDeskTickets"
+                                            AllowPaging="true"
+                                            AllowSorting="true"
+                                            AllowResizing="true"
+                                            AllowReordering="true">
+                                        <GridPageSettings PageSize="5"></GridPageSettings>
+                                        <GridEvents CommandClicked="OnCommandClicked"
+                                                    TValue="SyncfusionHelpDeskTickets">
+                                        </GridEvents>
+                                        <GridColumns>
+                                            <GridColumn HeaderText="" TextAlign="TextAlign.Left" Width="150">
+                                                <GridCommandColumns>
+                                                    <GridCommandColumn Type=CommandButtonType.Edit
+                                                                       ButtonOption="@(new CommandButtonOptions()
+                                                { Content = "Edit" })">
+                                                    </GridCommandColumn>
+                                                    <GridCommandColumn Type=CommandButtonType.Delete
+                                                                       ButtonOption="@(new CommandButtonOptions()
+                                                { Content = "Delete" })">
+                                                    </GridCommandColumn>
+                                                </GridCommandColumns>
+                                            </GridColumn>
+                                            <GridColumn IsPrimaryKey="true" Field=@nameof(SyncfusionHelpDeskTickets.HelpDeskTicketId)
+                                                        HeaderText="ID #" TextAlign="@TextAlign.Left"
+                                                        Width="70">
+                                            </GridColumn>
+                                            <GridColumn Field=@nameof(SyncfusionHelpDeskTickets.TicketStatus)
+                                                        HeaderText="Status" TextAlign="@TextAlign.Left"
+                                                        Width="80">
+                                            </GridColumn>
+                                            <GridColumn Field=@nameof(SyncfusionHelpDeskTickets.TicketDate)
+                                                        HeaderText="Date" TextAlign="@TextAlign.Left"
+                                                        Width="80">
+                                            </GridColumn>
+                                            <GridColumn Field=@nameof(SyncfusionHelpDeskTickets.TicketDescription)
+                                                        HeaderText="Description" TextAlign="@TextAlign.Left"
+                                                        Width="150">
+                                            </GridColumn>
+                                        </GridColumns>
+                                    </SfGrid>
+                                </div>
+                            </div>
                         </ContentTemplate>
                     </TabItem>
                 </TabItems>
             </SfTab>
         </div>
     </div>
+
+    <SfDialog Target="#target"
+              Width="500px"
+              Height="500px"
+              IsModal="true"
+              ShowCloseIcon="true"
+              @bind-Visible="EditDialogVisibility">
+        <DialogTemplates>
+            <Header> EDIT TICKET # @SelectedTicket.HelpDeskTicketId</Header>
+            <Content>
+                <EditTicket SelectedTicket="@SelectedTicket" />
+            </Content>
+            <FooterTemplate>
+                <div class="button-container">
+                    <button type="submit"
+                            class="e-btn e-normal e-primary"
+                            @onclick="SaveTicket">
+                        Save
+                    </button>
+                </div>
+            </FooterTemplate>
+        </DialogTemplates>
+    </SfDialog>
 }
 else
 {
@@ -99,6 +169,13 @@ else
         TicketStatus = "New"
     };
 
+    // Global property for the selected Help Desk Ticket
+    private SyncfusionHelpDeskTickets SelectedTicket = new SyncfusionHelpDeskTickets();
+
+    SfGrid<SyncfusionHelpDeskTickets> gridObj;
+
+    public List<SyncfusionHelpDeskTickets> colHelpDeskTickets { get; set; }
+
     AuthenticationState authState;
     bool isAuthenticated = false;
     string Status = "";
@@ -113,6 +190,10 @@ else
             if (authState.User.Identity.IsAuthenticated)
             {
                 isAuthenticated = true;
+
+                colHelpDeskTickets = 
+                    await HelpDeskService.GetSyncfusionHelpDeskTicketsByUserAsync(
+                        ModuleState.ModuleId, authState.User.Identity.Name);
             }
         }
         catch (Exception ex)
@@ -166,5 +247,41 @@ else
                 DateTime.Now.Day),
             TicketStatus = "New"
         };
+    }
+
+    // EXISTING HELP DESK TICKETS
+
+    public bool EditDialogVisibility { get; set; } = false;
+
+    public async void OnCommandClicked(
+      CommandClickEventArgs<SyncfusionHelpDeskTickets> args)
+    {
+        if (args.CommandColumn.ButtonOption.Content == "Edit")
+        {
+            //// Get the selected Help Desk Ticket
+            //SelectedTicket =
+            //    await Http.GetFromJsonAsync<HelpDeskTicket>(
+            //        "Email?HelpDeskTicketGuid=" +
+            //        args.RowData.TicketGuid);
+
+            // Open the Edit dialog
+            this.EditDialogVisibility = true;
+            StateHasChanged();
+        }
+    }
+
+    public async Task SaveTicket()
+    {
+        // Update the selected Help Desk Ticket
+        //await Http.PutAsJsonAsync(
+        //"SyncfusionHelpDesk", SelectedTicket);
+
+        // Close the Edit dialog
+        this.EditDialogVisibility = false;
+
+        // Refresh the SfGrid
+        // so the changes to the selected
+        // Help Desk Ticket are reflected
+        gridObj.Refresh();
     }
 }

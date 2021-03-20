@@ -35,20 +35,20 @@ namespace Syncfusion.HelpDesk.Controllers
         
         // Only an Administrator can query all Tickets
         // GET: api/<controller>?moduleid=x
-        [HttpGet]
-        [Authorize(Policy = PolicyNames.EditModule)]
-        public IEnumerable<SyncfusionHelpDeskTickets> Get(string moduleid)
-        {
-            return _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid))
-                .OrderBy(x => x.HelpDeskTicketId)
-                .ToList();
-        }
+        //[HttpGet]
+        //[Authorize(Policy = PolicyNames.EditModule)]
+        //public IEnumerable<SyncfusionHelpDeskTickets> Get(string moduleid)
+        //{
+        //    return _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid))
+        //        .OrderBy(x => x.HelpDeskTicketId)
+        //        .ToList();
+        //}
 
         // A non-Administrator can only query their Tickets
-        // GET: api/<controller>?moduleid=x&username=y
+        // GET: api/<controller>?username=x&entityid=y
         [HttpGet]
         [Authorize(Policy = PolicyNames.ViewModule)]
-        public IEnumerable<SyncfusionHelpDeskTickets> Get(string moduleid, string username)
+        public IEnumerable<SyncfusionHelpDeskTickets> Get(string username, string entityid)
         {
             // Get User
             var User = _users.GetUser(this.User.Identity.Name);
@@ -58,7 +58,7 @@ namespace Syncfusion.HelpDesk.Controllers
                 return null;
             } 
 
-            return _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid))
+            return _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(entityid))
                 .Where(x => x.CreatedBy == username)
                 .OrderBy(x => x.HelpDeskTicketId)
                 .ToList();
