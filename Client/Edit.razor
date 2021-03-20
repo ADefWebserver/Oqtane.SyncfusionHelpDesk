@@ -37,10 +37,6 @@
 <NavLink class="btn btn-secondary" href="@NavigateUrl()">Cancel</NavLink>
 <br />
 <br />
-@if (PageState.Action == "Edit")
-{
-    <AuditInfo CreatedBy="@_createdby" CreatedOn="@_createdon" ModifiedBy="@_modifiedby" ModifiedOn="@_modifiedon"></AuditInfo>
-}
 
 @code {
     public override SecurityAccessLevel SecurityAccessLevel => SecurityAccessLevel.Edit;
@@ -58,10 +54,6 @@
     string _TicketStatus;
     string _TicketDate;
     string _TicketDescription;
-    string _createdby;
-    DateTime _createdon;
-    string _modifiedby;
-    DateTime _modifiedon;
 
     protected override async Task OnInitializedAsync()
     {
