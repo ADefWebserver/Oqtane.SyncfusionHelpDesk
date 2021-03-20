@@ -7,7 +7,7 @@ namespace Syncfusion.HelpDesk
 {
     public class HostResources : IHostResources
     {           
-        // Register the .css files 
+        // Register the .js and .css files 
         // The JavaScript files will automatically be pulled
         // from the _content/syncfusion.blazor directory
         // so it does not need to be registered here
@@ -20,7 +20,10 @@ namespace Syncfusion.HelpDesk
             new Resource {
                 ResourceType = ResourceType.Stylesheet,
                 Url = "_content/Syncfusion.Blazor/" +
-                "styles/material-dark.css" }
+                "styles/material-dark.css" },
+            new Resource {
+                ResourceType = ResourceType.Script,
+                Url = "https://kit.fontawesome.com/a076d05399.js" }
         };
     }
 }
