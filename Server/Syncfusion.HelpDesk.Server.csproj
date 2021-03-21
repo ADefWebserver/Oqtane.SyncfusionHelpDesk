@@ -25,10 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\HelpDeskAdminController.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <_ContentIncludedByDefault Remove="efpt.config.json" />
   </ItemGroup>
 
@@ -53,9 +49,5 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\_content\syncfusion.blazor\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Controllers\HelpDeskAdminController.cs" />
   </ItemGroup>
 </Project>

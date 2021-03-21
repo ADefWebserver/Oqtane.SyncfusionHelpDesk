@@ -38,32 +38,7 @@ namespace Syncfusion.HelpDesk.Services
 
         public async Task<Models.SyncfusionHelpDeskTickets> UpdateSyncfusionHelpDeskTicketsAsync(Models.SyncfusionHelpDeskTickets objSyncfusionHelpDeskTicket)
         {
-            try
-            {
-                return await PostJsonAsync(CreateAuthorizationPolicyUrl($"{Apiurl}/{objSyncfusionHelpDeskTicket.HelpDeskTicketId}", objSyncfusionHelpDeskTicket.ModuleId), objSyncfusionHelpDeskTicket);
-            }
-            catch (System.Exception ex)
-            {
-                string error = ex.Message;
-                return null;
-            }
-        }
-
-        // Admin Methods
-
-        public async Task<List<Models.SyncfusionHelpDeskTickets>> GetSyncfusionHelpDeskTicketsAdminAsync(int ModuleId)
-        {
-            return await GetJsonAsync<List<Models.SyncfusionHelpDeskTickets>>(CreateAuthorizationPolicyUrl($"{AdminApiurl}?moduleid={ModuleId}", ModuleId));
-        }
-
-        public async Task<Models.SyncfusionHelpDeskTickets> UpdateSyncfusionHelpDeskTicketsAdminAsync(Models.SyncfusionHelpDeskTickets objSyncfusionHelpDeskTicket)
-        {
-            return await PutJsonAsync<Models.SyncfusionHelpDeskTickets>(CreateAuthorizationPolicyUrl($"{AdminApiurl}/{objSyncfusionHelpDeskTicket.HelpDeskTicketId}", objSyncfusionHelpDeskTicket.ModuleId), objSyncfusionHelpDeskTicket);
-        }
-
-        public async Task DeleteSyncfusionHelpDeskTicketsAsync(int HelpDeskId, int ModuleId)
-        {
-            await DeleteAsync(CreateAuthorizationPolicyUrl($"{AdminApiurl}/{HelpDeskId}", ModuleId));
-        }
+            return await PostJsonAsync(CreateAuthorizationPolicyUrl($"{Apiurl}/{objSyncfusionHelpDeskTicket.HelpDeskTicketId}", objSyncfusionHelpDeskTicket.ModuleId), objSyncfusionHelpDeskTicket);
+        }        
     }
 }

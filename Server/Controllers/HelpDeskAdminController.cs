@@ -23,25 +23,59 @@ namespace Syncfusion.HelpDesk.Controllers
 
         public HelpDeskAdminController(IHelpDeskRepository HelpDeskRepository, IUserRepository users, ILogManager logger, IHttpContextAccessor accessor)
         {
-            _HelpDeskRepository = HelpDeskRepository;
-            _users = users;
-            _logger = logger;
-
-            if (accessor.HttpContext.Request.Query.ContainsKey("entityid"))
+            try
             {
-                _entityId = int.Parse(accessor.HttpContext.Request.Query["entityid"]);
+                _HelpDeskRepository = HelpDeskRepository;
+                _users = users;
+                _logger = logger;
+
+                if (accessor.HttpContext.Request.Query.ContainsKey("entityid"))
+                {
+                    _entityId = int.Parse(accessor.HttpContext.Request.Query["entityid"]);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                string error = ex.Message;
             }
         }
 
         // Only an Administrator can query all Tickets
-        // GET: api/<controller>?moduleid=x
+        // GET: api/<controller>?entityid=x
         [HttpGet]
         [Authorize(Policy = PolicyNames.EditModule)]
-        public IEnumerable<SyncfusionHelpDeskTickets> Get(string moduleid)
+        public IEnumerable<SyncfusionHelpDeskTickets> Get(string entityid)
         {
-            return _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(moduleid))
+            return _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(entityid))
                 .OrderBy(x => x.HelpDeskTicketId)
                 .ToList();
+        }
+
+        // Only an Administrator can call this method
+        // GET: api/<controller>/1?entityid=z
+        [HttpGet("{HelpDeskTicketId}")]
+        [Authorize(Policy = PolicyNames.EditModule)]
+        public SyncfusionHelpDeskTickets Get(string HelpDeskTicketId, string entityid)
+        {
+            var HelpDeskTicket = _HelpDeskRepository.GetSyncfusionHelpDeskTicket(int.Parse(HelpDeskTicketId));
+
+            // Strip out HelpDeskTicket from SyncfusionHelpDeskTicketDetails
+            // to avoid trying to return self referencing object
+            var FinalHelpDeskTicket = new SyncfusionHelpDeskTickets();
+            FinalHelpDeskTicket.HelpDeskTicketId = HelpDeskTicket.HelpDeskTicketId;
+            FinalHelpDeskTicket.ModuleId = HelpDeskTicket.ModuleId;
+            FinalHelpDeskTicket.TicketDate = HelpDeskTicket.TicketDate;
+            FinalHelpDeskTicket.TicketDescription = HelpDeskTicket.TicketDescription;
+            FinalHelpDeskTicket.TicketStatus = HelpDeskTicket.TicketStatus;
+            FinalHelpDeskTicket.SyncfusionHelpDeskTicketDetails = new List<SyncfusionHelpDeskTicketDetails>();
+
+            foreach (var item in HelpDeskTicket.SyncfusionHelpDeskTicketDetails)
+            {
+                item.HelpDeskTicket = null;
+                FinalHelpDeskTicket.SyncfusionHelpDeskTicketDetails.Add(item);
+            }
+
+            return FinalHelpDeskTicket;
         }
 
         // Only an Administrator can update using this method
@@ -52,7 +86,7 @@ namespace Syncfusion.HelpDesk.Controllers
         {
             if (ModelState.IsValid && updatedSyncfusionHelpDeskTickets.ModuleId == _entityId)
             {
-                updatedSyncfusionHelpDeskTickets = _HelpDeskRepository.UpdateSyncfusionHelpDeskTickets(updatedSyncfusionHelpDeskTickets);
+                updatedSyncfusionHelpDeskTickets = _HelpDeskRepository.UpdateSyncfusionHelpDeskTickets("Admin", updatedSyncfusionHelpDeskTickets);
 
                 _logger.Log(LogLevel.Information, this, LogFunction.Update, "HelpDesk Updated {updatedSyncfusionHelpDeskTickets}",
                     updatedSyncfusionHelpDeskTickets);

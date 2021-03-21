@@ -1,42 +1,80 @@
 @using Oqtane.Modules.Controls
 @using Syncfusion.HelpDesk.Services
 @using Syncfusion.HelpDesk.Models
+@using Syncfusion.HelpDesk.Client
 
 @namespace Syncfusion.HelpDesk
 @inherits ModuleBase
-@inject IHelpDeskService HelpDeskService
+@inject IHelpDeskAdminService HelpDeskAdminService
 @inject NavigationManager NavigationManager
 
-<table class="table table-borderless">
-    <tr>
-        <td>
-            <Label For="name" HelpText="Enter a Ticket Status">Ticket Status: </Label>
-        </td>
-        <td>
-            <input id="TicketStatus" class="form-control" @bind="@_TicketStatus" />
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <Label For="TicketDate" HelpText="Enter a Ticket Date">Ticket Date: </Label>
-        </td>
-        <td>
-            <input id="TicketDate" class="form-control" @bind="@_TicketDate" />
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <Label For="TicketDescription" HelpText="Enter a Ticket Description">Ticket Description: </Label>
-        </td>
-        <td>
-            <input id="TicketDescription" class="form-control" @bind="@_TicketDescription" />
-        </td>
-    </tr>
-</table>
-<button type="button" class="btn btn-success" @onclick="Save">Save</button>
-<NavLink class="btn btn-secondary" href="@NavigateUrl()">Cancel</NavLink>
 <br />
 <br />
+<div id="target" style="height: 500px;" class="col-lg-12 control-section">
+    <div class="e-sample-resize-container">
+        <SfGrid ID="Grid"
+                @ref="gridObj"
+                DataSource="@colHelpDeskTickets"
+                AllowPaging="true" 
+                AllowSorting="true"
+                AllowResizing="true"
+                AllowReordering="true">
+            <GridPageSettings PageSize="10"></GridPageSettings>
+            <GridEvents CommandClicked="OnCommandClicked"
+                        TValue="SyncfusionHelpDeskTickets">
+            </GridEvents>
+            <GridColumns>
+                <GridColumn HeaderText="" TextAlign="TextAlign.Left" Width="50">
+                    <GridCommandColumns>
+                        <GridCommandColumn Type=CommandButtonType.Edit
+                                           ButtonOption="@(new CommandButtonOptions() { Content = "Edit" })">
+                        </GridCommandColumn>
+                    </GridCommandColumns>
+                </GridColumn>
+                <GridColumn IsPrimaryKey="true" Field=@nameof(SyncfusionHelpDeskTickets.HelpDeskTicketId)
+                            HeaderText="ID #" TextAlign="@TextAlign.Left"
+                            Width="70">
+                </GridColumn>
+                <GridColumn Field=@nameof(SyncfusionHelpDeskTickets.TicketStatus)
+                            HeaderText="Status" TextAlign="@TextAlign.Left"
+                            Width="80">
+                </GridColumn>
+                <GridColumn Field=@nameof(SyncfusionHelpDeskTickets.TicketDate)
+                            HeaderText="Date" TextAlign="@TextAlign.Left"
+                            Format="d" Type="ColumnType.Date"
+                            Width="80">
+                </GridColumn>
+                <GridColumn Field=@nameof(SyncfusionHelpDeskTickets.TicketDescription)
+                            HeaderText="Description" TextAlign="@TextAlign.Left"
+                            Width="150">
+                </GridColumn>
+            </GridColumns>
+        </SfGrid>
+    </div>
+</div>
+
+<SfDialog Target="#target"
+          Width="500px"
+          Height="500px"
+          IsModal="true"
+          ShowCloseIcon="true"
+          @bind-Visible="EditDialogVisibility">
+    <DialogTemplates>
+        <Header> EDIT TICKET # @SelectedTicket.HelpDeskTicketId</Header>
+        <Content>
+            <EditTicket SelectedTicket="@SelectedTicket" isAdmin="true" />
+        </Content>
+        <FooterTemplate>
+            <div class="button-container">
+                <button type="submit"
+                        class="e-btn e-normal e-primary"
+                        @onclick="SaveTicket">
+                    Save
+                </button>
+            </div>
+        </FooterTemplate>
+    </DialogTemplates>
+</SfDialog>
 
 @code {
     public override SecurityAccessLevel SecurityAccessLevel => SecurityAccessLevel.Edit;
@@ -50,57 +88,67 @@
         new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" }
     };
 
-    int _id;
-    string _TicketStatus;
-    string _TicketDate;
-    string _TicketDescription;
+    // Global property for the selected Help Desk Ticket
+    private SyncfusionHelpDeskTickets SelectedTicket = new SyncfusionHelpDeskTickets();
+
+    SfGrid<SyncfusionHelpDeskTickets> gridObj;
+
+    public List<SyncfusionHelpDeskTickets> colHelpDeskTickets { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            if (PageState.Action == "Edit")
-            {
-                //_id = Int32.Parse(PageState.QueryString["id"]);
-                //SyncfusionHelpDeskTickets HelpDesk = await HelpDeskService.GetSyncfusionHelpDeskTicketsAsync(_id, ModuleState.ModuleId);
-                //if (HelpDesk != null)
-                //{
-                //    _TicketStatus = HelpDesk.TicketStatus;
-                //    _TicketDate = HelpDesk.TicketDate.ToShortDateString();
-                //    _TicketDescription = HelpDesk.TicketDescription;
-                //    _createdby = HelpDesk.CreatedBy;
-                //    _createdon = HelpDesk.CreatedOn;
-                //    _modifiedby = HelpDesk.ModifiedBy;
-                //    _modifiedon = HelpDesk.ModifiedOn;
-                //}
-            }
+            await RefreshTickets();
+
         }
         catch (Exception ex)
         {
-            await logger.LogError(ex, "Error Loading HelpDesk {HelpDeskId} {Error}", _id, ex.Message);
+            await logger.LogError(ex, "Error Loading HelpDesk {Error}", ex.Message);
             AddModuleMessage("Error Loading HelpDesk", MessageType.Error);
         }
     }
 
-    private async Task Save()
+    public async Task RefreshTickets()
     {
-        try
-        {
+        var Tickets =
+            await HelpDeskAdminService.GetSyncfusionHelpDeskTicketsAdminAsync(ModuleState.ModuleId);
 
-            //SyncfusionHelpDeskTickets HelpDesk = new SyncfusionHelpDeskTickets();
-            //HelpDesk.ModuleId = ModuleState.ModuleId;
-            //HelpDesk.TicketStatus = _TicketStatus;
-            //HelpDesk.TicketDate = Convert.ToDateTime(_TicketDate);
-            //HelpDesk.TicketDescription = _TicketDescription;
-            //HelpDesk = await HelpDeskService.AddSyncfusionHelpDeskTicketsAsync(HelpDesk);
-            //await logger.LogInformation("HelpDesk Added {HelpDesk}", HelpDesk);
+        colHelpDeskTickets = Tickets.OrderByDescending(x => x.HelpDeskTicketId).ToList();
+    }
 
-            NavigationManager.NavigateTo(NavigateUrl());
-        }
-        catch (Exception ex)
+    public bool EditDialogVisibility { get; set; } = false;
+
+    public async void OnCommandClicked(
+      CommandClickEventArgs<SyncfusionHelpDeskTickets> args)
+    {
+        if (args.CommandColumn.ButtonOption.Content == "Edit")
         {
-            await logger.LogError(ex, "Error Saving HelpDesk {Error}", ex.Message);
-            AddModuleMessage("Error Saving HelpDesk", MessageType.Error);
+            // Get the selected Help Desk Ticket
+            var HelpDeskTicket = (SyncfusionHelpDeskTickets)args.RowData;
+            SelectedTicket = await HelpDeskAdminService.GetSyncfusionHelpDeskTicketAdminAsync(HelpDeskTicket.HelpDeskTicketId, ModuleState.ModuleId);
+
+            // Open the Edit dialog
+            this.EditDialogVisibility = true;
+            StateHasChanged();
         }
+    }
+
+    public async Task SaveTicket()
+    {
+        // Update the selected Help Desk Ticket
+        await HelpDeskAdminService.UpdateSyncfusionHelpDeskTicketsAdminAsync(SelectedTicket);
+
+        // Update the Status of the Ticket in the collection
+        var TicketToUpdate = colHelpDeskTickets.Where(x => x.HelpDeskTicketId == SelectedTicket.HelpDeskTicketId).FirstOrDefault();
+        TicketToUpdate.TicketStatus = SelectedTicket.TicketStatus;
+
+        // Close the Edit dialog
+        this.EditDialogVisibility = false;
+
+        // Refresh the SfGrid
+        // so the changes to the selected
+        // Help Desk Ticket are reflected
+        gridObj.Refresh();
     }
 }
