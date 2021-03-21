@@ -25,10 +25,10 @@ namespace Syncfusion.HelpDesk.Services
         {
             return await GetJsonAsync<List<Models.SyncfusionHelpDeskTickets>>(CreateAuthorizationPolicyUrl($"{Apiurl}?username={username}", ModuleId));
         }
+
         public async Task<Models.SyncfusionHelpDeskTickets> GetSyncfusionHelpDeskTicketByUserAsync(int HelpDeskTicketId, int ModuleId, string username)
         {
-            var HelpDeskticket = await GetJsonAsync<Models.SyncfusionHelpDeskTickets>(CreateAuthorizationPolicyUrl($"{Apiurl}/{HelpDeskTicketId}?&username={username}", ModuleId));
-            return HelpDeskticket;
+            return await GetJsonAsync<Models.SyncfusionHelpDeskTickets>(CreateAuthorizationPolicyUrl($"{Apiurl}/{HelpDeskTicketId}?&username={username}", ModuleId));
         }
 
         public async Task<Models.SyncfusionHelpDeskTickets> AddSyncfusionHelpDeskTicketsAsync(Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTickets)

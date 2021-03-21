@@ -125,7 +125,7 @@
         <DialogTemplates>
             <Header> EDIT TICKET # @SelectedTicket.HelpDeskTicketId</Header>
             <Content>
-                <EditTicket SelectedTicket="@SelectedTicket" />
+                <EditTicket SelectedTicket="@SelectedTicket" isAdmin="false" />
             </Content>
             <FooterTemplate>
                 <div class="button-container">
@@ -278,6 +278,10 @@ else
     {
         // Update the selected Help Desk Ticket
         await HelpDeskService.UpdateSyncfusionHelpDeskTicketsAsync(SelectedTicket);
+
+        // Update the Status of the Ticket in the collection
+        var TicketToUpdate = colHelpDeskTickets.Where(x => x.HelpDeskTicketId == SelectedTicket.HelpDeskTicketId).FirstOrDefault();
+        TicketToUpdate.TicketStatus = SelectedTicket.TicketStatus;
 
         // Close the Edit dialog
         this.EditDialogVisibility = false;

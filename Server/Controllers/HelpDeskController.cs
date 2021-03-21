@@ -95,7 +95,6 @@ namespace Syncfusion.HelpDesk.Controllers
             return FinalHelpDeskTicket;
         }
 
-
         // All users can Post
         // POST api/<controller>
         [HttpPost]
