@@ -38,7 +38,15 @@ namespace Syncfusion.HelpDesk.Services
 
         public async Task<Models.SyncfusionHelpDeskTickets> UpdateSyncfusionHelpDeskTicketsAsync(Models.SyncfusionHelpDeskTickets objSyncfusionHelpDeskTicket)
         {
-            return await PostJsonAsync(CreateAuthorizationPolicyUrl($"{Apiurl}/{objSyncfusionHelpDeskTicket.HelpDeskTicketId}", objSyncfusionHelpDeskTicket.ModuleId), objSyncfusionHelpDeskTicket);
+            try
+            {
+                return await PostJsonAsync(CreateAuthorizationPolicyUrl($"{Apiurl}/{objSyncfusionHelpDeskTicket.HelpDeskTicketId}", objSyncfusionHelpDeskTicket.ModuleId), objSyncfusionHelpDeskTicket);
+            }
+            catch (System.Exception ex)
+            {
+                string error = ex.Message;
+                return null;
+            }
         }
 
         // Admin Methods

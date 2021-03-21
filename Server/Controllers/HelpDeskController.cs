@@ -80,7 +80,7 @@ namespace Syncfusion.HelpDesk.Controllers
             // to avoid trying to return self referencing object
             var FinalHelpDeskTicket = new SyncfusionHelpDeskTickets();
             FinalHelpDeskTicket.HelpDeskTicketId = HelpDeskTicket.HelpDeskTicketId;
-            FinalHelpDeskTicket.ModuleId = HelpDeskTicket.HelpDeskTicketId;
+            FinalHelpDeskTicket.ModuleId = HelpDeskTicket.ModuleId;
             FinalHelpDeskTicket.TicketDate = HelpDeskTicket.TicketDate;
             FinalHelpDeskTicket.TicketDescription = HelpDeskTicket.TicketDescription;
             FinalHelpDeskTicket.TicketStatus = HelpDeskTicket.TicketStatus;
