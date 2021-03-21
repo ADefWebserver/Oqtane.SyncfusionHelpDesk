@@ -10,6 +10,8 @@ namespace Syncfusion.HelpDesk.Services
 
         Task<List<Models.SyncfusionHelpDeskTickets>> GetSyncfusionHelpDeskTicketsByUserAsync(int ModuleId, string username);
 
+        Task<Models.SyncfusionHelpDeskTickets> GetSyncfusionHelpDeskTicketByUserAsync(int HelpDeskTicketId, int ModuleId, string username);
+
         Task<Models.SyncfusionHelpDeskTickets> AddSyncfusionHelpDeskTicketsAsync(Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTickets);
         
         Task<Models.SyncfusionHelpDeskTickets> UpdateSyncfusionHelpDeskTicketsAsync(Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTickets);

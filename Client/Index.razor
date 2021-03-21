@@ -259,13 +259,14 @@ else
 
     public bool EditDialogVisibility { get; set; } = false;
 
-    public void OnCommandClicked(
+    public async void OnCommandClicked(
       CommandClickEventArgs<SyncfusionHelpDeskTickets> args)
     {
         if (args.CommandColumn.ButtonOption.Content == "Edit")
         {
             // Get the selected Help Desk Ticket
-            SelectedTicket = (SyncfusionHelpDeskTickets)args.RowData;
+            var HelpDeskTicket = (SyncfusionHelpDeskTickets)args.RowData;
+            SelectedTicket = await HelpDeskService.GetSyncfusionHelpDeskTicketByUserAsync(HelpDeskTicket.HelpDeskTicketId, ModuleState.ModuleId, authState.User.Identity.Name);
 
             // Open the Edit dialog
             this.EditDialogVisibility = true;

@@ -60,5 +60,18 @@ namespace Syncfusion.HelpDesk.Controllers
 
             return updatedSyncfusionHelpDeskTickets;
         }
+
+        // DELETE api/<controller>/5
+        [HttpDelete("{id}")]
+        [Authorize(Policy = PolicyNames.EditModule)]
+        public void Delete(int id)
+        {
+            Models.SyncfusionHelpDeskTickets deletedSyncfusionHelpDeskTickets = _HelpDeskRepository.GetSyncfusionHelpDeskTicket(id);
+            if (deletedSyncfusionHelpDeskTickets != null && deletedSyncfusionHelpDeskTickets.ModuleId == _entityId)
+            {
+                _HelpDeskRepository.DeleteSyncfusionHelpDeskTickets(id);
+                _logger.Log(LogLevel.Information, this, LogFunction.Delete, "HelpDesk Deleted {HelpDeskId}", id);
+            }
+        }
     }
 }

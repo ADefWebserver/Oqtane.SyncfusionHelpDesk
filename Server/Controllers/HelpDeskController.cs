@@ -55,6 +55,47 @@ namespace Syncfusion.HelpDesk.Controllers
             return HelpDeskTickets;
         }
 
+        // A non-Administrator can only get a Ticket they created
+        // GET: api/<controller>/1?username=y&entityid=z
+        [HttpGet("{HelpDeskTicketId}")]
+        [Authorize(Policy = PolicyNames.ViewModule)]
+        public SyncfusionHelpDeskTickets Get(string HelpDeskTicketId, string username, string entityid)
+        {
+            // Get User
+            var User = _users.GetUser(this.User.Identity.Name);
+
+            if (User.Username.ToLower() != username.ToLower())
+            {
+                return null;
+            }
+
+            var HelpDeskTicket = _HelpDeskRepository.GetSyncfusionHelpDeskTicket(int.Parse(HelpDeskTicketId));
+
+            if(HelpDeskTicket.CreatedBy != User.Username)
+            {
+                return null;
+            }
+
+            // Strip out HelpDeskTicket from SyncfusionHelpDeskTicketDetails
+            // to avoid trying to return self referencing object
+            var FinalHelpDeskTicket = new SyncfusionHelpDeskTickets();
+            FinalHelpDeskTicket.HelpDeskTicketId = HelpDeskTicket.HelpDeskTicketId;
+            FinalHelpDeskTicket.ModuleId = HelpDeskTicket.HelpDeskTicketId;
+            FinalHelpDeskTicket.TicketDate = HelpDeskTicket.TicketDate;
+            FinalHelpDeskTicket.TicketDescription = HelpDeskTicket.TicketDescription;
+            FinalHelpDeskTicket.TicketStatus = HelpDeskTicket.TicketStatus;
+            FinalHelpDeskTicket.SyncfusionHelpDeskTicketDetails = new List<SyncfusionHelpDeskTicketDetails>();
+
+            foreach (var item in HelpDeskTicket.SyncfusionHelpDeskTicketDetails)
+            {
+                item.HelpDeskTicket = null;
+                FinalHelpDeskTicket.SyncfusionHelpDeskTicketDetails.Add(item);
+            }
+
+            return FinalHelpDeskTicket;
+        }
+
+
         // All users can Post
         // POST api/<controller>
         [HttpPost]
@@ -94,19 +135,6 @@ namespace Syncfusion.HelpDesk.Controllers
                     // Update Ticket 
                     _HelpDeskRepository.UpdateSyncfusionHelpDeskTickets("User", UpdateSyncfusionHelpDeskTicket);
                 }                
-            }
-        }
-
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        [Authorize(Policy = PolicyNames.EditModule)]
-        public void Delete(int id)
-        {
-            Models.SyncfusionHelpDeskTickets deletedSyncfusionHelpDeskTickets = _HelpDeskRepository.GetSyncfusionHelpDeskTicket(id);
-            if (deletedSyncfusionHelpDeskTickets != null && deletedSyncfusionHelpDeskTickets.ModuleId == _entityId)
-            {
-                _HelpDeskRepository.DeleteSyncfusionHelpDeskTickets(id);
-                _logger.Log(LogLevel.Information, this, LogFunction.Delete, "HelpDesk Deleted {HelpDeskId}", id);
             }
         }
     }

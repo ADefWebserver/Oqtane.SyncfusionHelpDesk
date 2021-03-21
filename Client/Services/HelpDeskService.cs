@@ -25,6 +25,11 @@ namespace Syncfusion.HelpDesk.Services
         {
             return await GetJsonAsync<List<Models.SyncfusionHelpDeskTickets>>(CreateAuthorizationPolicyUrl($"{Apiurl}?username={username}", ModuleId));
         }
+        public async Task<Models.SyncfusionHelpDeskTickets> GetSyncfusionHelpDeskTicketByUserAsync(int HelpDeskTicketId, int ModuleId, string username)
+        {
+            var HelpDeskticket = await GetJsonAsync<Models.SyncfusionHelpDeskTickets>(CreateAuthorizationPolicyUrl($"{Apiurl}/{HelpDeskTicketId}?&username={username}", ModuleId));
+            return HelpDeskticket;
+        }
 
         public async Task<Models.SyncfusionHelpDeskTickets> AddSyncfusionHelpDeskTicketsAsync(Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTickets)
         {
@@ -34,11 +39,6 @@ namespace Syncfusion.HelpDesk.Services
         public async Task<Models.SyncfusionHelpDeskTickets> UpdateSyncfusionHelpDeskTicketsAsync(Models.SyncfusionHelpDeskTickets objSyncfusionHelpDeskTicket)
         {
             return await PostJsonAsync(CreateAuthorizationPolicyUrl($"{Apiurl}/{objSyncfusionHelpDeskTicket.HelpDeskTicketId}", objSyncfusionHelpDeskTicket.ModuleId), objSyncfusionHelpDeskTicket);
-        }
-
-        public async Task DeleteSyncfusionHelpDeskTicketsAsync(int HelpDeskId, int ModuleId)
-        {
-            await DeleteAsync(CreateAuthorizationPolicyUrl($"{Apiurl}/{HelpDeskId}", ModuleId));
         }
 
         // Admin Methods
@@ -51,6 +51,11 @@ namespace Syncfusion.HelpDesk.Services
         public async Task<Models.SyncfusionHelpDeskTickets> UpdateSyncfusionHelpDeskTicketsAdminAsync(Models.SyncfusionHelpDeskTickets objSyncfusionHelpDeskTicket)
         {
             return await PutJsonAsync<Models.SyncfusionHelpDeskTickets>(CreateAuthorizationPolicyUrl($"{AdminApiurl}/{objSyncfusionHelpDeskTicket.HelpDeskTicketId}", objSyncfusionHelpDeskTicket.ModuleId), objSyncfusionHelpDeskTicket);
+        }
+
+        public async Task DeleteSyncfusionHelpDeskTicketsAsync(int HelpDeskId, int ModuleId)
+        {
+            await DeleteAsync(CreateAuthorizationPolicyUrl($"{AdminApiurl}/{HelpDeskId}", ModuleId));
         }
     }
 }
