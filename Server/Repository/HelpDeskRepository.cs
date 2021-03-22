@@ -29,7 +29,9 @@ namespace Syncfusion.HelpDesk.Repository
 
             // Strip out HelpDeskTicket from SyncfusionHelpDeskTicketDetails
             // to avoid trying to return self referencing object
+
             var FinalHelpDeskTicket = new SyncfusionHelpDeskTickets();
+
             FinalHelpDeskTicket.HelpDeskTicketId = HelpDeskTicket.HelpDeskTicketId;
             FinalHelpDeskTicket.ModuleId = HelpDeskTicket.ModuleId;
             FinalHelpDeskTicket.TicketDate = HelpDeskTicket.TicketDate;
@@ -40,7 +42,8 @@ namespace Syncfusion.HelpDesk.Repository
             FinalHelpDeskTicket.ModifiedBy = HelpDeskTicket.ModifiedBy;
             FinalHelpDeskTicket.ModifiedOn = HelpDeskTicket.ModifiedOn;
 
-            FinalHelpDeskTicket.SyncfusionHelpDeskTicketDetails = new List<SyncfusionHelpDeskTicketDetails>();
+            FinalHelpDeskTicket.SyncfusionHelpDeskTicketDetails = 
+                new List<SyncfusionHelpDeskTicketDetails>();
 
             foreach (var item in HelpDeskTicket.SyncfusionHelpDeskTicketDetails)
             {
@@ -51,7 +54,8 @@ namespace Syncfusion.HelpDesk.Repository
             return FinalHelpDeskTicket;
         }
 
-        public Models.SyncfusionHelpDeskTickets AddSyncfusionHelpDeskTickets(Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTicket)
+        public Models.SyncfusionHelpDeskTickets AddSyncfusionHelpDeskTickets
+            (Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTicket)
         {
                 _db.SyncfusionHelpDeskTickets.Add(SyncfusionHelpDeskTicket);
                 _db.SaveChanges();
@@ -85,6 +89,7 @@ namespace Syncfusion.HelpDesk.Repository
                     UpdatedSyncfusionHelpDeskTickets.TicketStatus;
 
                 // Insert any new TicketDetails
+
                 if (UpdatedSyncfusionHelpDeskTickets.SyncfusionHelpDeskTicketDetails != null)
                 {
                     foreach (var item in
@@ -121,7 +126,9 @@ namespace Syncfusion.HelpDesk.Repository
 
         public void DeleteSyncfusionHelpDeskTickets(int Id)
         {
-            Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTicket = _db.SyncfusionHelpDeskTickets.Find(Id);
+            Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTicket = 
+                _db.SyncfusionHelpDeskTickets.Find(Id);
+
             _db.SyncfusionHelpDeskTickets.Remove(SyncfusionHelpDeskTicket);
             _db.SaveChanges();
         }
