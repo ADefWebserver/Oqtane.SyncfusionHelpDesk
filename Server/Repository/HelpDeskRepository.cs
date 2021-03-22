@@ -23,9 +23,32 @@ namespace Syncfusion.HelpDesk.Repository
 
         public Models.SyncfusionHelpDeskTickets GetSyncfusionHelpDeskTicket(int Id)
         {
-            return _db.SyncfusionHelpDeskTickets
+            var HelpDeskTicket = _db.SyncfusionHelpDeskTickets
                 .Where(item => item.HelpDeskTicketId == Id)
                 .Include(x => x.SyncfusionHelpDeskTicketDetails).FirstOrDefault();
+
+            // Strip out HelpDeskTicket from SyncfusionHelpDeskTicketDetails
+            // to avoid trying to return self referencing object
+            var FinalHelpDeskTicket = new SyncfusionHelpDeskTickets();
+            FinalHelpDeskTicket.HelpDeskTicketId = HelpDeskTicket.HelpDeskTicketId;
+            FinalHelpDeskTicket.ModuleId = HelpDeskTicket.ModuleId;
+            FinalHelpDeskTicket.TicketDate = HelpDeskTicket.TicketDate;
+            FinalHelpDeskTicket.TicketDescription = HelpDeskTicket.TicketDescription;
+            FinalHelpDeskTicket.TicketStatus = HelpDeskTicket.TicketStatus;
+            FinalHelpDeskTicket.CreatedBy = HelpDeskTicket.CreatedBy;
+            FinalHelpDeskTicket.CreatedOn = HelpDeskTicket.CreatedOn;
+            FinalHelpDeskTicket.ModifiedBy = HelpDeskTicket.ModifiedBy;
+            FinalHelpDeskTicket.ModifiedOn = HelpDeskTicket.ModifiedOn;
+
+            FinalHelpDeskTicket.SyncfusionHelpDeskTicketDetails = new List<SyncfusionHelpDeskTicketDetails>();
+
+            foreach (var item in HelpDeskTicket.SyncfusionHelpDeskTicketDetails)
+            {
+                item.HelpDeskTicket = null;
+                FinalHelpDeskTicket.SyncfusionHelpDeskTicketDetails.Add(item);
+            }
+
+            return FinalHelpDeskTicket;
         }
 
         public Models.SyncfusionHelpDeskTickets AddSyncfusionHelpDeskTickets(Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTicket)

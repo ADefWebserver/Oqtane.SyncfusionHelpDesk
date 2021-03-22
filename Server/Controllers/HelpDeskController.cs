@@ -76,23 +76,7 @@ namespace Syncfusion.HelpDesk.Controllers
                 return null;
             }
 
-            // Strip out HelpDeskTicket from SyncfusionHelpDeskTicketDetails
-            // to avoid trying to return self referencing object
-            var FinalHelpDeskTicket = new SyncfusionHelpDeskTickets();
-            FinalHelpDeskTicket.HelpDeskTicketId = HelpDeskTicket.HelpDeskTicketId;
-            FinalHelpDeskTicket.ModuleId = HelpDeskTicket.ModuleId;
-            FinalHelpDeskTicket.TicketDate = HelpDeskTicket.TicketDate;
-            FinalHelpDeskTicket.TicketDescription = HelpDeskTicket.TicketDescription;
-            FinalHelpDeskTicket.TicketStatus = HelpDeskTicket.TicketStatus;
-            FinalHelpDeskTicket.SyncfusionHelpDeskTicketDetails = new List<SyncfusionHelpDeskTicketDetails>();
-
-            foreach (var item in HelpDeskTicket.SyncfusionHelpDeskTicketDetails)
-            {
-                item.HelpDeskTicket = null;
-                FinalHelpDeskTicket.SyncfusionHelpDeskTicketDetails.Add(item);
-            }
-
-            return FinalHelpDeskTicket;
+            return HelpDeskTicket;
         }
 
         // All users can Post

@@ -8,52 +8,48 @@
 @inject IHelpDeskAdminService HelpDeskAdminService
 @inject NavigationManager NavigationManager
 
-<br />
-<br />
-<div id="target" style="height: 500px;" class="col-lg-12 control-section">
-    <div class="e-sample-resize-container">
-        <SfGrid ID="Grid"
-                @ref="gridObj"
-                DataSource="@colHelpDeskTickets"
-                AllowPaging="true" 
-                AllowSorting="true"
-                AllowResizing="true"
-                AllowReordering="true">
-            <GridPageSettings PageSize="10"></GridPageSettings>
-            <GridEvents CommandClicked="OnCommandClicked"
-                        TValue="SyncfusionHelpDeskTickets">
-            </GridEvents>
-            <GridColumns>
-                <GridColumn HeaderText="" TextAlign="TextAlign.Left" Width="50">
-                    <GridCommandColumns>
-                        <GridCommandColumn Type=CommandButtonType.Edit
-                                           ButtonOption="@(new CommandButtonOptions() { Content = "Edit" })">
-                        </GridCommandColumn>
-                    </GridCommandColumns>
-                </GridColumn>
-                <GridColumn IsPrimaryKey="true" Field=@nameof(SyncfusionHelpDeskTickets.HelpDeskTicketId)
-                            HeaderText="ID #" TextAlign="@TextAlign.Left"
-                            Width="70">
-                </GridColumn>
-                <GridColumn Field=@nameof(SyncfusionHelpDeskTickets.TicketStatus)
-                            HeaderText="Status" TextAlign="@TextAlign.Left"
-                            Width="80">
-                </GridColumn>
-                <GridColumn Field=@nameof(SyncfusionHelpDeskTickets.TicketDate)
-                            HeaderText="Date" TextAlign="@TextAlign.Left"
-                            Format="d" Type="ColumnType.Date"
-                            Width="80">
-                </GridColumn>
-                <GridColumn Field=@nameof(SyncfusionHelpDeskTickets.TicketDescription)
-                            HeaderText="Description" TextAlign="@TextAlign.Left"
-                            Width="150">
-                </GridColumn>
-            </GridColumns>
-        </SfGrid>
-    </div>
+<div id="admintarget" style="height: 500px;" class="col-lg-12 control-section">
+    <SfGrid ID="Grid"
+            @ref="gridObj"
+            DataSource="@colHelpDeskTickets"
+            AllowPaging="true"
+            AllowSorting="true"
+            AllowResizing="true"
+            AllowReordering="true">
+        <GridPageSettings PageSize="10"></GridPageSettings>
+        <GridEvents CommandClicked="OnCommandClicked"
+                    TValue="SyncfusionHelpDeskTickets">
+        </GridEvents>
+        <GridColumns>
+            <GridColumn HeaderText="" TextAlign="TextAlign.Left" Width="50">
+                <GridCommandColumns>
+                    <GridCommandColumn Type=CommandButtonType.Edit
+                                       ButtonOption="@(new CommandButtonOptions() { Content = "Edit" })">
+                    </GridCommandColumn>
+                </GridCommandColumns>
+            </GridColumn>
+            <GridColumn IsPrimaryKey="true" Field=@nameof(SyncfusionHelpDeskTickets.HelpDeskTicketId)
+                        HeaderText="ID #" TextAlign="@TextAlign.Left"
+                        Width="70">
+            </GridColumn>
+            <GridColumn Field=@nameof(SyncfusionHelpDeskTickets.TicketStatus)
+                        HeaderText="Status" TextAlign="@TextAlign.Left"
+                        Width="80">
+            </GridColumn>
+            <GridColumn Field=@nameof(SyncfusionHelpDeskTickets.TicketDate)
+                        HeaderText="Date" TextAlign="@TextAlign.Left"
+                        Format="d" Type="ColumnType.Date"
+                        Width="80">
+            </GridColumn>
+            <GridColumn Field=@nameof(SyncfusionHelpDeskTickets.TicketDescription)
+                        HeaderText="Description" TextAlign="@TextAlign.Left"
+                        Width="150">
+            </GridColumn>
+        </GridColumns>
+    </SfGrid>
 </div>
 
-<SfDialog Target="#target"
+<SfDialog Target="#admintarget"
           Width="500px"
           Height="500px"
           IsModal="true"
@@ -100,7 +96,6 @@
         try
         {
             await RefreshTickets();
-
         }
         catch (Exception ex)
         {
@@ -139,9 +134,10 @@
         // Update the selected Help Desk Ticket
         await HelpDeskAdminService.UpdateSyncfusionHelpDeskTicketsAdminAsync(SelectedTicket);
 
-        // Update the Status of the Ticket in the collection
+        // Update the TicketStatus and TicketDescription of the Ticket in the collection
         var TicketToUpdate = colHelpDeskTickets.Where(x => x.HelpDeskTicketId == SelectedTicket.HelpDeskTicketId).FirstOrDefault();
         TicketToUpdate.TicketStatus = SelectedTicket.TicketStatus;
+        TicketToUpdate.TicketDescription = SelectedTicket.TicketDescription;
 
         // Close the Edit dialog
         this.EditDialogVisibility = false;

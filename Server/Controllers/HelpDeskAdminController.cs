@@ -57,25 +57,7 @@ namespace Syncfusion.HelpDesk.Controllers
         [Authorize(Policy = PolicyNames.EditModule)]
         public SyncfusionHelpDeskTickets Get(string HelpDeskTicketId, string entityid)
         {
-            var HelpDeskTicket = _HelpDeskRepository.GetSyncfusionHelpDeskTicket(int.Parse(HelpDeskTicketId));
-
-            // Strip out HelpDeskTicket from SyncfusionHelpDeskTicketDetails
-            // to avoid trying to return self referencing object
-            var FinalHelpDeskTicket = new SyncfusionHelpDeskTickets();
-            FinalHelpDeskTicket.HelpDeskTicketId = HelpDeskTicket.HelpDeskTicketId;
-            FinalHelpDeskTicket.ModuleId = HelpDeskTicket.ModuleId;
-            FinalHelpDeskTicket.TicketDate = HelpDeskTicket.TicketDate;
-            FinalHelpDeskTicket.TicketDescription = HelpDeskTicket.TicketDescription;
-            FinalHelpDeskTicket.TicketStatus = HelpDeskTicket.TicketStatus;
-            FinalHelpDeskTicket.SyncfusionHelpDeskTicketDetails = new List<SyncfusionHelpDeskTicketDetails>();
-
-            foreach (var item in HelpDeskTicket.SyncfusionHelpDeskTicketDetails)
-            {
-                item.HelpDeskTicket = null;
-                FinalHelpDeskTicket.SyncfusionHelpDeskTicketDetails.Add(item);
-            }
-
-            return FinalHelpDeskTicket;
+            return _HelpDeskRepository.GetSyncfusionHelpDeskTicket(int.Parse(HelpDeskTicketId));
         }
 
         // Only an Administrator can update using this method
