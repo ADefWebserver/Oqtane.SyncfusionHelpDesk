@@ -21,10 +21,13 @@
                     TValue="SyncfusionHelpDeskTickets">
         </GridEvents>
         <GridColumns>
-            <GridColumn HeaderText="" TextAlign="TextAlign.Left" Width="50">
+            <GridColumn HeaderText="" TextAlign="TextAlign.Left" Width="100">
                 <GridCommandColumns>
                     <GridCommandColumn Type=CommandButtonType.Edit
                                        ButtonOption="@(new CommandButtonOptions() { Content = "Edit" })">
+                    </GridCommandColumn>
+                    <GridCommandColumn Type=CommandButtonType.Delete
+                                       ButtonOption="@(new CommandButtonOptions() { Content = "Delete" })">
                     </GridCommandColumn>
                 </GridCommandColumns>
             </GridColumn>
@@ -72,6 +75,31 @@
     </DialogTemplates>
 </SfDialog>
 
+<SfDialog Target="#admintarget"
+          Width="100px"
+          Height="130px"
+          IsModal="true"
+          ShowCloseIcon="false"
+          @bind-Visible="DeleteRecordConfirmVisibility">
+    <DialogTemplates>
+        <Header> DELETE RECORD ? </Header>
+        <Content>
+            <div class="button-container">
+                <button type="submit"
+                        class="e-btn e-normal e-primary"
+                        @onclick="ConfirmDeleteYes">
+                    Yes
+                </button>
+                <button type="submit"
+                        class="e-btn e-normal"
+                        @onclick="ConfirmDeleteNo">
+                    No
+                </button>
+            </div>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+
 @code {
     public override SecurityAccessLevel SecurityAccessLevel => SecurityAccessLevel.Edit;
 
@@ -80,7 +108,7 @@
     public override string Title => "Manage HelpDesk";
 
     public override List<Resource> Resources => new List<Resource>()
-{
+    {
         new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" }
     };
 
@@ -127,6 +155,18 @@
             this.EditDialogVisibility = true;
             StateHasChanged();
         }
+
+        if (args.CommandColumn.ButtonOption.Content == "Delete")
+        {
+            // We only need the TicketGuid
+            // of the selected Help Desk Ticket
+            SelectedTicket = new SyncfusionHelpDeskTickets();
+            SelectedTicket.HelpDeskTicketId = args.RowData.HelpDeskTicketId;
+
+            // Open Delete confirmation dialog
+            this.DeleteRecordConfirmVisibility = true;
+            StateHasChanged();
+        }
     }
 
     public async Task SaveTicket()
@@ -146,5 +186,36 @@
         // so the changes to the selected
         // Help Desk Ticket are reflected
         gridObj.Refresh();
+    }
+
+    // Property to control the delete dialog
+    public bool DeleteRecordConfirmVisibility { get; set; } = false;
+
+    public async void ConfirmDeleteYes()
+    {
+        // The user selected Yes to delete the
+        // seleted Help Desk Ticket
+        // Delete the record
+        await HelpDeskAdminService.DeleteSyncfusionHelpDeskTicketsAsync(SelectedTicket.HelpDeskTicketId, ModuleState.ModuleId);
+
+        // Update the TicketStatus and TicketDescription of the Ticket in the collection
+        var TicketToRemove = colHelpDeskTickets.Where(x => x.HelpDeskTicketId == SelectedTicket.HelpDeskTicketId).FirstOrDefault();
+        colHelpDeskTickets.Remove(TicketToRemove);
+
+        // Close the dialog
+        this.DeleteRecordConfirmVisibility = false;
+        StateHasChanged();
+
+        // Refresh the SfGrid
+        // so the deleted record will not show
+        gridObj.Refresh();
+    }
+
+    public void ConfirmDeleteNo()
+    {
+        // Open the dialog
+        // to give the user a chance
+        // to confirm they want to delete the record
+        this.DeleteRecordConfirmVisibility = false;
     }
 }
