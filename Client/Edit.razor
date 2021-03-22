@@ -149,7 +149,10 @@
         {
             // Get the selected Help Desk Ticket
             var HelpDeskTicket = (SyncfusionHelpDeskTickets)args.RowData;
-            SelectedTicket = await HelpDeskAdminService.GetSyncfusionHelpDeskTicketAdminAsync(HelpDeskTicket.HelpDeskTicketId, ModuleState.ModuleId);
+
+            SelectedTicket = 
+                await HelpDeskAdminService.GetSyncfusionHelpDeskTicketAdminAsync
+                (HelpDeskTicket.HelpDeskTicketId, ModuleState.ModuleId);
 
             // Open the Edit dialog
             this.EditDialogVisibility = true;
