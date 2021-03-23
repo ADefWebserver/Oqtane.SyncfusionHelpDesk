@@ -8,8 +8,6 @@ namespace Syncfusion.HelpDesk.Services
     {
         // Admin Methods
 
-        Task<List<Models.SyncfusionHelpDeskTickets>> GetSyncfusionHelpDeskTicketsAdminAsync(int ModuleId);
-
         Task<Models.SyncfusionHelpDeskTickets> GetSyncfusionHelpDeskTicketAdminAsync(int HelpDeskTicketId, int ModuleId);
 
         Task<Models.SyncfusionHelpDeskTickets> UpdateSyncfusionHelpDeskTicketsAdminAsync(Models.SyncfusionHelpDeskTickets objSyncfusionHelpDeskTicket);

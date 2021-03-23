@@ -126,7 +126,6 @@
     {
         try
         {
-            //await RefreshTickets();
             SfDataManagerURL = $"{ModuleState.SiteId}/api/HelpDeskAdmin?entityid={ModuleState.ModuleId}";
         }
         catch (Exception ex)
@@ -134,14 +133,6 @@
             await logger.LogError(ex, "Error Loading HelpDesk {Error}", ex.Message);
             AddModuleMessage("Error Loading HelpDesk", MessageType.Error);
         }
-    }
-
-    public async Task RefreshTickets()
-    {
-        var Tickets =
-            await HelpDeskAdminService.GetSyncfusionHelpDeskTicketsAdminAsync(ModuleState.ModuleId);
-
-        colHelpDeskTickets = Tickets.OrderByDescending(x => x.HelpDeskTicketId).ToList();
     }
 
     public bool EditDialogVisibility { get; set; } = false;
@@ -180,11 +171,6 @@
     {
         // Update the selected Help Desk Ticket
         await HelpDeskAdminService.UpdateSyncfusionHelpDeskTicketsAdminAsync(SelectedTicket);
-
-        // Update the TicketStatus and TicketDescription of the Ticket in the collection
-        var TicketToUpdate = colHelpDeskTickets.Where(x => x.HelpDeskTicketId == SelectedTicket.HelpDeskTicketId).FirstOrDefault();
-        TicketToUpdate.TicketStatus = SelectedTicket.TicketStatus;
-        TicketToUpdate.TicketDescription = SelectedTicket.TicketDescription;
 
         // Close the Edit dialog
         this.EditDialogVisibility = false;

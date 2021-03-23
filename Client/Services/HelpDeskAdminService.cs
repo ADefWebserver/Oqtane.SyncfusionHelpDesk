@@ -20,11 +20,6 @@ namespace Syncfusion.HelpDesk.Services
 
         private string Apiurl => CreateApiUrl(_siteState.Alias, "HelpDeskAdmin");
 
-        public async Task<List<Models.SyncfusionHelpDeskTickets>> GetSyncfusionHelpDeskTicketsAdminAsync(int ModuleId)
-        {
-            return await GetJsonAsync<List<Models.SyncfusionHelpDeskTickets>>(CreateAuthorizationPolicyUrl($"{Apiurl}", ModuleId));
-        }
-
         public async Task<Models.SyncfusionHelpDeskTickets> GetSyncfusionHelpDeskTicketAdminAsync(int HelpDeskTicketId, int ModuleId)
         {
             return await GetJsonAsync<Models.SyncfusionHelpDeskTickets>(CreateAuthorizationPolicyUrl($"{Apiurl}/{HelpDeskTicketId}", ModuleId));
