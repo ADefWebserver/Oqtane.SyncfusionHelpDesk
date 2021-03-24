@@ -74,7 +74,7 @@ namespace Syncfusion.HelpDesk.Controllers
                 return new
                 {
                     Items = _HelpDeskRepository.GetSyncfusionHelpDeskTickets(int.Parse(entityid))
-                    .OrderBy(orderby)
+                    .OrderByDescending(orderby)
                     .Skip(skip)
                     .Take(top),
                     Count = TotalRecordCount
