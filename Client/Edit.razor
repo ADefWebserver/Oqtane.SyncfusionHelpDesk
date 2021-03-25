@@ -191,10 +191,6 @@
         // Delete the record
         await HelpDeskAdminService.DeleteSyncfusionHelpDeskTicketsAsync(SelectedTicket.HelpDeskTicketId, ModuleState.ModuleId);
 
-        // Update the TicketStatus and TicketDescription of the Ticket in the collection
-        var TicketToRemove = colHelpDeskTickets.Where(x => x.HelpDeskTicketId == SelectedTicket.HelpDeskTicketId).FirstOrDefault();
-        colHelpDeskTickets.Remove(TicketToRemove);
-
         // Close the dialog
         this.DeleteRecordConfirmVisibility = false;
         StateHasChanged();
