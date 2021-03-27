@@ -16,9 +16,11 @@ namespace Syncfusion.HelpDesk.Repository
             _db = context;
         }
 
-        public IQueryable<Models.SyncfusionHelpDeskTickets> GetSyncfusionHelpDeskTickets(int ModuleId)
+        public IQueryable<Models.SyncfusionHelpDeskTickets> 
+            GetSyncfusionHelpDeskTickets(int ModuleId)
         {
-            return _db.SyncfusionHelpDeskTickets.Where(item => item.ModuleId == ModuleId);
+            return _db.SyncfusionHelpDeskTickets.Where(
+                item => item.ModuleId == ModuleId);
         }
 
         public Models.SyncfusionHelpDeskTickets GetSyncfusionHelpDeskTicket(int Id)
@@ -30,28 +32,28 @@ namespace Syncfusion.HelpDesk.Repository
             // Strip out HelpDeskTicket from SyncfusionHelpDeskTicketDetails
             // to avoid trying to return self referencing object
 
-            var FinalHelpDeskTicket = new SyncfusionHelpDeskTickets();
+            var objDeskTicket = new SyncfusionHelpDeskTickets();
 
-            FinalHelpDeskTicket.HelpDeskTicketId = HelpDeskTicket.HelpDeskTicketId;
-            FinalHelpDeskTicket.ModuleId = HelpDeskTicket.ModuleId;
-            FinalHelpDeskTicket.TicketDate = HelpDeskTicket.TicketDate;
-            FinalHelpDeskTicket.TicketDescription = HelpDeskTicket.TicketDescription;
-            FinalHelpDeskTicket.TicketStatus = HelpDeskTicket.TicketStatus;
-            FinalHelpDeskTicket.CreatedBy = HelpDeskTicket.CreatedBy;
-            FinalHelpDeskTicket.CreatedOn = HelpDeskTicket.CreatedOn;
-            FinalHelpDeskTicket.ModifiedBy = HelpDeskTicket.ModifiedBy;
-            FinalHelpDeskTicket.ModifiedOn = HelpDeskTicket.ModifiedOn;
+            objDeskTicket.HelpDeskTicketId = HelpDeskTicket.HelpDeskTicketId;
+            objDeskTicket.ModuleId = HelpDeskTicket.ModuleId;
+            objDeskTicket.TicketDate = HelpDeskTicket.TicketDate;
+            objDeskTicket.TicketDescription = HelpDeskTicket.TicketDescription;
+            objDeskTicket.TicketStatus = HelpDeskTicket.TicketStatus;
+            objDeskTicket.CreatedBy = HelpDeskTicket.CreatedBy;
+            objDeskTicket.CreatedOn = HelpDeskTicket.CreatedOn;
+            objDeskTicket.ModifiedBy = HelpDeskTicket.ModifiedBy;
+            objDeskTicket.ModifiedOn = HelpDeskTicket.ModifiedOn;
 
-            FinalHelpDeskTicket.SyncfusionHelpDeskTicketDetails = 
+            objDeskTicket.SyncfusionHelpDeskTicketDetails = 
                 new List<SyncfusionHelpDeskTicketDetails>();
 
             foreach (var item in HelpDeskTicket.SyncfusionHelpDeskTicketDetails)
             {
                 item.HelpDeskTicket = null;
-                FinalHelpDeskTicket.SyncfusionHelpDeskTicketDetails.Add(item);
+                objDeskTicket.SyncfusionHelpDeskTicketDetails.Add(item);
             }
 
-            return FinalHelpDeskTicket;
+            return objDeskTicket;
         }
 
         public Models.SyncfusionHelpDeskTickets AddSyncfusionHelpDeskTickets
@@ -62,8 +64,9 @@ namespace Syncfusion.HelpDesk.Repository
                 return SyncfusionHelpDeskTicket;
         }
 
-        public Models.SyncfusionHelpDeskTickets UpdateSyncfusionHelpDeskTickets
-            (string UpdateMode, Models.SyncfusionHelpDeskTickets UpdatedSyncfusionHelpDeskTickets)
+        public Models.SyncfusionHelpDeskTickets UpdateSyncfusionHelpDeskTickets(
+            string UpdateMode, 
+            Models.SyncfusionHelpDeskTickets UpdatedSyncfusionHelpDeskTickets)
         {
             // Get the existing record
             var ExistingTicket =
@@ -90,7 +93,8 @@ namespace Syncfusion.HelpDesk.Repository
 
                 // Insert any new TicketDetails
 
-                if (UpdatedSyncfusionHelpDeskTickets.SyncfusionHelpDeskTicketDetails != null)
+                if (UpdatedSyncfusionHelpDeskTickets.SyncfusionHelpDeskTicketDetails 
+                    != null)
                 {
                     foreach (var item in
                         UpdatedSyncfusionHelpDeskTickets.SyncfusionHelpDeskTicketDetails)

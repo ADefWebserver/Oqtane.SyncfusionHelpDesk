@@ -16,7 +16,9 @@
             AllowSorting="true"
             AllowResizing="true"
             AllowReordering="true">
-        <SfDataManager Url="@SfDataManagerURL" Adaptor="Adaptors.WebApiAdaptor"></SfDataManager>
+        <SfDataManager Url="@SfDataManagerURL" 
+                       Adaptor="Adaptors.WebApiAdaptor">
+        </SfDataManager>
         <GridPageSettings PageSize="10"></GridPageSettings>
         <GridEvents CommandClicked="OnCommandClicked"
                     TValue="SyncfusionHelpDeskTickets">
@@ -102,7 +104,8 @@
 </SfDialog>
 
 @code {
-    public override SecurityAccessLevel SecurityAccessLevel => SecurityAccessLevel.Edit;
+    public override SecurityAccessLevel 
+        SecurityAccessLevel => SecurityAccessLevel.Edit;
 
     public override string Actions => "Add,Edit";
 
@@ -110,15 +113,19 @@
 
     public override List<Resource> Resources => new List<Resource>()
     {
-        new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" }
+        new Resource { 
+            ResourceType = ResourceType.Stylesheet, 
+            Url = ModulePath() + "Module.css" }
     };
 
     // Global property for the selected Help Desk Ticket
-    private SyncfusionHelpDeskTickets SelectedTicket = new SyncfusionHelpDeskTickets();
+    private SyncfusionHelpDeskTickets SelectedTicket = 
+        new SyncfusionHelpDeskTickets();
 
     SfGrid<SyncfusionHelpDeskTickets> gridObj;
 
-    public List<SyncfusionHelpDeskTickets> colHelpDeskTickets { get; set; }
+    public List<SyncfusionHelpDeskTickets> 
+        colHelpDeskTickets { get; set; }
 
     string SfDataManagerURL = "";
 
@@ -126,7 +133,8 @@
     {
         try
         {
-            SfDataManagerURL = $"{ModuleState.SiteId}/api/HelpDeskAdmin?entityid={ModuleState.ModuleId}";
+            SfDataManagerURL = 
+                $"{ModuleState.SiteId}/api/HelpDeskAdmin?entityid={ModuleState.ModuleId}";
         }
         catch (Exception ex)
         {
@@ -170,7 +178,8 @@
     public async Task SaveTicket()
     {
         // Update the selected Help Desk Ticket
-        await HelpDeskAdminService.UpdateSyncfusionHelpDeskTicketsAdminAsync(SelectedTicket);
+        await HelpDeskAdminService.
+            UpdateSyncfusionHelpDeskTicketsAdminAsync(SelectedTicket);
 
         // Close the Edit dialog
         this.EditDialogVisibility = false;
@@ -189,7 +198,10 @@
         // The user selected Yes to delete the
         // seleted Help Desk Ticket
         // Delete the record
-        await HelpDeskAdminService.DeleteSyncfusionHelpDeskTicketsAsync(SelectedTicket.HelpDeskTicketId, ModuleState.ModuleId);
+        await HelpDeskAdminService.
+            DeleteSyncfusionHelpDeskTicketsAsync(
+            SelectedTicket.HelpDeskTicketId, 
+            ModuleState.ModuleId);
 
         // Close the dialog
         this.DeleteRecordConfirmVisibility = false;

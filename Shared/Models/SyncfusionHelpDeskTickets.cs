@@ -10,7 +10,8 @@ namespace Syncfusion.HelpDesk.Models
     {
         public SyncfusionHelpDeskTickets()
         {
-            SyncfusionHelpDeskTicketDetails = new HashSet<SyncfusionHelpDeskTicketDetails>();
+            SyncfusionHelpDeskTicketDetails = 
+                new HashSet<SyncfusionHelpDeskTicketDetails>();
         }
 
         [Key]
@@ -26,7 +27,8 @@ namespace Syncfusion.HelpDesk.Models
         [Required]
         [StringLength(50, MinimumLength = 2,
             ErrorMessage =
-            "Description must be a minimum of 2 and maximum of 50 characters.")]
+            "Description must be a minimum of 2 and " +
+            "maximum of 50 characters.")]
         public string TicketDescription { get; set; }
 
         public string CreatedBy { get; set; }
@@ -34,6 +36,7 @@ namespace Syncfusion.HelpDesk.Models
         public string ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
 
-        public virtual ICollection<SyncfusionHelpDeskTicketDetails> SyncfusionHelpDeskTicketDetails { get; set; }
+        public virtual ICollection<SyncfusionHelpDeskTicketDetails> 
+            SyncfusionHelpDeskTicketDetails { get; set; }
     }
 }

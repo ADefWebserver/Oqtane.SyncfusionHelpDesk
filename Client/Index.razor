@@ -10,7 +10,9 @@
 @inject IHelpDeskService HelpDeskService
 @inject NavigationManager NavigationManager
 
-<ActionLink Action="Edit" Security="SecurityAccessLevel.Edit" Text="Administration" />
+<ActionLink Action="Edit" 
+            Security="SecurityAccessLevel.Edit" 
+            Text="Administration" />
 <br />
 <br />
 @if (isAuthenticated)
@@ -21,20 +23,26 @@
                 <TabItems>
                     <TabItem>
                         <ChildContent>
-                            <TabHeader Text="New Help Desk Ticket" IconCss="far fa-edit"></TabHeader>
+                            <TabHeader Text="New Help Desk Ticket" IconCss="far fa-edit">
+                            </TabHeader>
                         </ChildContent>
                         <ContentTemplate>
                             <br /><br />
-                            <EditForm ID="new-doctor-form" Model="@objHelpDeskTicket"
+                            <EditForm ID="new-doctor-form" 
+                                      Model="@objHelpDeskTicket"
                                       OnValidSubmit="@HandleValidSubmit">
                                 <DataAnnotationsValidator></DataAnnotationsValidator>
                                 <div>
                                     <SfComboBox TValue="string" TItem="SyncfusionHelpDeskStatus"
                                                 PopupHeight="230px" Placeholder="Ticket Status"
                                                 FloatLabelType="@FloatLabelType.Always"
-                                                @bind-Value="@objHelpDeskTicket.TicketStatus" DataSource="@SyncfusionHelpDeskStatus.Statuses">
-                                        <ComboBoxEvents TValue="string" TItem="SyncfusionHelpDeskStatus"></ComboBoxEvents>
-                                        <ComboBoxFieldSettings Text="Text" Value="ID"></ComboBoxFieldSettings>
+                                                @bind-Value="@objHelpDeskTicket.TicketStatus" 
+                                                DataSource="@SyncfusionHelpDeskStatus.Statuses">
+                                        <ComboBoxEvents TValue="string" 
+                                                        TItem="SyncfusionHelpDeskStatus">
+                                        </ComboBoxEvents>
+                                        <ComboBoxFieldSettings Text="Text" Value="ID">
+                                        </ComboBoxFieldSettings>
                                     </SfComboBox>
                                 </div>
                                 <div>
@@ -56,14 +64,14 @@
                                 <br />
 
                                 <SfButton Content="@Content" HtmlAttributes="@submit"></SfButton>
-                                <br /><br /> <b>@Status</b>
-
+                                <br /><br /><b>@Status</b>
                             </EditForm>
                         </ContentTemplate>
                     </TabItem>
                     <TabItem>
                         <ChildContent>
-                            <TabHeader Text="Existing Tickets" IconCss="fa fa-inbox"></TabHeader>
+                            <TabHeader Text="Existing Tickets" IconCss="fa fa-inbox">
+                            </TabHeader>
                         </ChildContent>
                         <ContentTemplate>
                             <br /><br />
@@ -84,11 +92,13 @@
                                             <GridColumn HeaderText="" TextAlign="TextAlign.Left" Width="50">
                                                 <GridCommandColumns>
                                                     <GridCommandColumn Type=CommandButtonType.Edit
-                                                                       ButtonOption="@(new CommandButtonOptions() { Content = "Edit" })">
+                                                                       ButtonOption=
+                                                                       "@(new CommandButtonOptions() { Content = "Edit" })">
                                                     </GridCommandColumn>
                                                 </GridCommandColumns>
                                             </GridColumn>
-                                            <GridColumn IsPrimaryKey="true" Field=@nameof(SyncfusionHelpDeskTickets.HelpDeskTicketId)
+                                            <GridColumn IsPrimaryKey="true" 
+                                                        Field=@nameof(SyncfusionHelpDeskTickets.HelpDeskTicketId)
                                                         HeaderText="ID #" TextAlign="@TextAlign.Left"
                                                         Width="70">
                                             </GridColumn>
@@ -151,7 +161,8 @@ else
     };
 
     public string Content = "Submit";
-    private Dictionary<string, object> submit = new Dictionary<string, object>() {
+    private Dictionary<string, object> submit = 
+        new Dictionary<string, object>() {
         { "type", "submit"}
     };
 
@@ -166,7 +177,8 @@ else
     };
 
     // Global property for the selected Help Desk Ticket
-    private SyncfusionHelpDeskTickets SelectedTicket = new SyncfusionHelpDeskTickets();
+    private SyncfusionHelpDeskTickets SelectedTicket = 
+        new SyncfusionHelpDeskTickets();
 
     SfGrid<SyncfusionHelpDeskTickets> gridObj;
 
@@ -181,7 +193,8 @@ else
         try
         {
             // get user
-            authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            authState = 
+                await AuthenticationStateProvider.GetAuthenticationStateAsync();
 
             if (authState.User.Identity.IsAuthenticated)
             {
@@ -192,7 +205,9 @@ else
         }
         catch (Exception ex)
         {
-            await logger.LogError(ex, "Error Loading HelpDesk {Error}", ex.Message);
+            await logger.LogError(
+                ex, "Error Loading HelpDesk {Error}", ex.Message);
+
             AddModuleMessage("Error Loading HelpDesk", MessageType.Error);
         }
     }
@@ -203,7 +218,8 @@ else
             await HelpDeskService.GetSyncfusionHelpDeskTicketsByUserAsync(
                 ModuleState.ModuleId, authState.User.Identity.Name);
 
-        colHelpDeskTickets = Tickets.OrderByDescending(x => x.HelpDeskTicketId).ToList();
+        colHelpDeskTickets = 
+            Tickets.OrderByDescending(x => x.HelpDeskTicketId).ToList();
     }
 
     public async Task HandleValidSubmit(EditContext context)
@@ -224,9 +240,12 @@ else
             HelpDesk.CreatedOn = DateTime.Now;
             HelpDesk.ModifiedBy = authState.User.Identity.Name;
             HelpDesk.ModifiedOn = DateTime.Now;
-            HelpDesk.SyncfusionHelpDeskTicketDetails = new List<SyncfusionHelpDeskTicketDetails>();
+            HelpDesk.SyncfusionHelpDeskTicketDetails = 
+                new List<SyncfusionHelpDeskTicketDetails>();
 
-            HelpDesk = await HelpDeskService.AddSyncfusionHelpDeskTicketsAsync(HelpDesk);
+            HelpDesk = 
+                await HelpDeskService.AddSyncfusionHelpDeskTicketsAsync(HelpDesk);
+
             await logger.LogInformation("HelpDesk Added {HelpDesk}", HelpDesk);
 
             Status = "Saved!";
@@ -266,7 +285,12 @@ else
         {
             // Get the selected Help Desk Ticket
             var HelpDeskTicket = (SyncfusionHelpDeskTickets)args.RowData;
-            SelectedTicket = await HelpDeskService.GetSyncfusionHelpDeskTicketByUserAsync(HelpDeskTicket.HelpDeskTicketId, ModuleState.ModuleId, authState.User.Identity.Name);
+
+            SelectedTicket = 
+                await HelpDeskService.GetSyncfusionHelpDeskTicketByUserAsync(
+                    HelpDeskTicket.HelpDeskTicketId, 
+                    ModuleState.ModuleId, 
+                    authState.User.Identity.Name);
 
             // Open the Edit dialog
             this.EditDialogVisibility = true;
@@ -280,7 +304,11 @@ else
         await HelpDeskService.UpdateSyncfusionHelpDeskTicketsAsync(SelectedTicket);
 
         // Update the Status of the Ticket in the collection
-        var TicketToUpdate = colHelpDeskTickets.Where(x => x.HelpDeskTicketId == SelectedTicket.HelpDeskTicketId).FirstOrDefault();
+        var TicketToUpdate = 
+            colHelpDeskTickets.Where(
+                x => x.HelpDeskTicketId == 
+                SelectedTicket.HelpDeskTicketId).FirstOrDefault();
+
         TicketToUpdate.TicketStatus = SelectedTicket.TicketStatus;
 
         // Close the Edit dialog

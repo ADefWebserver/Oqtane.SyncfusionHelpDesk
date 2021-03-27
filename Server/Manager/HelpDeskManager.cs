@@ -49,7 +49,8 @@ namespace Syncfusion.HelpDesk.Manager
             List<Models.SyncfusionHelpDeskTickets> HelpDesks = null;
             if (!string.IsNullOrEmpty(content))
             {
-                HelpDesks = JsonSerializer.Deserialize<List<Models.SyncfusionHelpDeskTickets>>(content);
+                HelpDesks = 
+                    JsonSerializer.Deserialize<List<Models.SyncfusionHelpDeskTickets>>(content);
             }
             if (HelpDesks != null)
             {
