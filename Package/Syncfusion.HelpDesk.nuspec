@@ -25,7 +25,11 @@
     <file src="..\Server\bin\Release\net5.0\Syncfusion.HelpDesk.Server.Oqtane.dll" target="lib\net5.0" /> 
     <file src="..\Server\bin\Release\net5.0\Syncfusion.HelpDesk.Server.Oqtane.pdb" target="lib\net5.0" /> 
     <file src="..\Shared\bin\Release\net5.0\Syncfusion.HelpDesk.Shared.Oqtane.dll" target="lib\net5.0" /> 
-    <file src="..\Shared\bin\Release\net5.0\Syncfusion.HelpDesk.Shared.Oqtane.pdb" target="lib\net5.0" /> 
+    <file src="..\Shared\bin\Release\net5.0\Syncfusion.HelpDesk.Shared.Oqtane.pdb" target="lib\net5.0" />
+    <file src="..\Server\bin\Release\net5.0\Syncfusion.Blazor.dll" target="lib\net5.0" />
+    <file src="..\Server\bin\Release\net5.0\Syncfusion.ExcelExport.Net.dll" target="lib\net5.0" />
+    <file src="..\Server\bin\Release\net5.0\Syncfusion.Licensing.dll" target="lib\net5.0" />
+    <file src="..\Server\bin\Release\net5.0\Syncfusion.PdfExport.Net.dll" target="lib\net5.0" />
     <file src="..\Server\wwwroot\**\*.*" target="wwwroot" /> 
   </files>
 </package>
