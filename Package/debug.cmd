@@ -11,3 +11,4 @@ XCOPY "..\Server\bin\Debug\net5.0\Syncfusion.Blazor.dll" "..\..\oqtane.framework
 XCOPY "..\Server\bin\Debug\net5.0\Syncfusion.ExcelExport.Net.dll" "..\..\oqtane.framework\Oqtane.Server\bin\Debug\net5.0\" /Y
 XCOPY "..\Server\bin\Debug\net5.0\Syncfusion.Licensing.dll" "..\..\oqtane.framework\Oqtane.Server\bin\Debug\net5.0\" /Y
 XCOPY "..\Server\bin\Debug\net5.0\Syncfusion.PdfExport.Net.dll" "..\..\oqtane.framework\Oqtane.Server\bin\Debug\net5.0\" /Y
+XCOPY "..\Server\bin\Debug\net5.0\Newtonsoft.Json.dll" "..\..\oqtane.framework\Oqtane.Server\bin\Debug\net5.0\" /Y

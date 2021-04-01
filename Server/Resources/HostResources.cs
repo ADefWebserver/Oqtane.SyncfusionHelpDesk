@@ -15,11 +15,11 @@ namespace Syncfusion.HelpDesk
         {
             new Resource {
                 ResourceType = ResourceType.Stylesheet,
-                Url = "_content/Syncfusion.Blazor/" +
+                Url = "_content/syncfusion.blazor/" +
                 "styles/bootstrap4.css" },
             new Resource {
                 ResourceType = ResourceType.Stylesheet,
-                Url = "_content/Syncfusion.Blazor/" +
+                Url = "_content/syncfusion.blazor/" +
                 "styles/material-dark.css" },
             new Resource {
                 ResourceType = ResourceType.Script,
