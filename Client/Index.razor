@@ -28,7 +28,7 @@
                         </ChildContent>
                         <ContentTemplate>
                             <br /><br />
-                            <EditForm ID="new-doctor-form" 
+                            <EditForm ID="new-form" 
                                       Model="@objHelpDeskTicket"
                                       OnValidSubmit="@HandleValidSubmit">
                                 <DataAnnotationsValidator></DataAnnotationsValidator>
@@ -161,6 +161,7 @@ else
     };
 
     public string Content = "Submit";
+
     private Dictionary<string, object> submit = 
         new Dictionary<string, object>() {
         { "type", "submit"}

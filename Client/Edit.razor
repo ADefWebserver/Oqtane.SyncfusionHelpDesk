@@ -16,7 +16,7 @@
             AllowSorting="true"
             AllowResizing="true"
             AllowReordering="true">
-        <SfDataManager Url="@SfDataManagerURL" 
+        <SfDataManager Url="@SfDataManagerURL"
                        Adaptor="Adaptors.WebApiAdaptor">
         </SfDataManager>
         <GridPageSettings PageSize="10"></GridPageSettings>
@@ -104,7 +104,7 @@
 </SfDialog>
 
 @code {
-    public override SecurityAccessLevel 
+    public override SecurityAccessLevel
         SecurityAccessLevel => SecurityAccessLevel.Edit;
 
     public override string Actions => "Add,Edit";
@@ -113,19 +113,20 @@
 
     public override List<Resource> Resources => new List<Resource>()
     {
-        new Resource { 
-            ResourceType = ResourceType.Stylesheet, 
+        new Resource {
+            ResourceType = ResourceType.Stylesheet,
             Url = ModulePath() + "Module.css" }
     };
 
     // Global property for the selected Help Desk Ticket
-    private SyncfusionHelpDeskTickets SelectedTicket = 
+    private SyncfusionHelpDeskTickets SelectedTicket =
         new SyncfusionHelpDeskTickets();
 
     SfGrid<SyncfusionHelpDeskTickets> gridObj;
 
-    public List<SyncfusionHelpDeskTickets> 
-        colHelpDeskTickets { get; set; }
+    public List<SyncfusionHelpDeskTickets>
+        colHelpDeskTickets
+    { get; set; }
 
     string SfDataManagerURL = "";
 
@@ -133,7 +134,7 @@
     {
         try
         {
-            SfDataManagerURL = 
+            SfDataManagerURL =
                 $"{ModuleState.SiteId}/api/HelpDeskAdmin?entityid={ModuleState.ModuleId}";
         }
         catch (Exception ex)
@@ -200,7 +201,7 @@
         // Delete the record
         await HelpDeskAdminService.
             DeleteSyncfusionHelpDeskTicketsAsync(
-            SelectedTicket.HelpDeskTicketId, 
+            SelectedTicket.HelpDeskTicketId,
             ModuleState.ModuleId);
 
         // Close the dialog
