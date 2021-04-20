@@ -15,7 +15,9 @@ namespace Syncfusion.HelpDesk.Manager
         private IHelpDeskRepository _HelpDeskRepository;
         private ISqlRepository _sql;
 
-        public HelpDeskManager(IHelpDeskRepository HelpDeskRepository, ISqlRepository sql)
+        public HelpDeskManager(
+            IHelpDeskRepository HelpDeskRepository,
+            ISqlRepository sql)
         {
             _HelpDeskRepository = HelpDeskRepository;
             _sql = sql;
@@ -23,19 +25,35 @@ namespace Syncfusion.HelpDesk.Manager
 
         public bool Install(Tenant tenant, string version)
         {
-            return _sql.ExecuteScript(tenant, GetType().Assembly, "Syncfusion.HelpDesk." + version + ".sql");
+            return _sql.ExecuteScript(
+                tenant, GetType().Assembly,
+                "Syncfusion.HelpDesk." + version + ".sql");
         }
 
         public bool Uninstall(Tenant tenant)
         {
-            return _sql.ExecuteScript(tenant, GetType().Assembly, "Syncfusion.HelpDesk.Uninstall.sql");
+            return _sql.ExecuteScript(
+                tenant, GetType().Assembly,
+                "Syncfusion.HelpDesk.Uninstall.sql");
         }
 
         public string ExportModule(Module module)
         {
             string content = "";
-            List<Models.SyncfusionHelpDeskTickets> HelpDesks = 
-                _HelpDeskRepository.GetSyncfusionHelpDeskTickets(module.ModuleId).ToList();
+
+            List<Models.SyncfusionHelpDeskTickets> HelpDesks =
+                new List<SyncfusionHelpDeskTickets>();
+
+            var AllTickets = _HelpDeskRepository
+                .GetSyncfusionHelpDeskTickets(module.ModuleId).ToList();
+
+            foreach (var Ticket in AllTickets)
+            {
+                var HelpDeskTicket = _HelpDeskRepository
+                    .GetSyncfusionHelpDeskTicket(Ticket.HelpDeskTicketId);
+
+                HelpDesks.Add(HelpDeskTicket);
+            }
 
             if (HelpDesks != null)
             {
@@ -49,28 +67,39 @@ namespace Syncfusion.HelpDesk.Manager
             List<Models.SyncfusionHelpDeskTickets> HelpDesks = null;
             if (!string.IsNullOrEmpty(content))
             {
-                HelpDesks = 
+                HelpDesks =
                     JsonSerializer.Deserialize<List<Models.SyncfusionHelpDeskTickets>>(content);
             }
             if (HelpDesks != null)
             {
-                foreach(var HelpDesk in HelpDesks)
+                foreach (var HelpDesk in HelpDesks)
                 {
-                    try
+                    Models.SyncfusionHelpDeskTickets NewHelpDesk =
+                        new SyncfusionHelpDeskTickets();
+
+                    NewHelpDesk.ModuleId = module.ModuleId;
+                    NewHelpDesk.TicketDate = HelpDesk.TicketDate;
+                    NewHelpDesk.TicketStatus = HelpDesk.TicketStatus;
+                    NewHelpDesk.TicketDescription = HelpDesk.TicketDescription;
+
+                    NewHelpDesk.SyncfusionHelpDeskTicketDetails =
+                        new List<SyncfusionHelpDeskTicketDetails>();
+
+                    foreach (var TicketDetail in
+                        HelpDesk.SyncfusionHelpDeskTicketDetails)
                     {
-                        _HelpDeskRepository.AddSyncfusionHelpDeskTickets(
-                    new Models.SyncfusionHelpDeskTickets
-                    {
-                        ModuleId = module.ModuleId,
-                        TicketDate = HelpDesk.TicketDate,
-                        TicketStatus = HelpDesk.TicketStatus,
-                        TicketDescription = HelpDesk.TicketDescription
-                    });
+                        SyncfusionHelpDeskTicketDetails NewDetail =
+                            new SyncfusionHelpDeskTicketDetails();
+
+                        NewDetail.TicketDetailDate = TicketDetail.TicketDetailDate;
+                        NewDetail.ModifiedBy = TicketDetail.ModifiedBy;
+                        NewDetail.ModifiedOn = TicketDetail.ModifiedOn;
+                        NewDetail.TicketDescription = TicketDetail.TicketDescription;
+
+                        NewHelpDesk.SyncfusionHelpDeskTicketDetails.Add(NewDetail);
                     }
-                    catch (System.Exception ex)
-                    {
-                        string error = ex.Message;
-                    }
+
+                    _HelpDeskRepository.AddSyncfusionHelpDeskTickets(NewHelpDesk);
                 }
             }
         }
