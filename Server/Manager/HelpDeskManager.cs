@@ -56,14 +56,21 @@ namespace Syncfusion.HelpDesk.Manager
             {
                 foreach(var HelpDesk in HelpDesks)
                 {
-                    _HelpDeskRepository.AddSyncfusionHelpDeskTickets(
-                        new Models.SyncfusionHelpDeskTickets {
-                            HelpDeskTicketId = HelpDesk.HelpDeskTicketId,
-                            ModuleId = module.ModuleId,
-                            TicketDate = HelpDesk.TicketDate,
-                            TicketStatus = HelpDesk.TicketStatus,
-                            TicketDescription = HelpDesk.TicketDescription   
-                        });
+                    try
+                    {
+                        _HelpDeskRepository.AddSyncfusionHelpDeskTickets(
+                    new Models.SyncfusionHelpDeskTickets
+                    {
+                        ModuleId = module.ModuleId,
+                        TicketDate = HelpDesk.TicketDate,
+                        TicketStatus = HelpDesk.TicketStatus,
+                        TicketDescription = HelpDesk.TicketDescription
+                    });
+                    }
+                    catch (System.Exception ex)
+                    {
+                        string error = ex.Message;
+                    }
                 }
             }
         }
