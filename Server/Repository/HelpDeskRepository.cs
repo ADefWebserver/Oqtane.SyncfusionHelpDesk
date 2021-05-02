@@ -17,7 +17,7 @@ namespace Syncfusion.Helpdesk.Repository
         }
 
         public IQueryable<Models.SyncfusionHelpDeskTickets>
-    GetSyncfusionHelpDeskTickets(int ModuleId)
+            GetSyncfusionHelpDeskTickets(int ModuleId)
         {
             return _db.SyncfusionHelpDeskTickets.Where(
                 item => item.ModuleId == ModuleId);
@@ -93,11 +93,13 @@ namespace Syncfusion.Helpdesk.Repository
 
                 // Insert any new TicketDetails
 
-                if (UpdatedSyncfusionHelpDeskTickets.SyncfusionHelpDeskTicketDetails
+                if (UpdatedSyncfusionHelpDeskTickets
+                    .SyncfusionHelpDeskTicketDetails
                     != null)
                 {
                     foreach (var item in
-                        UpdatedSyncfusionHelpDeskTickets.SyncfusionHelpDeskTicketDetails)
+                        UpdatedSyncfusionHelpDeskTickets
+                        .SyncfusionHelpDeskTicketDetails)
                     {
                         if (item.HelpDeskTicketDetailId == 0)
                         {
@@ -125,7 +127,7 @@ namespace Syncfusion.Helpdesk.Repository
                 _db.Entry(ExistingTicket).State = EntityState.Modified;
                 _db.SaveChanges();
             }
-           
+
             return ExistingTicket;
         }
 
