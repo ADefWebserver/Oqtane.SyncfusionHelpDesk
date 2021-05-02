@@ -1,25 +1,25 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Syncfusion.HelpDesk.Models;
+using Syncfusion.Helpdesk.Models;
 
-namespace Syncfusion.HelpDesk.Services
+namespace Syncfusion.Helpdesk.Services
 {
-    public interface IHelpDeskService
+    public interface IHelpdeskService
     {
-        Task<List<Models.SyncfusionHelpDeskTickets>> 
+        Task<List<SyncfusionHelpDeskTickets>>
             GetSyncfusionHelpDeskTicketsByUserAsync(
             int ModuleId, string username);
 
-        Task<Models.SyncfusionHelpDeskTickets> 
+        Task<SyncfusionHelpDeskTickets>
             GetSyncfusionHelpDeskTicketByUserAsync(
             int HelpDeskTicketId, int ModuleId, string username);
 
-        Task<Models.SyncfusionHelpDeskTickets> 
+        Task<SyncfusionHelpDeskTickets>
             AddSyncfusionHelpDeskTicketsAsync(
-            Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTickets);
-        
-        Task<Models.SyncfusionHelpDeskTickets> 
+            SyncfusionHelpDeskTickets SyncfusionHelpDeskTickets);
+
+        Task<SyncfusionHelpDeskTickets>
             UpdateSyncfusionHelpDeskTicketsAsync(
-            Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTickets);
+            SyncfusionHelpDeskTickets SyncfusionHelpDeskTickets);
     }
 }

@@ -1,17 +1,16 @@
 ﻿@using System.Security.Claims;
 @using Syncfusion.Blazor.DropDowns
-@using Syncfusion.HelpDesk.Models
+@using Syncfusion.Helpdesk.Models
 
 <div>
-    <SfComboBox TValue="string" 
+    <SfComboBox TValue="string"
                 TItem="SyncfusionHelpDeskStatus"
-                PopupHeight="230px" 
+                PopupHeight="230px"
                 Placeholder="Ticket Status"
                 FloatLabelType="@FloatLabelType.Always"
-                @bind-Value="@SelectedTicket.TicketStatus" 
+                @bind-Value="@SelectedTicket.TicketStatus"
                 DataSource="@SyncfusionHelpDeskStatus.Statuses">
-        <ComboBoxEvents 
-                        TValue="string" 
+        <ComboBoxEvents TValue="string"
                         TItem="SyncfusionHelpDeskStatus">
         </ComboBoxEvents>
         <ComboBoxFieldSettings Text="Text" Value="ID">
@@ -19,7 +18,7 @@
     </SfComboBox>
 </div>
 <div>
-    <SfDatePicker ID="TicketDate" 
+    <SfDatePicker ID="TicketDate"
                   Enabled="isAdmin"
                   Placeholder="Ticket Date"
                   FloatLabelType="@FloatLabelType.Always"
@@ -29,12 +28,13 @@
     </SfDatePicker>
 </div>
 <div>
-    <SfTextBox Enabled="isAdmin" 
+    <SfTextBox Enabled="isAdmin"
                Placeholder="Ticket Description"
                FloatLabelType="@FloatLabelType.Always"
                @bind-Value="@SelectedTicket.TicketDescription">
     </SfTextBox>
 </div>
+
 @if (SelectedTicket.SyncfusionHelpDeskTicketDetails != null)
 {
     @if (SelectedTicket.SyncfusionHelpDeskTicketDetails.Count() > 0)
@@ -48,7 +48,7 @@
             </thead>
             <tbody>
                 @foreach (var TicketDetail in
-            SelectedTicket.SyncfusionHelpDeskTicketDetails)
+         SelectedTicket.SyncfusionHelpDeskTicketDetails)
                 {
                     <tr>
                         <td>
@@ -70,7 +70,7 @@
         Add
     </SfButton>
 }
-<br />
+
 @code {
     [Parameter]
     public SyncfusionHelpDeskTickets SelectedTicket { get; set; }
@@ -102,4 +102,5 @@
         // Clear the Text Box
         NewHelpDeskTicketDetailText = "";
     }
+
 }

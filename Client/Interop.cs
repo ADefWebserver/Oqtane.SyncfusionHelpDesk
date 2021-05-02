@@ -1,7 +1,7 @@
 using Microsoft.JSInterop;
 using System.Threading.Tasks;
 
-namespace Syncfusion.HelpDesk
+namespace Syncfusion.Helpdesk
 {
     public class Interop
     {

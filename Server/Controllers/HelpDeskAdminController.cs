@@ -6,28 +6,28 @@ using Microsoft.AspNetCore.Http;
 using Oqtane.Shared;
 using Oqtane.Enums;
 using Oqtane.Infrastructure;
-using Syncfusion.HelpDesk.Models;
-using Syncfusion.HelpDesk.Repository;
+using Syncfusion.Helpdesk.Models;
+using Syncfusion.Helpdesk.Repository;
 using System.Linq;
 using System.Threading.Tasks;
 using Oqtane.Repository;
 using System.Linq.Expressions;
 using System;
 
-namespace Syncfusion.HelpDesk.Controllers
+namespace Syncfusion.Helpdesk.Controllers
 {
     [Route(ControllerRoutes.Default)]
-    public class HelpDeskAdminController : Controller
+    public class HelpdeskAdminController : Controller
     {
-        private readonly IHelpDeskRepository _HelpDeskRepository;
+        private readonly IHelpdeskRepository _HelpDeskRepository;
         private readonly IUserRepository _users;
         private readonly ILogManager _logger;
         protected int _entityId = -1;
 
-        public HelpDeskAdminController(
-            IHelpDeskRepository HelpDeskRepository, 
-            IUserRepository users, 
-            ILogManager logger, 
+        public HelpdeskAdminController(
+            IHelpdeskRepository HelpDeskRepository,
+            IUserRepository users,
+            ILogManager logger,
             IHttpContextAccessor accessor)
         {
             try
@@ -36,10 +36,12 @@ namespace Syncfusion.HelpDesk.Controllers
                 _users = users;
                 _logger = logger;
 
-                if (accessor.HttpContext.Request.Query.ContainsKey("entityid"))
+                if (accessor.HttpContext
+                    .Request.Query.ContainsKey("entityid"))
                 {
                     _entityId = int.Parse(
-                        accessor.HttpContext.Request.Query["entityid"]);
+                        accessor.HttpContext
+                        .Request.Query["entityid"]);
                 }
             }
             catch (System.Exception ex)
@@ -59,7 +61,7 @@ namespace Syncfusion.HelpDesk.Controllers
             StringValues OrderBy;
 
             // Filter the data
-            var TotalRecordCount = 
+            var TotalRecordCount =
                 _HelpDeskRepository.GetSyncfusionHelpDeskTickets(
                 int.Parse(entityid)).Count();
 
@@ -80,7 +82,7 @@ namespace Syncfusion.HelpDesk.Controllers
 
                 return new
                 {
-                    Items = 
+                    Items =
                     _HelpDeskRepository.GetSyncfusionHelpDeskTickets(
                         int.Parse(entityid))
                     .OrderByDescending(orderby)
@@ -111,7 +113,7 @@ namespace Syncfusion.HelpDesk.Controllers
         [HttpGet("{HelpDeskTicketId}")]
         [Authorize(Policy = PolicyNames.EditModule)]
         public SyncfusionHelpDeskTickets Get(
-            string HelpDeskTicketId, 
+            string HelpDeskTicketId,
             string entityid)
         {
             return _HelpDeskRepository.GetSyncfusionHelpDeskTicket
@@ -124,17 +126,18 @@ namespace Syncfusion.HelpDesk.Controllers
         [Authorize(Policy = PolicyNames.EditModule)]
         public Models.SyncfusionHelpDeskTickets Put(
             int id,
-            [FromBody] Models.SyncfusionHelpDeskTickets updatedSyncfusionHelpDeskTickets)
+            [FromBody] Models.SyncfusionHelpDeskTickets
+            updatedSyncfusionHelpDeskTickets)
         {
-            if (ModelState.IsValid && 
+            if (ModelState.IsValid &&
                 updatedSyncfusionHelpDeskTickets.ModuleId == _entityId)
             {
-                updatedSyncfusionHelpDeskTickets = 
+                updatedSyncfusionHelpDeskTickets =
                     _HelpDeskRepository.UpdateSyncfusionHelpDeskTickets(
-                        "Admin", 
+                        "Admin",
                         updatedSyncfusionHelpDeskTickets);
 
-                _logger.Log(LogLevel.Information, this, LogFunction.Update, 
+                _logger.Log(LogLevel.Information, this, LogFunction.Update,
                     "HelpDesk Updated {updatedSyncfusionHelpDeskTickets}",
                     updatedSyncfusionHelpDeskTickets);
             }
@@ -147,13 +150,13 @@ namespace Syncfusion.HelpDesk.Controllers
         [Authorize(Policy = PolicyNames.EditModule)]
         public void Delete(int id)
         {
-            Models.SyncfusionHelpDeskTickets deletedSyncfusionHelpDeskTickets = 
+            Models.SyncfusionHelpDeskTickets deletedSyncfusionHelpDeskTickets =
                 _HelpDeskRepository.GetSyncfusionHelpDeskTicket(id);
-            if (deletedSyncfusionHelpDeskTickets != null && 
+            if (deletedSyncfusionHelpDeskTickets != null &&
                 deletedSyncfusionHelpDeskTickets.ModuleId == _entityId)
             {
                 _HelpDeskRepository.DeleteSyncfusionHelpDeskTickets(id);
-                _logger.Log(LogLevel.Information, this, LogFunction.Delete, 
+                _logger.Log(LogLevel.Information, this, LogFunction.Delete,
                     "HelpDesk Deleted {HelpDeskId}", id);
             }
         }

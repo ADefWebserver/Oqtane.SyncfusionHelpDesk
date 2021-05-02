@@ -6,9 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Client\Syncfusion.HelpDesk.Client.csproj" />
-    <ProjectReference Include="..\Server\Syncfusion.HelpDesk.Server.csproj" />
-    <ProjectReference Include="..\Shared\Syncfusion.HelpDesk.Shared.csproj" />
+    <ProjectReference Include="..\Client\Syncfusion.Helpdesk.Client.csproj" />
+    <ProjectReference Include="..\Server\Syncfusion.Helpdesk.Server.csproj" />
+    <ProjectReference Include="..\Shared\Syncfusion.Helpdesk.Shared.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

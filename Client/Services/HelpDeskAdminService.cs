@@ -1,45 +1,45 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Oqtane.Modules;
+﻿using Oqtane.Modules;
 using Oqtane.Services;
 using Oqtane.Shared;
-using Syncfusion.HelpDesk.Models;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Syncfusion.Helpdesk.Models;
 
-namespace Syncfusion.HelpDesk.Services
+namespace Syncfusion.Helpdesk.Services
 {
-    public class HelpDeskAdminService : 
-        ServiceBase, IHelpDeskAdminService, IService
+    public class HelpdeskAdminService :
+            ServiceBase, IHelpdeskAdminService, IService
     {
         private readonly SiteState _siteState;
 
-        public HelpDeskAdminService(
-            HttpClient http, 
+        public HelpdeskAdminService(
+            HttpClient http,
             SiteState siteState) : base(http)
         {
             _siteState = siteState;
         }
 
-        private string Apiurl => CreateApiUrl(_siteState.Alias, "HelpDeskAdmin");
+        private string Apiurl => CreateApiUrl(
+            _siteState.Alias, "HelpdeskAdmin");
 
-        public async Task<Models.SyncfusionHelpDeskTickets> 
+        public async Task<SyncfusionHelpDeskTickets>
             GetSyncfusionHelpDeskTicketAdminAsync(
             int HelpDeskTicketId, int ModuleId)
         {
-            return await GetJsonAsync<Models.SyncfusionHelpDeskTickets>(
-                CreateAuthorizationPolicyUrl($"{Apiurl}/{HelpDeskTicketId}", 
-                ModuleId));
+            return await GetJsonAsync<SyncfusionHelpDeskTickets>(
+                CreateAuthorizationPolicyUrl(
+                    $"{Apiurl}/{HelpDeskTicketId}",
+                    ModuleId));
         }
 
-        public async Task<Models.SyncfusionHelpDeskTickets> 
+        public async Task<SyncfusionHelpDeskTickets>
             UpdateSyncfusionHelpDeskTicketsAdminAsync(
             Models.SyncfusionHelpDeskTickets objSyncfusionHelpDeskTicket)
         {
-            return await PutJsonAsync<Models.SyncfusionHelpDeskTickets>(
+            return await PutJsonAsync<SyncfusionHelpDeskTickets>(
                 CreateAuthorizationPolicyUrl(
-                    $"{Apiurl}/{objSyncfusionHelpDeskTicket.HelpDeskTicketId}", 
-                    objSyncfusionHelpDeskTicket.ModuleId), 
+                    $"{Apiurl}/{objSyncfusionHelpDeskTicket.HelpDeskTicketId}",
+                    objSyncfusionHelpDeskTicket.ModuleId),
                 objSyncfusionHelpDeskTicket);
         }
 

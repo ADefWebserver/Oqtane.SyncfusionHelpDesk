@@ -1,11 +1,11 @@
 @using Oqtane.Modules.Controls
-@using Syncfusion.HelpDesk.Services
-@using Syncfusion.HelpDesk.Models
-@using Syncfusion.HelpDesk.Client
+@using Syncfusion.Helpdesk.Services
+@using Syncfusion.Helpdesk.Models
+@using Syncfusion.Helpdesk.Client.Modules.Syncfusion_Helpdesk
 
-@namespace Syncfusion.HelpDesk
+@namespace Syncfusion.Helpdesk
 @inherits ModuleBase
-@inject IHelpDeskAdminService HelpDeskAdminService
+@inject IHelpdeskAdminService HelpdeskAdminService
 @inject NavigationManager NavigationManager
 
 <div id="admintarget" style="height: 500px;" class="col-lg-12 control-section">
@@ -27,14 +27,17 @@
             <GridColumn HeaderText="" TextAlign="TextAlign.Left" Width="100">
                 <GridCommandColumns>
                     <GridCommandColumn Type=CommandButtonType.Edit
-                                       ButtonOption="@(new CommandButtonOptions() { Content = "Edit" })">
+                                       ButtonOption="@(new CommandButtonOptions()
+                                                       { Content = "Edit" })">
                     </GridCommandColumn>
                     <GridCommandColumn Type=CommandButtonType.Delete
-                                       ButtonOption="@(new CommandButtonOptions() { Content = "Delete" })">
+                                       ButtonOption="@(new CommandButtonOptions()
+                                                       { Content = "Delete" })">
                     </GridCommandColumn>
                 </GridCommandColumns>
             </GridColumn>
-            <GridColumn IsPrimaryKey="true" Field=@nameof(SyncfusionHelpDeskTickets.HelpDeskTicketId)
+            <GridColumn IsPrimaryKey="true"
+                        Field=@nameof(SyncfusionHelpDeskTickets.HelpDeskTicketId)
                         HeaderText="ID #" TextAlign="@TextAlign.Left"
                         Width="70">
             </GridColumn>
@@ -104,15 +107,17 @@
 </SfDialog>
 
 @code {
+    // This ensures only users with this security level Edit
+    // can open this control
     public override SecurityAccessLevel
-        SecurityAccessLevel => SecurityAccessLevel.Edit;
+    SecurityAccessLevel => SecurityAccessLevel.Edit;
 
     public override string Actions => "Add,Edit";
 
     public override string Title => "Manage HelpDesk";
 
     public override List<Resource> Resources => new List<Resource>()
-    {
+{
         new Resource {
             ResourceType = ResourceType.Stylesheet,
             Url = ModulePath() + "Module.css" }
@@ -135,19 +140,20 @@
         try
         {
             SfDataManagerURL =
-                $"{ModuleState.SiteId}/api/HelpDeskAdmin?entityid={ModuleState.ModuleId}";
+                $"{ModuleState.SiteId}/api/HelpdeskAdmin?" +
+                $"entityid={ModuleState.ModuleId}";
         }
         catch (Exception ex)
         {
-            await logger.LogError(ex, "Error Loading HelpDesk {Error}", ex.Message);
+            await logger.LogError(ex, "Error Loading HelpDesk {Error}",
+                ex.Message);
+
             AddModuleMessage("Error Loading HelpDesk", MessageType.Error);
         }
     }
 
-    public bool EditDialogVisibility { get; set; } = false;
-
     public async void OnCommandClicked(
-      CommandClickEventArgs<SyncfusionHelpDeskTickets> args)
+        CommandClickEventArgs<SyncfusionHelpDeskTickets> args)
     {
         if (args.CommandColumn.ButtonOption.Content == "Edit")
         {
@@ -155,7 +161,7 @@
             var HelpDeskTicket = (SyncfusionHelpDeskTickets)args.RowData;
 
             SelectedTicket =
-                await HelpDeskAdminService.GetSyncfusionHelpDeskTicketAdminAsync
+                await HelpdeskAdminService.GetSyncfusionHelpDeskTicketAdminAsync
                 (HelpDeskTicket.HelpDeskTicketId, ModuleState.ModuleId);
 
             // Open the Edit dialog
@@ -165,8 +171,6 @@
 
         if (args.CommandColumn.ButtonOption.Content == "Delete")
         {
-            // We only need the TicketGuid
-            // of the selected Help Desk Ticket
             SelectedTicket = new SyncfusionHelpDeskTickets();
             SelectedTicket.HelpDeskTicketId = args.RowData.HelpDeskTicketId;
 
@@ -174,12 +178,13 @@
             this.DeleteRecordConfirmVisibility = true;
             StateHasChanged();
         }
+
     }
 
     public async Task SaveTicket()
     {
         // Update the selected Help Desk Ticket
-        await HelpDeskAdminService.
+        await HelpdeskAdminService.
             UpdateSyncfusionHelpDeskTicketsAdminAsync(SelectedTicket);
 
         // Close the Edit dialog
@@ -191,15 +196,22 @@
         gridObj.Refresh();
     }
 
+    public bool EditDialogVisibility { get; set; } = false;
+
     // Property to control the delete dialog
     public bool DeleteRecordConfirmVisibility { get; set; } = false;
+
+    public void ConfirmDeleteNo()
+    {
+        this.DeleteRecordConfirmVisibility = false;
+    }
 
     public async void ConfirmDeleteYes()
     {
         // The user selected Yes to delete the
-        // seleted Help Desk Ticket
+        // selected Help Desk Ticket
         // Delete the record
-        await HelpDeskAdminService.
+        await HelpdeskAdminService.
             DeleteSyncfusionHelpDeskTicketsAsync(
             SelectedTicket.HelpDeskTicketId,
             ModuleState.ModuleId);
@@ -211,13 +223,5 @@
         // Refresh the SfGrid
         // so the deleted record will not show
         gridObj.Refresh();
-    }
-
-    public void ConfirmDeleteNo()
-    {
-        // Open the dialog
-        // to give the user a chance
-        // to confirm they want to delete the record
-        this.DeleteRecordConfirmVisibility = false;
     }
 }

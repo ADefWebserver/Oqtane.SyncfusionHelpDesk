@@ -2,22 +2,22 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Collections.Generic;
 using Oqtane.Modules;
-using Syncfusion.HelpDesk.Models;
+using Syncfusion.Helpdesk.Models;
 using System;
 
-namespace Syncfusion.HelpDesk.Repository
+namespace Syncfusion.Helpdesk.Repository
 {
-    public class HelpDeskRepository : IHelpDeskRepository, IService
+    public class HelpdeskRepository : IHelpdeskRepository, IService
     {
-        private readonly HelpDeskContext _db;
+        private readonly HelpdeskContext _db;
 
-        public HelpDeskRepository(HelpDeskContext context)
+        public HelpdeskRepository(HelpdeskContext context)
         {
             _db = context;
         }
 
-        public IQueryable<Models.SyncfusionHelpDeskTickets> 
-            GetSyncfusionHelpDeskTickets(int ModuleId)
+        public IQueryable<Models.SyncfusionHelpDeskTickets>
+    GetSyncfusionHelpDeskTickets(int ModuleId)
         {
             return _db.SyncfusionHelpDeskTickets.Where(
                 item => item.ModuleId == ModuleId);
@@ -44,7 +44,7 @@ namespace Syncfusion.HelpDesk.Repository
             objDeskTicket.ModifiedBy = HelpDeskTicket.ModifiedBy;
             objDeskTicket.ModifiedOn = HelpDeskTicket.ModifiedOn;
 
-            objDeskTicket.SyncfusionHelpDeskTicketDetails = 
+            objDeskTicket.SyncfusionHelpDeskTicketDetails =
                 new List<SyncfusionHelpDeskTicketDetails>();
 
             foreach (var item in HelpDeskTicket.SyncfusionHelpDeskTicketDetails)
@@ -59,13 +59,13 @@ namespace Syncfusion.HelpDesk.Repository
         public Models.SyncfusionHelpDeskTickets AddSyncfusionHelpDeskTickets
             (Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTicket)
         {
-                _db.SyncfusionHelpDeskTickets.Add(SyncfusionHelpDeskTicket);
-                _db.SaveChanges();
-                return SyncfusionHelpDeskTicket;
+            _db.SyncfusionHelpDeskTickets.Add(SyncfusionHelpDeskTicket);
+            _db.SaveChanges();
+            return SyncfusionHelpDeskTicket;
         }
 
         public Models.SyncfusionHelpDeskTickets UpdateSyncfusionHelpDeskTickets(
-            string UpdateMode, 
+            string UpdateMode,
             Models.SyncfusionHelpDeskTickets UpdatedSyncfusionHelpDeskTickets)
         {
             // Get the existing record
@@ -93,7 +93,7 @@ namespace Syncfusion.HelpDesk.Repository
 
                 // Insert any new TicketDetails
 
-                if (UpdatedSyncfusionHelpDeskTickets.SyncfusionHelpDeskTicketDetails 
+                if (UpdatedSyncfusionHelpDeskTickets.SyncfusionHelpDeskTicketDetails
                     != null)
                 {
                     foreach (var item in
@@ -116,6 +116,8 @@ namespace Syncfusion.HelpDesk.Repository
 
                             _db.SyncfusionHelpDeskTicketDetails
                                 .Add(newHelpDeskTicketDetails);
+
+                            _db.SaveChanges();
                         }
                     }
                 }
@@ -123,18 +125,18 @@ namespace Syncfusion.HelpDesk.Repository
                 _db.Entry(ExistingTicket).State = EntityState.Modified;
                 _db.SaveChanges();
             }
-
-            _db.SaveChanges();
+           
             return ExistingTicket;
         }
 
         public void DeleteSyncfusionHelpDeskTickets(int Id)
         {
-            Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTicket = 
+            Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTicket =
                 _db.SyncfusionHelpDeskTickets.Find(Id);
 
             _db.SyncfusionHelpDeskTickets.Remove(SyncfusionHelpDeskTicket);
             _db.SaveChanges();
         }
+
     }
 }

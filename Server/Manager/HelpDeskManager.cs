@@ -5,18 +5,18 @@ using Oqtane.Modules;
 using Oqtane.Models;
 using Oqtane.Infrastructure;
 using Oqtane.Repository;
-using Syncfusion.HelpDesk.Models;
-using Syncfusion.HelpDesk.Repository;
+using Syncfusion.Helpdesk.Models;
+using Syncfusion.Helpdesk.Repository;
 
-namespace Syncfusion.HelpDesk.Manager
+namespace Syncfusion.Helpdesk.Manager
 {
-    public class HelpDeskManager : IInstallable, IPortable
+    public class HelpdeskManager : IInstallable, IPortable
     {
-        private IHelpDeskRepository _HelpDeskRepository;
+        private IHelpdeskRepository _HelpDeskRepository;
         private ISqlRepository _sql;
 
-        public HelpDeskManager(
-            IHelpDeskRepository HelpDeskRepository,
+        public HelpdeskManager(
+            IHelpdeskRepository HelpDeskRepository,
             ISqlRepository sql)
         {
             _HelpDeskRepository = HelpDeskRepository;
@@ -26,15 +26,17 @@ namespace Syncfusion.HelpDesk.Manager
         public bool Install(Tenant tenant, string version)
         {
             return _sql.ExecuteScript(
-                tenant, GetType().Assembly,
-                "Syncfusion.HelpDesk." + version + ".sql");
+                tenant,
+                GetType().Assembly,
+                "Syncfusion.Helpdesk." + version + ".sql");
         }
 
         public bool Uninstall(Tenant tenant)
         {
             return _sql.ExecuteScript(
-                tenant, GetType().Assembly,
-                "Syncfusion.HelpDesk.Uninstall.sql");
+                tenant,
+                GetType().Assembly,
+                "Syncfusion.Helpdesk.Uninstall.sql");
         }
 
         public string ExportModule(Module module)
@@ -68,7 +70,8 @@ namespace Syncfusion.HelpDesk.Manager
             if (!string.IsNullOrEmpty(content))
             {
                 HelpDesks =
-                    JsonSerializer.Deserialize<List<Models.SyncfusionHelpDeskTickets>>(content);
+                    JsonSerializer
+                    .Deserialize<List<Models.SyncfusionHelpDeskTickets>>(content);
             }
             if (HelpDesks != null)
             {
@@ -103,5 +106,6 @@ namespace Syncfusion.HelpDesk.Manager
                 }
             }
         }
+
     }
 }

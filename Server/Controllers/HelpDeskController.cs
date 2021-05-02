@@ -5,26 +5,26 @@ using Microsoft.AspNetCore.Http;
 using Oqtane.Shared;
 using Oqtane.Enums;
 using Oqtane.Infrastructure;
-using Syncfusion.HelpDesk.Models;
-using Syncfusion.HelpDesk.Repository;
+using Syncfusion.Helpdesk.Models;
+using Syncfusion.Helpdesk.Repository;
 using System.Linq;
 using System.Threading.Tasks;
 using Oqtane.Repository;
 
-namespace Syncfusion.HelpDesk.Controllers
+namespace Syncfusion.Helpdesk.Controllers
 {
     [Route(ControllerRoutes.Default)]
-    public class HelpDeskController : Controller
+    public class HelpdeskController : Controller
     {
-        private readonly IHelpDeskRepository _HelpDeskRepository;
+        private readonly IHelpdeskRepository _HelpDeskRepository;
         private readonly IUserRepository _users;
         private readonly ILogManager _logger;
         protected int _entityId = -1;
 
-        public HelpDeskController(
-            IHelpDeskRepository HelpDeskRepository, 
-            IUserRepository users, 
-            ILogManager logger, 
+        public HelpdeskController(
+            IHelpdeskRepository HelpDeskRepository,
+            IUserRepository users,
+            ILogManager logger,
             IHttpContextAccessor accessor)
         {
             _HelpDeskRepository = HelpDeskRepository;
@@ -51,9 +51,9 @@ namespace Syncfusion.HelpDesk.Controllers
             if (User.Username.ToLower() != username.ToLower())
             {
                 return null;
-            } 
+            }
 
-            var HelpDeskTickets = 
+            var HelpDeskTickets =
                 _HelpDeskRepository.GetSyncfusionHelpDeskTickets(
                     int.Parse(entityid))
                 .Where(x => x.CreatedBy == username)
@@ -78,11 +78,11 @@ namespace Syncfusion.HelpDesk.Controllers
                 return null;
             }
 
-            var HelpDeskTicket = 
+            var HelpDeskTicket =
                 _HelpDeskRepository.GetSyncfusionHelpDeskTicket(
                     int.Parse(HelpDeskTicketId));
 
-            if(HelpDeskTicket.CreatedBy != User.Username)
+            if (HelpDeskTicket.CreatedBy != User.Username)
             {
                 return null;
             }
@@ -97,18 +97,18 @@ namespace Syncfusion.HelpDesk.Controllers
         public Task Post(
             [FromBody] Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTickets)
         {
-            if (ModelState.IsValid 
+            if (ModelState.IsValid
                 && SyncfusionHelpDeskTickets.ModuleId == _entityId)
             {
                 // Add a new Help Desk Ticket
-                SyncfusionHelpDeskTickets = 
+                SyncfusionHelpDeskTickets =
                     _HelpDeskRepository.AddSyncfusionHelpDeskTickets(
                         SyncfusionHelpDeskTickets);
 
-                _logger.Log(LogLevel.Information, this, LogFunction.Create, 
-                    "HelpDesk Added {newSyncfusionHelpDeskTickets}", 
+                _logger.Log(LogLevel.Information, this, LogFunction.Create,
+                    "HelpDesk Added {newSyncfusionHelpDeskTickets}",
                     SyncfusionHelpDeskTickets);
-            }            
+            }
 
             return Task.FromResult(SyncfusionHelpDeskTickets);
         }
@@ -119,7 +119,7 @@ namespace Syncfusion.HelpDesk.Controllers
         [HttpPost("{Id}")]
         [Authorize(Policy = PolicyNames.ViewModule)]
         public void Post(
-            int Id, 
+            int Id,
             [FromBody] Models.SyncfusionHelpDeskTickets UpdateSyncfusionHelpDeskTicket)
         {
             // Get User
@@ -127,17 +127,14 @@ namespace Syncfusion.HelpDesk.Controllers
 
             if (User != null)
             {
-                // Get Ticket
-                var ExistingTicket = _HelpDeskRepository.GetSyncfusionHelpDeskTicket(Id);
-
                 // Ensure logged in user is the creator
-                if(ExistingTicket.CreatedBy.ToLower() == User.Username.ToLower())
+                if (UpdateSyncfusionHelpDeskTicket.CreatedBy.ToLower() == User.Username.ToLower())
                 {
                     // Update Ticket 
                     _HelpDeskRepository.UpdateSyncfusionHelpDeskTickets(
-                        "User", 
+                        "User",
                         UpdateSyncfusionHelpDeskTicket);
-                }                
+                }
             }
         }
     }

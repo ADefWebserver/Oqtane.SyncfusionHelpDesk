@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Oqtane.Models;
 
-namespace Syncfusion.HelpDesk.Models
+namespace Syncfusion.Helpdesk.Models
 {
     public class SyncfusionHelpDeskTicketDetails : IAuditable
     {

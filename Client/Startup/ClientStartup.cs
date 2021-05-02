@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Oqtane.Services;
 using Syncfusion.Blazor;
-
-namespace Syncfusion.HelpDesk.Client.Startup
+namespace Syncfusion.Helpdesk.Client.Startup
 {
     public class ClientStartup : IClientStartup
     {
@@ -10,7 +9,7 @@ namespace Syncfusion.HelpDesk.Client.Startup
         {
             services.AddSyncfusionBlazor();
             //Syncfusion.Licensing.SyncfusionLicenseProvider
-            //    .RegisterLicense("Enter Your Syncfusion License Here");
+            //.RegisterLicense("Enter Your Syncfusion License Here");
         }
     }
 }

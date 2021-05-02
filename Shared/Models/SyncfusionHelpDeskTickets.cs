@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Oqtane.Models;
 
-namespace Syncfusion.HelpDesk.Models
+namespace Syncfusion.Helpdesk.Models
 {
     public class SyncfusionHelpDeskTickets : IAuditable
     {
         public SyncfusionHelpDeskTickets()
         {
-            SyncfusionHelpDeskTicketDetails = 
+            SyncfusionHelpDeskTicketDetails =
                 new HashSet<SyncfusionHelpDeskTicketDetails>();
         }
 
@@ -36,7 +36,8 @@ namespace Syncfusion.HelpDesk.Models
         public string ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
 
-        public virtual ICollection<SyncfusionHelpDeskTicketDetails> 
-            SyncfusionHelpDeskTicketDetails { get; set; }
+        public virtual ICollection<SyncfusionHelpDeskTicketDetails>
+            SyncfusionHelpDeskTicketDetails
+        { get; set; }
     }
 }

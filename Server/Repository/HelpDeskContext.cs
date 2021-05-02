@@ -2,22 +2,24 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Oqtane.Modules;
 using Oqtane.Repository;
-using Syncfusion.HelpDesk.Models;
+using Syncfusion.Helpdesk.Models;
 
-namespace Syncfusion.HelpDesk.Repository
+namespace Syncfusion.Helpdesk.Repository
 {
-    public class HelpDeskContext : DBContextBase, IService
+    public class HelpdeskContext : DBContextBase, IService
     {
-        public virtual 
-            DbSet<Models.SyncfusionHelpDeskTickets> 
-            SyncfusionHelpDeskTickets { get; set; }
+        public virtual
+            DbSet<Models.SyncfusionHelpDeskTickets>
+            SyncfusionHelpDeskTickets
+        { get; set; }
 
-        public virtual 
-            DbSet<SyncfusionHelpDeskTicketDetails> 
-            SyncfusionHelpDeskTicketDetails { get; set; }
+        public virtual
+            DbSet<SyncfusionHelpDeskTicketDetails>
+            SyncfusionHelpDeskTicketDetails
+        { get; set; }
 
-        public HelpDeskContext(
-            ITenantResolver tenantResolver, IHttpContextAccessor accessor) : 
+        public HelpdeskContext(
+            ITenantResolver tenantResolver, IHttpContextAccessor accessor) :
             base(tenantResolver, accessor)
         {
             // ContextBase handles multi-tenant database connections

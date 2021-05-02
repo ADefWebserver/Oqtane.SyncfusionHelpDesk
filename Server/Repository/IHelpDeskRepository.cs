@@ -1,24 +1,24 @@
 using System.Collections.Generic;
 using System.Linq;
-using Syncfusion.HelpDesk.Models;
+using Syncfusion.Helpdesk.Models;
 
-namespace Syncfusion.HelpDesk.Repository
+namespace Syncfusion.Helpdesk.Repository
 {
-    public interface IHelpDeskRepository
+    public interface IHelpdeskRepository
     {
-        IQueryable<Models.SyncfusionHelpDeskTickets> 
+        IQueryable<Models.SyncfusionHelpDeskTickets>
             GetSyncfusionHelpDeskTickets(int ModuleId);
 
-        Models.SyncfusionHelpDeskTickets 
+        Models.SyncfusionHelpDeskTickets
             GetSyncfusionHelpDeskTicket(int Id);
 
-        Models.SyncfusionHelpDeskTickets 
+        Models.SyncfusionHelpDeskTickets
             AddSyncfusionHelpDeskTickets(
             Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTicket);
 
-        Models.SyncfusionHelpDeskTickets 
+        Models.SyncfusionHelpDeskTickets
             UpdateSyncfusionHelpDeskTickets(
-            string UpdateMode, 
+            string UpdateMode,
             Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTicket);
 
         void DeleteSyncfusionHelpDeskTickets(int Id);

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>Syncfusion.HelpDesk</id>
+    <id>Syncfusion.Helpdesk</id>
     <version>1.0.0</version>
     <authors>Syncfusion</authors>
     <owners>Syncfusion</owners>
-    <title>HelpDesk</title>
-    <description>HelpDesk</description>
+    <title>Helpdesk</title>
+    <description>Helpdesk</description>
     <copyright>Syncfusion</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
@@ -16,20 +16,21 @@
     <releaseNotes></releaseNotes>
     <summary></summary>
     <dependencies>
-      <dependency id="Oqtane.Framework" version="2.0.1" />
+      <dependency id="Oqtane.Framework" version="2.0.2" />
     </dependencies>
   </metadata>
   <files>
-    <file src="..\Client\bin\Release\net5.0\Syncfusion.HelpDesk.Client.Oqtane.dll" target="lib\net5.0" /> 
-    <file src="..\Client\bin\Release\net5.0\Syncfusion.HelpDesk.Client.Oqtane.pdb" target="lib\net5.0" /> 
-    <file src="..\Server\bin\Release\net5.0\Syncfusion.HelpDesk.Server.Oqtane.dll" target="lib\net5.0" /> 
-    <file src="..\Server\bin\Release\net5.0\Syncfusion.HelpDesk.Server.Oqtane.pdb" target="lib\net5.0" /> 
-    <file src="..\Shared\bin\Release\net5.0\Syncfusion.HelpDesk.Shared.Oqtane.dll" target="lib\net5.0" /> 
-    <file src="..\Shared\bin\Release\net5.0\Syncfusion.HelpDesk.Shared.Oqtane.pdb" target="lib\net5.0" />
+    <file src="..\Client\bin\Release\net5.0\Syncfusion.Helpdesk.Client.Oqtane.dll" target="lib\net5.0" /> 
+    <file src="..\Client\bin\Release\net5.0\Syncfusion.Helpdesk.Client.Oqtane.pdb" target="lib\net5.0" /> 
+    <file src="..\Server\bin\Release\net5.0\Syncfusion.Helpdesk.Server.Oqtane.dll" target="lib\net5.0" /> 
+    <file src="..\Server\bin\Release\net5.0\Syncfusion.Helpdesk.Server.Oqtane.pdb" target="lib\net5.0" /> 
+    <file src="..\Shared\bin\Release\net5.0\Syncfusion.Helpdesk.Shared.Oqtane.dll" target="lib\net5.0" /> 
+    <file src="..\Shared\bin\Release\net5.0\Syncfusion.Helpdesk.Shared.Oqtane.pdb" target="lib\net5.0" /> 
+    <file src="..\Server\wwwroot\**\*.*" target="wwwroot" />
     <file src="..\Server\bin\Release\net5.0\Syncfusion.Blazor.dll" target="lib\net5.0" />
     <file src="..\Server\bin\Release\net5.0\Syncfusion.ExcelExport.Net.dll" target="lib\net5.0" />
     <file src="..\Server\bin\Release\net5.0\Syncfusion.Licensing.dll" target="lib\net5.0" />
     <file src="..\Server\bin\Release\net5.0\Syncfusion.PdfExport.Net.dll" target="lib\net5.0" />
-    <file src="..\Server\wwwroot\**\*.*" target="wwwroot" /> 
+    <file src="..\Server\bin\Release\net5.0\Newtonsoft.Json.dll" target="lib\net5.0" />
   </files>
 </package>

@@ -1,20 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using Syncfusion.Helpdesk.Models;
 using System.Threading.Tasks;
-using Syncfusion.HelpDesk.Models;
 
-namespace Syncfusion.HelpDesk.Services
+namespace Syncfusion.Helpdesk.Services
 {
-    public interface IHelpDeskAdminService
+    public interface IHelpdeskAdminService
     {
         // Admin Methods
 
-        Task<Models.SyncfusionHelpDeskTickets> 
+        Task<SyncfusionHelpDeskTickets>
             GetSyncfusionHelpDeskTicketAdminAsync(
             int HelpDeskTicketId, int ModuleId);
 
-        Task<Models.SyncfusionHelpDeskTickets> 
+        Task<SyncfusionHelpDeskTickets>
             UpdateSyncfusionHelpDeskTicketsAdminAsync(
-            Models.SyncfusionHelpDeskTickets objSyncfusionHelpDeskTicket);
+            SyncfusionHelpDeskTickets objSyncfusionHelpDeskTicket);
 
         Task DeleteSyncfusionHelpDeskTicketsAsync(
             int Id, int ModuleId);

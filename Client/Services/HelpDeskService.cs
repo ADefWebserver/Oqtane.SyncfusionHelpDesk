@@ -5,60 +5,60 @@ using System.Threading.Tasks;
 using Oqtane.Modules;
 using Oqtane.Services;
 using Oqtane.Shared;
-using Syncfusion.HelpDesk.Models;
+using Syncfusion.Helpdesk.Models;
 
-namespace Syncfusion.HelpDesk.Services
+namespace Syncfusion.Helpdesk.Services
 {
-    public class HelpDeskService : 
-        ServiceBase, IHelpDeskService, IService
+    public class HelpdeskService :
+        ServiceBase, IHelpdeskService, IService
     {
         private readonly SiteState _siteState;
 
-        public HelpDeskService(
+        public HelpdeskService(
             HttpClient http, SiteState siteState) : base(http)
         {
             _siteState = siteState;
         }
 
-         private string Apiurl => CreateApiUrl(_siteState.Alias, "HelpDesk");
-        private string AdminApiurl => CreateApiUrl(_siteState.Alias, "HelpDeskAdmin");
+        private string Apiurl => CreateApiUrl(_siteState.Alias, "Helpdesk");
 
-        public async Task<List<Models.SyncfusionHelpDeskTickets>> 
-            GetSyncfusionHelpDeskTicketsByUserAsync(int ModuleId, string username)
+        public async Task<List<SyncfusionHelpDeskTickets>>
+            GetSyncfusionHelpDeskTicketsByUserAsync(
+            int ModuleId, string username)
         {
-            return await GetJsonAsync<List<Models.SyncfusionHelpDeskTickets>>(
+            return await GetJsonAsync<List<SyncfusionHelpDeskTickets>>(
                 CreateAuthorizationPolicyUrl(
                     $"{Apiurl}?username={username}", ModuleId));
         }
 
-        public async Task<Models.SyncfusionHelpDeskTickets> 
+        public async Task<SyncfusionHelpDeskTickets>
             GetSyncfusionHelpDeskTicketByUserAsync(
             int HelpDeskTicketId, int ModuleId, string username)
         {
-            return await GetJsonAsync<Models.SyncfusionHelpDeskTickets>(
+            return await GetJsonAsync<SyncfusionHelpDeskTickets>(
                 CreateAuthorizationPolicyUrl(
                     $"{Apiurl}/{HelpDeskTicketId}?&username={username}", ModuleId));
         }
 
-        public async Task<Models.SyncfusionHelpDeskTickets> 
+        public async Task<SyncfusionHelpDeskTickets>
             AddSyncfusionHelpDeskTicketsAsync(
-            Models.SyncfusionHelpDeskTickets SyncfusionHelpDeskTickets)
+            SyncfusionHelpDeskTickets SyncfusionHelpDeskTickets)
         {
-            return await PostJsonAsync<Models.SyncfusionHelpDeskTickets>(
-                CreateAuthorizationPolicyUrl($"{Apiurl}", 
-                SyncfusionHelpDeskTickets.ModuleId), 
+            return await PostJsonAsync<SyncfusionHelpDeskTickets>(
+                CreateAuthorizationPolicyUrl($"{Apiurl}",
+                SyncfusionHelpDeskTickets.ModuleId),
                 SyncfusionHelpDeskTickets);
         }
 
-        public async Task<Models.SyncfusionHelpDeskTickets> 
+        public async Task<SyncfusionHelpDeskTickets>
             UpdateSyncfusionHelpDeskTicketsAsync(
-            Models.SyncfusionHelpDeskTickets objSyncfusionHelpDeskTicket)
+            SyncfusionHelpDeskTickets objSyncfusionHelpDeskTicket)
         {
             return await PostJsonAsync(
                 CreateAuthorizationPolicyUrl(
-                    $"{Apiurl}/{objSyncfusionHelpDeskTicket.HelpDeskTicketId}", 
-                    objSyncfusionHelpDeskTicket.ModuleId), 
+                    $"{Apiurl}/{objSyncfusionHelpDeskTicket.HelpDeskTicketId}",
+                    objSyncfusionHelpDeskTicket.ModuleId),
                 objSyncfusionHelpDeskTicket);
-        }        
+        }
     }
 }
