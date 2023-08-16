@@ -12,3 +12,6 @@ Blazor Oqtane Syncfusion Help Desk
 ![custom-blazor-oqtane-modules-succinctly](https://user-images.githubusercontent.com/1857799/138502674-abf9ac35-6ca9-42b3-93a3-e73c3e7d2140.png)
 
 [Custom Blazor Oqtane Modules Succinctly](https://www.syncfusion.com/succinctly-free-ebooks/custom-blazor-oqtane-modules-succinctly/create-the-help-desk-module)
+
+### Updates
+![I tried to setup my oqtane project with syncfusion, but it don't work #3066](https://github.com/oqtane/oqtane.framework/discussions/3066)
