@@ -14,4 +14,4 @@ Blazor Oqtane Syncfusion Help Desk
 [Custom Blazor Oqtane Modules Succinctly](https://www.syncfusion.com/succinctly-free-ebooks/custom-blazor-oqtane-modules-succinctly/create-the-help-desk-module)
 
 ### Updates
-![I tried to setup my oqtane project with syncfusion, but it don't work #3066](https://github.com/oqtane/oqtane.framework/discussions/3066)
+[I tried to setup my oqtane project with syncfusion, but it don't work #3066](https://github.com/oqtane/oqtane.framework/discussions/3066)
