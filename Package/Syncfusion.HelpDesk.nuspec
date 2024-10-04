@@ -16,21 +16,21 @@
     <releaseNotes></releaseNotes>
     <summary></summary>
     <dependencies>
-      <dependency id="Oqtane.Framework" version="2.0.2" />
+      <dependency id="Oqtane.Framework" version="5.2.0" />
     </dependencies>
   </metadata>
   <files>
-    <file src="..\Client\bin\Release\net5.0\Syncfusion.Helpdesk.Client.Oqtane.dll" target="lib\net5.0" /> 
-    <file src="..\Client\bin\Release\net5.0\Syncfusion.Helpdesk.Client.Oqtane.pdb" target="lib\net5.0" /> 
-    <file src="..\Server\bin\Release\net5.0\Syncfusion.Helpdesk.Server.Oqtane.dll" target="lib\net5.0" /> 
-    <file src="..\Server\bin\Release\net5.0\Syncfusion.Helpdesk.Server.Oqtane.pdb" target="lib\net5.0" /> 
-    <file src="..\Shared\bin\Release\net5.0\Syncfusion.Helpdesk.Shared.Oqtane.dll" target="lib\net5.0" /> 
-    <file src="..\Shared\bin\Release\net5.0\Syncfusion.Helpdesk.Shared.Oqtane.pdb" target="lib\net5.0" /> 
+    <file src="..\Client\bin\Release\net8.0\Syncfusion.Helpdesk.Client.Oqtane.dll" target="lib\net8.0" /> 
+    <file src="..\Client\bin\Release\net8.0\Syncfusion.Helpdesk.Client.Oqtane.pdb" target="lib\net8.0" /> 
+    <file src="..\Server\bin\Release\net8.0\Syncfusion.Helpdesk.Server.Oqtane.dll" target="lib\net8.0" /> 
+    <file src="..\Server\bin\Release\net8.0\Syncfusion.Helpdesk.Server.Oqtane.pdb" target="lib\net8.0" /> 
+    <file src="..\Shared\bin\Release\net8.0\Syncfusion.Helpdesk.Shared.Oqtane.dll" target="lib\net8.0" /> 
+    <file src="..\Shared\bin\Release\net8.0\Syncfusion.Helpdesk.Shared.Oqtane.pdb" target="lib\net8.0" /> 
     <file src="..\Server\wwwroot\**\*.*" target="wwwroot" />
-    <file src="..\Server\bin\Release\net5.0\Syncfusion.Blazor.dll" target="lib\net5.0" />
-    <file src="..\Server\bin\Release\net5.0\Syncfusion.ExcelExport.Net.dll" target="lib\net5.0" />
-    <file src="..\Server\bin\Release\net5.0\Syncfusion.Licensing.dll" target="lib\net5.0" />
-    <file src="..\Server\bin\Release\net5.0\Syncfusion.PdfExport.Net.dll" target="lib\net5.0" />
-    <file src="..\Server\bin\Release\net5.0\Newtonsoft.Json.dll" target="lib\net5.0" />
+    <file src="..\Server\bin\Release\net8.0\Syncfusion.Blazor.dll" target="lib\net8.0" />
+    <file src="..\Server\bin\Release\net8.0\Syncfusion.ExcelExport.Net.dll" target="lib\net8.0" />
+    <file src="..\Server\bin\Release\net8.0\Syncfusion.Licensing.dll" target="lib\net8.0" />
+    <file src="..\Server\bin\Release\net8.0\Syncfusion.PdfExport.Net.dll" target="lib\net8.0" />
+    <file src="..\Server\bin\Release\net8.0\Newtonsoft.Json.dll" target="lib\net8.0" />
   </files>
 </package>

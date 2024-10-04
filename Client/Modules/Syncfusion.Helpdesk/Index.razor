@@ -165,8 +165,23 @@ else
             Url = ModulePath() + "Module.css" },
 
         new Resource { ResourceType = ResourceType.Script,
-            Url = ModulePath() + "Module.js" }
-                };
+            Url = ModulePath() + "Module.js" },
+
+        // Only register .css files
+        // The JavaScript files will automatically be pulled
+        // from the _content/syncfusion.blazor directory
+        // so they do not need to be registered here
+        new Resource { ResourceType = ResourceType.Stylesheet,
+            Url = "_content/Syncfusion.Blazor/" +
+            "styles/bootstrap4.css" },
+
+        new Resource { ResourceType = ResourceType.Stylesheet,
+            Url = "_content/Syncfusion.Blazor/" +
+            "styles/material-dark.css" },
+
+        new Resource { ResourceType = ResourceType.Script,
+            Url = "https://kit.fontawesome.com/a076d05399.js" }
+    };
 
     public string Content = "Submit";
 
